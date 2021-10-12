@@ -1,7 +1,6 @@
 ﻿using GraphProcessor;
 using HLVS.Runtime;
 using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,13 +15,22 @@ namespace HLVS.Editor
 		private HlvsGraph          _previousGraph;
 
 		protected VisualElement                root;
-		protected ExposedParameterFieldFactory exposedParameterFactory;
+		protected ExposedParameterFieldFactory parameterFactory;
 
 		private VisualElement _defaultContainer;
 		VisualElement         _parameterContainer;
+		
+		/// <summary>
+		/// IMGUI elements have per default a margin of 0px, however Unity's properties have a 1px, 3px margin. This fixes the differences
+		/// </summary>
+		private StyleSheet _alignmentFixSheet;
+		private const string ParameterFixSheet = "PropertyFieldAlignmentFix";
 
 		protected virtual void OnEnable()
 		{
+			_alignmentFixSheet = Resources.Load<StyleSheet>(ParameterFixSheet);
+			Debug.Assert(_alignmentFixSheet != null, "Did not find parameter fix style sheet");
+
 			Init();
 		}
 
@@ -33,11 +41,11 @@ namespace HLVS.Editor
 			{
 				RegisterExposedParameters(_graph);
 
-				exposedParameterFactory = new ExposedParameterFieldFactory(_graph);
+				parameterFactory = new ExposedParameterFieldFactory(_graph);
 			}
 			else
 			{
-				exposedParameterFactory = null;
+				parameterFactory = null;
 			}
 		}
 
@@ -48,8 +56,8 @@ namespace HLVS.Editor
 				UnregisterExposedParameters(_graph);
 			}
 
-			exposedParameterFactory?.Dispose();
-			exposedParameterFactory = null;
+			parameterFactory?.Dispose();
+			parameterFactory = null;
 		}
 
 		private void RegisterExposedParameters(HlvsGraph graph)
@@ -69,6 +77,7 @@ namespace HLVS.Editor
 			Init();
 
 			root = new VisualElement();
+			root.styleSheets.Add(_alignmentFixSheet);
 			CreateInspector();
 			return root;
 		}
@@ -97,26 +106,27 @@ namespace HLVS.Editor
 		void DefaultElements(VisualElement container)
 		{
 			var property = serializedObject.FindProperty("graph");
-			var propertyField = new PropertyField(property) { label = "Graph" };
+			var propertyField = new PropertyField(property) { label = "Graph", tooltip = "The graph that describes this components actions" };
 			propertyField.Bind(serializedObject);
-			propertyField.RegisterValueChangeCallback(evt =>
-			                                          {
-				                                          if (evt.changedProperty.objectReferenceValue)
-				                                          {
-					                                          // unregister old callbacks
-					                                          if (_previousGraph)
-						                                          UnregisterExposedParameters(_previousGraph);
+			propertyField.RegisterValueChangeCallback(
+				evt =>
+				{
+					if (evt.changedProperty.objectReferenceValue)
+					{
+						// unregister old callbacks
+						if (_previousGraph)
+							UnregisterExposedParameters(_previousGraph);
 
-					                                          Init();
+						Init();
 
-					                                          _parameterContainer.Clear();
-					                                          if (_graph)
-						                                          FillExposedParameters(_parameterContainer);
+						_parameterContainer.Clear();
+						if (_graph)
+							FillExposedParameters(_parameterContainer);
 
-					                                          Debug.Log($"graph changed to: {_graph.name}");
-					                                          _previousGraph = _graph;
-				                                          }
-			                                          });
+						Debug.Log($"graph changed to: {_graph.name}");
+						_previousGraph = _graph;
+					}
+				});
 
 			VisualElement view = new VisualElement();
 			view.Add(propertyField);
@@ -129,20 +139,24 @@ namespace HLVS.Editor
 			// params title
 			var paramsTitle = new Label("Parameters:");
 			paramsTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
-			paramsTitle.tooltip = "Parameters are the inputs of a graph that can differ for each gameobject. They are the only way for graph to work with scene references.";
+			paramsTitle.tooltip =
+				"Parameters are the inputs of a graph that can differ for each gameobject. They are the only way for graph to work with scene references.";
 			parameterContainer.Add(paramsTitle);
 
 
+			// in case there a re no parameters, communicate that clearly with the user
 			if (_graph.exposedParameters.Count == 0)
 			{
 				var noParamsLabel = new Label("No parameters found");
 				noParamsLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
 				parameterContainer.Add(noParamsLabel);
+
 				return;
 			}
 
+
 			// for the case that the custom editor is not registered (call Init()). NOTE: this seems odd, it should not be called in this case
-			if (exposedParameterFactory == null)
+			if (parameterFactory == null)
 				return;
 
 			// add parameter fields
@@ -151,7 +165,7 @@ namespace HLVS.Editor
 				if (param.settings.isHidden)
 					continue;
 
-				var field = exposedParameterFactory.GetParameterValueField(param, (newValue) =>
+				var field = parameterFactory.GetParameterValueField(param, (newValue) =>
 				                                                                  {
 					                                                                  param.value = newValue;
 					                                                                  serializedObject.ApplyModifiedProperties();
