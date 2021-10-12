@@ -6,13 +6,13 @@ using GraphProcessor;
 
 public class AllGraphWindow : BaseGraphWindow
 {
-	BaseGraph			tmpGraph;
-	CustomToolbarView	toolbarView;
+	BaseGraph         tmpGraph;
+	CustomToolbarView toolbarView;
 
 	[MenuItem("Window/05 All Combined")]
 	public static BaseGraphWindow OpenWithTmpGraph()
 	{
-		var graphWindow = CreateWindow< AllGraphWindow >();
+		var graphWindow = CreateWindow<AllGraphWindow>();
 
 		// When the graph is opened from the window, we don't save the graph to disk
 		graphWindow.tmpGraph = ScriptableObject.CreateInstance<BaseGraph>();
