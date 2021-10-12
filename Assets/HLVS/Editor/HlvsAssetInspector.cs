@@ -1,22 +1,31 @@
 ﻿using GraphProcessor;
 using UnityEditor;
 using UnityEditor.Callbacks;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace HLVS.Editor
 {
 	[CustomEditor(typeof(HlvsGraph), false)]
-	public class HlvsAssetInspector : GraphInspector
+	public class HlvsAssetInspector : UnityEditor.Editor
 	{
-		protected override void CreateInspector()
+		protected VisualElement root;
+		protected BaseGraph     graph;
+		
+		protected void OnEnable()
 		{
-			base.CreateInspector();
-
+			graph = target as BaseGraph;
+		}
+		
+		public sealed override VisualElement CreateInspectorGUI()
+		{
+			root = new VisualElement();
+			
 			root.Add(new Button(() => EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(target as HlvsGraph))
 			{
 				text = "Open in Editor"
 			});
+			
+			return root;
 		}
 
 		[MenuItem("Assets/Create/HLVS Graph", false, 128)]
