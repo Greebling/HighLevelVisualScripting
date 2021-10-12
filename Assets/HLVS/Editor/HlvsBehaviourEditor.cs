@@ -106,7 +106,7 @@ namespace HLVS.Editor
 		void DefaultElements(VisualElement container)
 		{
 			var property = serializedObject.FindProperty("graph");
-			var propertyField = new PropertyField(property) { label = "Graph", tooltip = "The graph that describes this components actions" };
+			var propertyField = new PropertyField(property) { label = "Graph", tooltip = "The graph asset that describes this components actions" };
 			propertyField.Bind(serializedObject);
 			propertyField.RegisterValueChangeCallback(
 				evt =>
@@ -140,7 +140,7 @@ namespace HLVS.Editor
 			var paramsTitle = new Label("Parameters:");
 			paramsTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
 			paramsTitle.tooltip =
-				"Parameters are the inputs of a graph that can differ for each gameobject. They are the only way for graph to work with scene references.";
+				"Parameters are the inputs of a graph that can differ for each gameobject. They are the only way for a graph to work with scene references.";
 			parameterContainer.Add(paramsTitle);
 
 
