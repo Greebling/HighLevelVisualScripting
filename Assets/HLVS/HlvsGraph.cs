@@ -8,7 +8,7 @@ namespace HLVS
 	public class HlvsGraph : BaseGraph
 	{
 		protected List<OnStartNode> startNodes;
-		
+
 		protected override void OnEnable()
 		{
 			base.OnEnable();
@@ -37,7 +37,7 @@ namespace HLVS
 
 		protected void RegisterExecutionNode(GraphChanges change)
 		{
-			if(change.addedNode == null)
+			if (change.addedNode == null)
 				return;
 
 			if (change.addedNode is OnStartNode startNode)
@@ -48,21 +48,11 @@ namespace HLVS
 
 		public void Run()
 		{
-			Debug.Log("Running!");
-
-			foreach (OnStartNode onStartNode in startNodes)
-			{
-				Debug.Log("Start Node");
-
-				HlvsActionNode current;
-				current = onStartNode.outputPorts[0].GetEdges()[0].inputNode as HlvsActionNode;
-
-				while (current != null)
-				{
-					current.OnEvaluate();
-					current = current.outputPorts[0].GetEdges()[0].inputNode as HlvsActionNode;
-				}
-			}
+			Debug.Log("Running...");
+			HlvsGraphProcessor<OnStartNode> processor = new HlvsGraphProcessor<OnStartNode>(this);
+			processor.UpdateComputeOrder();
+			processor.Run();
+			Debug.Log("Run finished");
 		}
 	}
 }
