@@ -119,7 +119,6 @@ namespace GraphProcessor
 		{
 			get
 			{
-
 				if (graph.nodeInspectorReference == null)
 					graph.nodeInspectorReference = CreateNodeInspectorObject();
 				return graph.nodeInspectorReference as NodeInspectorObject;

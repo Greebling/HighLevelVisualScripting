@@ -26,7 +26,7 @@ namespace HLVS.Editor
 		private StyleSheet _alignmentFixSheet;
 		private const string ParameterFixSheet = "PropertyFieldAlignmentFix";
 
-		protected virtual void OnEnable()
+		protected void OnEnable()
 		{
 			_alignmentFixSheet = Resources.Load<StyleSheet>(ParameterFixSheet);
 			Debug.Assert(_alignmentFixSheet != null, "Did not find parameter fix style sheet");

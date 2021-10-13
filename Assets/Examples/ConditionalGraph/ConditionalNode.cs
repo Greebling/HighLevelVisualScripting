@@ -14,7 +14,7 @@ namespace NodeGraphProcessor.Examples
 	/// </summary>
 	public abstract class ConditionalNode : BaseNode, IConditionalNode
 	{
-		// These booleans will controls wether or not the execution of the folowing nodes will be done or discarded.
+		// These booleans will controls whether or not the execution of the following nodes will be done or discarded.
 		[Input(name = "Executed", allowMultiple = true)]
 		public ConditionalLink	executed;
 
