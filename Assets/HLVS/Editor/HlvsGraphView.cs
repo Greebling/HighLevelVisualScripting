@@ -1,5 +1,6 @@
 ﻿using GraphProcessor;
 using UnityEditor;
+using UnityEngine.UIElements;
 
 namespace HLVS.Editor
 {
@@ -8,7 +9,21 @@ namespace HLVS.Editor
 		public HlvsGraphView(EditorWindow window) : base(window)
 		{
 		}
-		
-		// Removed add stack node
+
+		public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+		{
+			BuildRunGraphMenu(evt);
+			base.BuildContextualMenu(evt);
+		}
+
+		/// <summary>
+		/// Add the View entry to the context menu
+		/// </summary>
+		/// <param name="evt"></param>
+		protected virtual void BuildRunGraphMenu(ContextualMenuPopulateEvent evt)
+		{
+			evt.menu.AppendAction("Run Graph", e => (graph as HlvsGraph)?.Run());
+			evt.menu.AppendSeparator();
+		}
 	}
 }

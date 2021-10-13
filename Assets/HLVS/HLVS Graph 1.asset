@@ -24,7 +24,7 @@ MonoBehaviour:
       y: 229
       width: 150
       height: 200
-    opened: 0
+    opened: 1
     editorType:
       serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
