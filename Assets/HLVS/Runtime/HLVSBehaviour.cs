@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace HLVS.Runtime
 {
@@ -10,6 +11,16 @@ namespace HLVS.Runtime
 		{
 			if (graph)
 				graph.LinkToScene(gameObject.scene);
+		}
+
+		private void Start()
+		{
+			graph.RunStartNodes();
+		}
+
+		private void Update()
+		{
+			graph.RunUpdateNodes();
 		}
 	}
 }

@@ -20,9 +20,9 @@ namespace HLVS.Editor
 		/// Add the View entry to the context menu
 		/// </summary>
 		/// <param name="evt"></param>
-		protected virtual void BuildRunGraphMenu(ContextualMenuPopulateEvent evt)
+		protected void BuildRunGraphMenu(ContextualMenuPopulateEvent evt)
 		{
-			evt.menu.AppendAction("Run Graph", e => (graph as HlvsGraph)?.Run());
+			evt.menu.AppendAction("Run Graph", e => (graph as HlvsGraph)?.RunStartNodes());
 			evt.menu.AppendSeparator();
 		}
 	}
