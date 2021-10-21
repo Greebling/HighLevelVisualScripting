@@ -9,6 +9,8 @@ namespace HLVS.Runtime
 
 		private void OnEnable()
 		{
+			//graph = Instantiate(graph); //TODO: Do we need to clone this?
+			
 			if (graph)
 				graph.LinkToScene(gameObject.scene);
 		}

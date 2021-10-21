@@ -5,7 +5,7 @@ namespace HLVS.Nodes
 {
 	public class ExecutionStarterNode : HlvsNode
 	{
-		[Output("Action", false)]
+		[Output(" ", false)]
 		public ExecutionLink followingAction;
 	}
 }

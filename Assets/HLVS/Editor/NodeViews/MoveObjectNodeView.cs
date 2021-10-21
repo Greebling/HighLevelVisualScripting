@@ -3,7 +3,7 @@ using HLVS.Nodes;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-namespace HLVS.Editor.Views
+namespace HLVS.Editor.NodeViews
 {
 	[NodeCustomEditor(typeof(MoveObjectNode))]
 	public class MoveObjectNodeView : BaseNodeView

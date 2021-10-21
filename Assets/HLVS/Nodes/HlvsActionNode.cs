@@ -5,10 +5,10 @@ namespace HLVS.Nodes
 {
 	public abstract class HlvsActionNode : HlvsNode
 	{
-		[Input("Action", false)]
+		[Input(" ", false)]
 		public ExecutionLink previousAction;
 		
-		[Output("Action", false)]
+		[Output(" ", false)]
 		public ExecutionLink followingAction;
 	}
 }
