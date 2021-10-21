@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using GraphProcessor;
+using HLVS.Editor;
 using HLVS.Nodes;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace HLVS
 		
 		protected 	HlvsGraphProcessor<OnStartNode> startNodeProcessor;
 		protected 	HlvsGraphProcessor<OnUpdateNode> updateNodeProcessor;
+
+		public List<ExposedParameter> blackboardFields;
 		protected override void OnEnable()
 		{
 			base.OnEnable();

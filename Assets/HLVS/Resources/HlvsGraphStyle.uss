@@ -1,0 +1,16 @@
+.my-grid{
+    --thick-line-color: rgba(99, 99, 99, 0.2);
+    --line-color: rgba(76, 76, 76, 0.2);
+    --thick-lines:20;
+    --spacing:25;
+}
+
+.pill #node.border{
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.hlvs-blackboard-field > .mainContainer{
+}

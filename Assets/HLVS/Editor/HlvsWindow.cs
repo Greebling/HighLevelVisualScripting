@@ -1,13 +1,19 @@
 ﻿using GraphProcessor;
+using HLVS.Editor.Views;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace HLVS.Editor
 {
 	public class HlvsWindow : BaseGraphWindow
 	{
-		BaseGraph         tmpGraph;
-		HlvsToolbarView toolbarView;
+		private BaseGraph _tmpGraph;
+		private HlvsToolbarView _toolbarView;
+		private TwoPaneSplitView _splitView;
+
+		private StyleSheet _customStyling;
 
 		[MenuItem("HLVS/Graph Editor")]
 		public static BaseGraphWindow OpenWithTmpGraph()
@@ -15,9 +21,9 @@ namespace HLVS.Editor
 			var graphWindow = CreateWindow<HlvsWindow>();
 
 			// When the graph is opened from the window, we don't save the graph to disk
-			graphWindow.tmpGraph = CreateInstance<BaseGraph>();
-			graphWindow.tmpGraph.hideFlags = HideFlags.HideAndDontSave;
-			graphWindow.InitializeGraph(graphWindow.tmpGraph);
+			graphWindow._tmpGraph = CreateInstance<BaseGraph>();
+			graphWindow._tmpGraph.hideFlags = HideFlags.HideAndDontSave;
+			graphWindow.InitializeGraph(graphWindow._tmpGraph);
 
 			graphWindow.Show();
 
@@ -27,20 +33,29 @@ namespace HLVS.Editor
 		protected override void OnDestroy()
 		{
 			graphView?.Dispose();
-			DestroyImmediate(tmpGraph);
+			DestroyImmediate(_tmpGraph);
 		}
 
 		protected override void InitializeWindow(BaseGraph startingGraph)
 		{
 			titleContent = new GUIContent($"{HlvsSettings.Name} Graph");
 
+			_customStyling = Resources.Load<StyleSheet>("HlvsGraphStyle");
+			rootView.styleSheets.Add(_customStyling);
+
 			if (graphView == null)
 			{
-				graphView = new HlvsGraphView(this);
-				toolbarView = new HlvsToolbarView(graphView);
-				graphView.Add(toolbarView);
+				var graphView = new HlvsGraphView(this);
+				this.graphView = graphView;
+				
+				_toolbarView = new HlvsToolbarView(graphView);
+				graphView.Add(_toolbarView);
+				graphView.Add(graphView.blackboard);
+				var bg = new GridBackground();
+				bg.AddToClassList("my-grid");
+				graphView.Insert(0, bg);
 			}
-
+			
 			rootView.Add(graphView);
 		}
 	}
