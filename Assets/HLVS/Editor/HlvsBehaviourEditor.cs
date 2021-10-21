@@ -49,7 +49,7 @@ namespace HLVS.Editor
 			}
 		}
 
-		protected virtual void OnDisable()
+		protected void OnDisable()
 		{
 			if (_graph)
 			{
@@ -82,7 +82,7 @@ namespace HLVS.Editor
 			return root;
 		}
 
-		protected virtual void CreateInspector()
+		protected void CreateInspector()
 		{
 			_defaultContainer = new VisualElement { name = "DefaultElements" };
 			_parameterContainer = new VisualElement { name = "ExposedParameters" };
@@ -99,6 +99,11 @@ namespace HLVS.Editor
 			separatorBox.style.marginBottom = 3;
 
 			root.Add(_defaultContainer);
+			root.Add(new Button(() => EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(_graph))
+			{
+				text = "Open"
+			});
+			
 			root.Add(separatorBox);
 			root.Add(_parameterContainer);
 		}
