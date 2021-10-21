@@ -465,39 +465,38 @@ namespace GraphProcessor
 			InitializeGraphElements();
 		}
 
-		public void MigrateGraphIfNeeded()
+		public virtual void MigrateGraphIfNeeded()
 		{
 #pragma warning disable CS0618
 			// Migration step from JSON serialized nodes to [SerializeReference]
-			if (serializedNodes.Count > 0)
+			if (serializedNodes.Count <= 0) return;
+			
+			nodes.Clear();
+			foreach (var serializedNode in serializedNodes.ToList())
 			{
-				nodes.Clear();
-				foreach (var serializedNode in serializedNodes.ToList())
+				BaseNode node = JsonSerializer.DeserializeNode(serializedNode);
+				if (node != null)
+					nodes.Add(node);
+			}
+			serializedNodes.Clear();
+
+			// we also migrate parameters here:
+			var paramsToMigrate = serializedParameterList.ToList();
+			exposedParameters.Clear();
+			foreach (var param in paramsToMigrate)
+			{
+				if (param == null)
+					continue;
+
+				var newParam = param.Migrate();
+
+				if (newParam == null)
 				{
-                    var node = JsonSerializer.DeserializeNode(serializedNode) as BaseNode;
-                    if (node != null)
-                        nodes.Add(node);
+					Debug.LogError($"Can't migrate parameter of type {param.type}, please create an Exposed Parameter class that implements this type.");
+					continue;
 				}
-				serializedNodes.Clear();
-
-				// we also migrate parameters here:
-				var paramsToMigrate = serializedParameterList.ToList();
-				exposedParameters.Clear();
-				foreach (var param in paramsToMigrate)
-				{
-					if (param == null)
-						continue;
-
-					var newParam = param.Migrate();
-
-					if (newParam == null)
-					{
-						Debug.LogError($"Can't migrate parameter of type {param.type}, please create an Exposed Parameter class that implements this type.");
-						continue;
-					}
-					else
-						exposedParameters.Add(newParam);
-				}
+				else
+					exposedParameters.Add(newParam);
 			}
 #pragma warning restore CS0618
 		}
@@ -826,7 +825,7 @@ namespace GraphProcessor
 		/// <param name="t1"></param>
 		/// <param name="t2"></param>
 		/// <returns></returns>
-		public static bool TypesAreConnectable(Type t1, Type t2)
+		public static bool TypesAreConnectable(Type t1, Type t2) // NOTE: Extend this later for adding conversion nodes
 		{
 			if (t1 == null || t2 == null)
 				return false;
