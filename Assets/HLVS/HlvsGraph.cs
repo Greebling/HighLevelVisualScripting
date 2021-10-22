@@ -13,7 +13,7 @@ namespace HLVS
 		protected 	HlvsGraphProcessor<OnStartNode> startNodeProcessor;
 		protected 	HlvsGraphProcessor<OnUpdateNode> updateNodeProcessor;
 
-		public List<ExposedParameter> blackboardFields;
+		public List<BlackboardEntry> blackboardFields;
 		protected override void OnEnable()
 		{
 			base.OnEnable();

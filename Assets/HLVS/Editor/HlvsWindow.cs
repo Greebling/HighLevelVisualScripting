@@ -58,5 +58,11 @@ namespace HLVS.Editor
 			
 			rootView.Add(graphView);
 		}
+
+		protected override void InitializeGraphView(BaseGraphView baseView)
+		{
+			var view = baseView as HlvsGraphView;
+			view.DisplayExistingBlackboardEntries();
+		}
 	}
 }

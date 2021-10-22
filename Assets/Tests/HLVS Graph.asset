@@ -89,11 +89,11 @@ MonoBehaviour:
   pinnedElements:
   - position:
       serializedVersion: 2
-      x: 1020
-      y: 116
+      x: 527
+      y: 176
       width: 443
       height: 358
-    opened: 1
+    opened: 0
     editorType:
       serializedType: GraphProcessor.ExposedParameterView, com.alelievr.NodeGraphProcessor.Editor,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
@@ -113,332 +113,23 @@ MonoBehaviour:
   - id: 15
   - id: 16
   - id: 17
+  - id: 18
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -394, y: 708, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: -116.99999, y: 669, z: 0}
+  scale: {x: 0.7561437, y: 0.7561437, z: 1}
   blackboardFields:
-  - guid: e47eec3c-12e5-4ac7-aaaf-de7bce3ad819
-    name: New Vector 3
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 18
-  - guid: 84d34319-6825-43fd-835e-6c02c42e270a
-    name: New Vector 2 Int
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 19
-  - guid: 9abeb62d-4ef9-4c0c-869a-8301a64d206b
-    name: New Vector 2
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 20
-  - guid: 8f92242a-386b-45a5-a043-137100469b35
-    name: New Double
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 21
-  - guid: 39888d71-853d-4c62-9719-4bcd9e8def79
-    name: New Float
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 22
-  - guid: 050d2982-276a-4d6a-b571-5b326aaa61ce
-    name: New Long
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 23
-  - guid: 3e7134ce-a607-4f81-a657-976f9a95f48d
-    name: New Vector 4
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 24
-  - guid: b03609ad-ce18-49ef-97d3-492cade50995
-    name: New Vector 2
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 25
-  - guid: 0e8b50ab-fd9f-48a1-b41f-3c978410f384
-    name: New Vector 2
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 26
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
-  - guid: 
-    name: 
-    type: 
-    serializedValue:
-      serializedType: 
-      serializedName: 
-      serializedValue: 
-    input: 1
-    settings:
-      id: 27
+  - name: Boolean
+    guid: d08bd15c-fcfa-43f6-875f-690efb294cd1
+    typeName: System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+  - name: Float
+    guid: 498202c0-5a0d-4455-a316-deb1e44654d8
+    typeName: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+  - name: Game Object
+    guid: e8c3c2a9-6547-4faf-ad05-777dfe85d30e
+    typeName: UnityEngine.GameObject, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
   references:
     version: 1
     00000000:
@@ -525,7 +216,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 0f35dd1c-a6c3-4879-ada0-df48e0a23213
-        computeOrder: 5
+        computeOrder: 6
         position:
           serializedVersion: 2
           x: 390
@@ -540,7 +231,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 733baa19-f7b5-4ab9-8724-99a5884906e1
-        computeOrder: 6
+        computeOrder: 7
         position:
           serializedVersion: 2
           x: 675
@@ -572,7 +263,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 51f7db5e-1176-487f-ac29-bab25f148c2f
-        computeOrder: 8
+        computeOrder: 5
         position:
           serializedVersion: 2
           x: 1317.5626
@@ -604,7 +295,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: a22f9b2d-eb05-41b7-a642-4a4cc4401ee7
-        computeOrder: 10
+        computeOrder: 0
         position:
           serializedVersion: 2
           x: 1073.7316
@@ -619,7 +310,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 0b1c372c-2f1b-4e53-8c3b-50d50834ee50
-        computeOrder: 11
+        computeOrder: 1
         position:
           serializedVersion: 2
           x: 1272.6575
@@ -657,7 +348,7 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 28
+          id: 19
         val: {x: 0, y: 0, z: 0}
     0000000E:
       type: {class: Vector2IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
@@ -671,7 +362,7 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 29
+          id: 20
         val: {x: 0, y: 0}
     0000000F:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
@@ -685,7 +376,7 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 30
+          id: 21
         val: 7
     00000010:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
@@ -699,7 +390,7 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 31
+          id: 22
         val: {fileID: 0}
     00000011:
       type: {class: ColorParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
@@ -713,77 +404,35 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 32
+          id: 23
         val: {r: 0, g: 0, b: 0, a: 0}
     00000012:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
-        isHidden: 0
-        expanded: 0
-        guid: e47eec3c-12e5-4ac7-aaaf-de7bce3ad819
+        guid: 6637ceef-3c47-46f2-963a-13fe19f81cf7
+        name: New Bool
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 24
+        val: 0
     00000013:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 84d34319-6825-43fd-835e-6c02c42e270a
-    00000014:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 9abeb62d-4ef9-4c0c-869a-8301a64d206b
-    00000015:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 8f92242a-386b-45a5-a043-137100469b35
-    00000016:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 39888d71-853d-4c62-9719-4bcd9e8def79
-    00000017:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 050d2982-276a-4d6a-b571-5b326aaa61ce
-    00000018:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 3e7134ce-a607-4f81-a657-976f9a95f48d
-    00000019:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: b03609ad-ce18-49ef-97d3-492cade50995
-    0000001A:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 0e8b50ab-fd9f-48a1-b41f-3c978410f384
-    0000001B:
-      type: {class: , ns: , asm: }
-    0000001C:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 1
         guid: 4b274763-31be-485c-a76e-ac07557c03c9
-    0000001D:
+    00000014:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: c556883b-4e53-47b9-9fdc-2c944eab199a
-    0000001E:
+    00000015:
       type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
@@ -792,16 +441,22 @@ MonoBehaviour:
         mode: 0
         min: 0
         max: 10
-    0000001F:
+    00000016:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: 7fafeece-2b81-416b-8b82-d3ee043346cc
-    00000020:
+    00000017:
       type: {class: ColorParameter/ColorSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: 4f96ffb6-6746-470d-b605-26817ad1f328
         mode: 0
+    00000018:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 6637ceef-3c47-46f2-963a-13fe19f81cf7

@@ -1,10 +1,11 @@
 using System;
 using GraphProcessor;
+using HLVS.Editor;
 using UnityEngine;
 
 namespace HLVS.Nodes
 {
-	[Serializable]
+	[Serializable] [HlvsType]
 	public class Direction
 	{
 		public Direction(Vector3 val)
