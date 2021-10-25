@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using GraphProcessor;
 using UnityEngine;
 
 namespace HLVS.Runtime
@@ -7,22 +9,31 @@ namespace HLVS.Runtime
 	{
 		public HlvsGraph graph;
 
+		[SerializeReference]
+		public List<ExposedParameter> graphParameters = new List<ExposedParameter>();
+
 		private void OnEnable()
 		{
-			//graph = Instantiate(graph); //TODO: Do we need to clone this?
-			
 			if (graph)
 				graph.LinkToScene(gameObject.scene);
 		}
 
 		private void Start()
 		{
-			graph.RunStartNodes();
+			if (graph)
+				graph.RunStartNodes(graphParameters);
 		}
 
 		private void Update()
 		{
-			graph.RunUpdateNodes();
+			if (graph)
+				graph.RunUpdateNodes(graphParameters);
+		}
+
+		private void OnTriggerEnter(Collider other)
+		{
+			if (graph)
+				graph.RunOnTriggerEnteredNodes(graphParameters);
 		}
 	}
 }

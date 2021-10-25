@@ -3,7 +3,7 @@ using GraphProcessor;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("HLVS/On Update")]
+	[Serializable, NodeMenuItem("HLVS/Begin/On Update")]
 	public class OnUpdateNode : ExecutionStarterNode
 	{
 		public override string name => "On Update";

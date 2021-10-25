@@ -10,20 +10,18 @@ namespace HLVS.Editor
 	[CustomEditor(typeof(HLVSBehaviour))]
 	public class HlvsBehaviourEditor : UnityEditor.Editor
 	{
-		private SerializedProperty _serializedGraph;
-		private HlvsGraph          _graph;
-		private HlvsGraph          _previousGraph;
+		private HlvsGraph _graph;
 
-		protected VisualElement                root;
-		protected ExposedParameterFieldFactory parameterFactory;
+		protected VisualElement root;
 
 		private VisualElement _defaultContainer;
-		VisualElement         _parameterContainer;
-		
+		VisualElement _parameterContainer;
+
 		/// <summary>
 		/// IMGUI elements have per default a margin of 0px, however Unity's properties have a 1px, 3px margin. This fixes the differences
 		/// </summary>
 		private StyleSheet _alignmentFixSheet;
+
 		private const string ParameterFixSheet = "PropertyFieldAlignmentFix";
 
 		protected void OnEnable()
@@ -31,50 +29,17 @@ namespace HLVS.Editor
 			_alignmentFixSheet = Resources.Load<StyleSheet>(ParameterFixSheet);
 			Debug.Assert(_alignmentFixSheet != null, "Did not find parameter fix style sheet");
 
-			Init();
+			Reinitialize();
 		}
 
-		private void Init()
+		private void Reinitialize()
 		{
 			_graph = (target as HLVSBehaviour)?.graph;
-			if (_graph)
-			{
-				RegisterExposedParameters(_graph);
-
-				parameterFactory = new ExposedParameterFieldFactory(_graph);
-			}
-			else
-			{
-				parameterFactory = null;
-			}
-		}
-
-		protected void OnDisable()
-		{
-			if (_graph)
-			{
-				UnregisterExposedParameters(_graph);
-			}
-
-			parameterFactory?.Dispose();
-			parameterFactory = null;
-		}
-
-		private void RegisterExposedParameters(HlvsGraph graph)
-		{
-			graph.onExposedParameterListChanged += UpdateExposedParameters;
-			graph.onExposedParameterModified += UpdateExposedParameters;
-		}
-
-		private void UnregisterExposedParameters(HlvsGraph graph)
-		{
-			graph.onExposedParameterListChanged -= UpdateExposedParameters;
-			graph.onExposedParameterModified -= UpdateExposedParameters;
 		}
 
 		public sealed override VisualElement CreateInspectorGUI()
 		{
-			Init();
+			Reinitialize();
 
 			root = new VisualElement();
 			root.styleSheets.Add(_alignmentFixSheet);
@@ -87,49 +52,44 @@ namespace HLVS.Editor
 			_defaultContainer = new VisualElement { name = "DefaultElements" };
 			_parameterContainer = new VisualElement { name = "ExposedParameters" };
 
-			DefaultElements(_defaultContainer);
-
-			if (_graph)
-				FillExposedParameters(_parameterContainer);
-
-
-			var separatorBox = new Box();
-			separatorBox.style.borderBottomColor = new Color { a = 1, r = 1, g = 1, b = 1 };
-			separatorBox.style.marginTop = 10;
-			separatorBox.style.marginBottom = 3;
+			AddDefaultElementsTo(_defaultContainer);
 
 			root.Add(_defaultContainer);
 			root.Add(new Button(() => EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(_graph))
 			{
 				text = "Open"
 			});
-			
-			root.Add(separatorBox);
+
+
+			var separatorBar = new Box
+			{
+				style =
+				{
+					borderBottomColor = new Color { a = 1, r = 1, g = 1, b = 1 },
+					marginTop = 10,
+					marginBottom = 3
+				}
+			};
+			root.Add(separatorBar);
 			root.Add(_parameterContainer);
 		}
 
-		void DefaultElements(VisualElement container)
+		void AddDefaultElementsTo(VisualElement container)
 		{
 			var property = serializedObject.FindProperty("graph");
-			var propertyField = new PropertyField(property) { label = "Graph", tooltip = "The graph asset that describes this components actions" };
+			var propertyField = new PropertyField(property)
+				{ label = "Graph", tooltip = "The graph asset that describes this components actions" };
 			propertyField.Bind(serializedObject);
 			propertyField.RegisterValueChangeCallback(
 				evt =>
 				{
 					if (evt.changedProperty.objectReferenceValue)
 					{
-						// unregister old callbacks
-						if (_previousGraph)
-							UnregisterExposedParameters(_previousGraph);
-
-						Init();
+						Reinitialize();
 
 						_parameterContainer.Clear();
 						if (_graph)
-							FillExposedParameters(_parameterContainer);
-
-						Debug.Log($"graph changed to: {_graph.name}");
-						_previousGraph = _graph;
+							AddGraphParametersTo(_parameterContainer);
 					}
 				});
 
@@ -139,65 +99,12 @@ namespace HLVS.Editor
 			container.Add(view);
 		}
 
-		protected void FillExposedParameters(VisualElement parameterContainer)
+		void AddGraphParametersTo(VisualElement container)
 		{
-			// params title
-			var paramsTitle = new Label("Parameters:");
-			paramsTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
-			paramsTitle.tooltip =
-				"Parameters are the inputs of a graph that can differ for each gameobject. They are the only way for a graph to work with scene references.";
-			parameterContainer.Add(paramsTitle);
-
-
-			// in case there a re no parameters, communicate that clearly with the user
-			if (_graph.exposedParameters.Count == 0)
-			{
-				var noParamsLabel = new Label("No parameters found");
-				noParamsLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
-				parameterContainer.Add(noParamsLabel);
-
-				return;
-			}
-
-
-			// for the case that the custom editor is not registered (call Init()). NOTE: this seems odd, it should not be called in this case
-			if (parameterFactory == null)
-				return;
-
-			// add parameter fields
-			foreach (var param in _graph.exposedParameters)
-			{
-				if (param.settings.isHidden)
-					continue;
-
-				var field = parameterFactory.GetParameterValueField(param, (newValue) =>
-				                                                                  {
-					                                                                  param.value = newValue;
-					                                                                  serializedObject.ApplyModifiedProperties();
-					                                                                  _graph.NotifyExposedParameterValueChanged(param);
-				                                                                  });
-				parameterContainer.Add(field);
-			}
+			var titleLabel = new Label("Parameters");
+			container.Add(titleLabel);
 		}
-
-		void UpdateExposedParameters(ExposedParameter param) => UpdateExposedParameters();
-
-		void UpdateExposedParameters()
-		{
-			if (!_graph)
-				return;
-			if (_parameterContainer == null)
-			{
-				CreateInspectorGUI();
-				return;
-			}
-
-			_parameterContainer.Clear();
-			FillExposedParameters(_parameterContainer);
-		}
-
-		public override void OnInspectorGUI()
-		{
-		}
+		
+		
 	}
 }

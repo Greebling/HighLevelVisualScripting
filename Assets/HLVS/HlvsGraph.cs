@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using GraphProcessor;
-using HLVS.Editor;
 using HLVS.Nodes;
 using UnityEngine;
 
@@ -8,64 +7,46 @@ namespace HLVS
 {
 	public class HlvsGraph : BaseGraph
 	{
-		protected List<OnStartNode> startNodes;
-		
-		protected 	HlvsGraphProcessor<OnStartNode> startNodeProcessor;
-		protected 	HlvsGraphProcessor<OnUpdateNode> updateNodeProcessor;
+		protected HlvsGraphProcessor<OnStartNode> startNodeProcessor;
+		protected HlvsGraphProcessor<OnUpdateNode> updateNodeProcessor;
+		protected HlvsGraphProcessor<OnTriggerEnteredNode> triggerNodeProcessor;
 
-		public List<BlackboardEntry> blackboardFields;
+		/// <summary>
+		/// Blackboard variables of a graph. They are shared amongst all instances of a graph asset
+		/// </summary>
+		[SerializeReference]
+		public List<ExposedParameter> blackboardFields = new List<ExposedParameter>();
+		
+		/// <summary>
+		/// Blueprint of which types are needed as parameters
+		/// </summary>
+		[SerializeReference]
+		public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
+		
 		protected override void OnEnable()
 		{
 			base.OnEnable();
 
-			InitStartNodesList();
-			onGraphChanges += RegisterExecutionNode;
-
 			startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
 			updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
+			triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
 		}
-
-		private void InitStartNodesList()
-		{
-			startNodes = new List<OnStartNode>();
-			foreach (BaseNode baseNode in nodes)
-			{
-				if (baseNode is OnStartNode startNode)
-				{
-					startNodes.Add(startNode);
-				}
-			}
-		}
-
-		protected override void OnDisable()
-		{
-			onGraphChanges -= RegisterExecutionNode;
-			base.OnDisable();
-		}
-
-		protected void RegisterExecutionNode(GraphChanges change)
-		{
-			if (change.addedNode == null)
-				return;
-
-			if (change.addedNode is OnStartNode startNode)
-			{
-				startNodes.Add(startNode);
-			}
-		}
-
-		public void RunStartNodes()
+		public void RunStartNodes(List<ExposedParameter> parameters)
 		{
 			startNodeProcessor.UpdateComputeOrder();
-			Debug.Log("Running...");
 			startNodeProcessor.Run();
-			Debug.Log("Run finished");
 		}
 
-		public void RunUpdateNodes()
+		public void RunUpdateNodes(List<ExposedParameter> parameters)
 		{
 			updateNodeProcessor.UpdateComputeOrder();
 			updateNodeProcessor.Run();
+		}
+
+		public void RunOnTriggerEnteredNodes(List<ExposedParameter> parameters)
+		{
+			triggerNodeProcessor.UpdateComputeOrder();
+			triggerNodeProcessor.Run();
 		}
 	}
 }

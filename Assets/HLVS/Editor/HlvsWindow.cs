@@ -50,7 +50,7 @@ namespace HLVS.Editor
 				
 				_toolbarView = new HlvsToolbarView(graphView);
 				graphView.Add(_toolbarView);
-				graphView.Add(graphView.blackboard);
+				graphView.Add(graphView.blackboardView.blackboard);
 				var bg = new GridBackground();
 				bg.AddToClassList("my-grid");
 				graphView.Insert(0, bg);
@@ -62,7 +62,7 @@ namespace HLVS.Editor
 		protected override void InitializeGraphView(BaseGraphView baseView)
 		{
 			var view = baseView as HlvsGraphView;
-			view.DisplayExistingBlackboardEntries();
+			view.blackboardView.DisplayExistingBlackboardEntries();
 		}
 	}
 }

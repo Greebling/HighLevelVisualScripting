@@ -424,4 +424,14 @@ namespace GraphProcessor
         public override object value { get => val; set => val = (Material)value; }
         public override Type GetValueType() => typeof(Material);
     }
+    
+    
+    [System.Serializable]
+    public class GenericParameter<T> : ExposedParameter
+    {
+	    [SerializeField] T val;
+
+	    public override object value { get => val; set => val = (T)value; }
+	    public override Type GetValueType() => typeof(T);
+    }
 }
