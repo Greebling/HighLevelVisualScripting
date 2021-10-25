@@ -1,4 +1,6 @@
-﻿using GraphProcessor;
+﻿using System.Collections.Generic;
+using GraphProcessor;
+using HLVS.Editor.Views;
 using HLVS.Runtime;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -11,11 +13,14 @@ namespace HLVS.Editor
 	public class HlvsBehaviourEditor : UnityEditor.Editor
 	{
 		private HlvsGraph _graph;
+		private HLVSBehaviour _behaviour => target as HLVSBehaviour;
 
 		protected VisualElement root;
 
 		private VisualElement _defaultContainer;
-		VisualElement _parameterContainer;
+		private VisualElement _parameterContainer;
+
+		private FieldView _parameterView = new FieldView();
 
 		/// <summary>
 		/// IMGUI elements have per default a margin of 0px, however Unity's properties have a 1px, 3px margin. This fixes the differences
@@ -85,6 +90,7 @@ namespace HLVS.Editor
 				{
 					if (evt.changedProperty.objectReferenceValue)
 					{
+						_behaviour.CreateFittingParamList();
 						Reinitialize();
 
 						_parameterContainer.Clear();
@@ -103,8 +109,25 @@ namespace HLVS.Editor
 		{
 			var titleLabel = new Label("Parameters");
 			container.Add(titleLabel);
+
+			foreach (var graphParameter in _behaviour.graphParameters)
+			{
+				var fieldContainer = new VisualElement();
+				fieldContainer.style.flexDirection = FlexDirection.Row;
+				
+				// labeling
+				var nameLabel = new Label($"{graphParameter.name}");
+				nameLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
+				nameLabel.style.width = 150;
+				fieldContainer.Add(nameLabel);
+				
+				// value field
+				var field = _parameterView.CreateEntryValueField(graphParameter.GetValueType(), graphParameter);
+				field.style.width = new StyleLength(StyleKeyword.Auto);
+				fieldContainer.Add(field);
+				
+				container.Add(fieldContainer);
+			}
 		}
-		
-		
 	}
 }
