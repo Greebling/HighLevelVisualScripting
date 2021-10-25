@@ -49,8 +49,14 @@ namespace HLVS.Editor
 				this.graphView = graphView;
 				
 				_toolbarView = new HlvsToolbarView(graphView);
+				
+				
 				graphView.Add(_toolbarView);
 				graphView.Add(graphView.blackboardView.blackboard);
+				graphView.Add(graphView.paramView.blackboard);
+				
+				
+				// background
 				var bg = new GridBackground();
 				bg.AddToClassList("my-grid");
 				graphView.Insert(0, bg);
@@ -63,6 +69,7 @@ namespace HLVS.Editor
 		{
 			var view = baseView as HlvsGraphView;
 			view.blackboardView.DisplayExistingBlackboardEntries();
+			view.paramView.DisplayExistingParameterEntries();
 		}
 	}
 }

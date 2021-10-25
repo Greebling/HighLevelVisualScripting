@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using GraphProcessor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -9,7 +8,7 @@ using UnityEngine.UIElements;
 
 namespace HLVS.Editor.Views
 {
-	public class BlackboardView : FieldView
+	public class ParameterView : FieldView
 	{
 		private readonly HlvsGraphView _graphView;
 		public readonly Blackboard blackboard;
@@ -18,12 +17,12 @@ namespace HLVS.Editor.Views
 
 		private HlvsGraph graph => _graphView.graph as HlvsGraph;
 
-		public BlackboardView(HlvsGraphView graphView)
+		public ParameterView(HlvsGraphView graphView)
 		{
 			_graphView = graphView;
 			
 			blackboard = new Blackboard();
-			blackboard.title = "Blackboard";
+			blackboard.title = "Parameters";
 			blackboard.subTitle = "";
 			
 			_mainSection = new BlackboardSection();
@@ -54,7 +53,8 @@ namespace HLVS.Editor.Views
 				_addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
 				{
 					var finalName =
-						ObjectNames.GetUniqueName(graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
+						ObjectNames.GetUniqueName(
+							graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
 							niceParamName);
 					AddBlackboardEntry(type, finalName);
 				});
@@ -72,19 +72,19 @@ namespace HLVS.Editor.Views
 			// Debug Stuff
 			_addMenu.AddSeparator("");
 			_addMenu.AddSeparator("");
-			_addMenu.AddItem(new GUIContent("Clear Blackboard"), false,
+			_addMenu.AddItem(new GUIContent("Clear Parameters"), false,
 				() =>
 				{
 					blackboard.Clear();
-					graph.blackboardFields.Clear();
+					graph.parametersBlueprint.Clear();
 				});
 		}
 
-		public void DisplayExistingBlackboardEntries()
+		public void DisplayExistingParameterEntries()
 		{
 			_mainSection.Clear();
 
-			foreach (var field in graph.blackboardFields)
+			foreach (var field in graph.parametersBlueprint)
 			{
 				if (field.GetValueType() == null)
 				{
@@ -92,7 +92,7 @@ namespace HLVS.Editor.Views
 				}
 				else
 				{
-					var row = CreateBlackboardRow(field.GetValueType(), field.name, field);
+					var row = CreateBlackboardRow(field.name, field);
 					_mainSection.Add(row);
 				}
 			}
@@ -110,14 +110,14 @@ namespace HLVS.Editor.Views
 
 			param.name = entryName;
 			param.guid = Guid.NewGuid().ToString();
-			graph.blackboardFields.Add(param);
+			graph.parametersBlueprint.Add(param);
 
 			// ui
-			var field = CreateBlackboardRow(entryType, entryName, param);
+			var field = CreateBlackboardRow(entryName, param);
 			_mainSection.Add(field);
 		}
 
-		protected BlackboardField CreateBlackboardRow(Type entryType, string entryName, ExposedParameter param)
+		protected BlackboardField CreateBlackboardRow(string entryName, ExposedParameter param)
 		{
 			var field = new BlackboardField();
 			field.AddToClassList("hlvs-blackboard-field");
@@ -128,15 +128,10 @@ namespace HLVS.Editor.Views
 			field.Q("contentItem").Remove(typeL);
 			field.Q("node-border").style.overflow = Overflow.Hidden;
 
-			// displays the value of the field
-			var objField = CreateEntryValueField(entryType, param);
-			field.Add(objField);
-
-
 			// display remove option
 			var removeButton = new Button(() =>
 			{
-				graph.blackboardFields.Remove(param);
+				graph.parametersBlueprint.Remove(param);
 				_mainSection.Remove(field);
 			});
 			removeButton.text = " - ";

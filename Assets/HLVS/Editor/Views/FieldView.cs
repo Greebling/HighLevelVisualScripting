@@ -39,6 +39,8 @@ namespace HLVS.Editor.Views
 					return new Vector3Parameter();
 				case "Vector4":
 					return new Vector4Parameter();
+				case "GameObject":
+					return new GameObjectParameter();
 			}
 		}
 

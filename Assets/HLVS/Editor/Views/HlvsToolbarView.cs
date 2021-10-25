@@ -7,6 +7,7 @@ namespace HLVS.Editor.Views
 	{
 		
 		protected ToolbarButtonData showBlackboard;
+		protected ToolbarButtonData showParametersButton;
 		protected HlvsGraphView view;
 
 
@@ -20,6 +21,10 @@ namespace HLVS.Editor.Views
 			showBlackboard = AddToggle("Show Blackboard", view.blackboardView.blackboard.visible, v =>
 			{
 				view.blackboardView.blackboard.visible = v;
+			});
+			showParametersButton = AddToggle("Show Parameters", view.paramView.blackboard.visible, v =>
+			{
+				view.paramView.blackboard.visible = v;
 			});
 
 			AddButton("Show In Project", () => EditorGUIUtility.PingObject(graphView.graph), false);
