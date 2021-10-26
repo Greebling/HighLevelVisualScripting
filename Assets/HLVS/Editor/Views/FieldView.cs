@@ -63,6 +63,9 @@ namespace HLVS.Editor.Views
 					objField.style.width =
 						0; //so it does not have such a long minimum width and is aligned with other fields
 					objField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
+
+					if (parameter.value != null)
+						objField.value = (UnityEngine.Object) parameter.value;
 					return objField;
 				case "String":
 					var stringField = new TextField();
@@ -70,6 +73,9 @@ namespace HLVS.Editor.Views
 					stringField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					stringField.style.width = 0;
 					stringField.style.flexGrow = new StyleFloat(1.5f);
+					
+					if (parameter.value != null)
+						stringField.value = (string) parameter.value;
 					return stringField;
 				case "Color":
 					var colorField = new ColorField();
@@ -78,14 +84,18 @@ namespace HLVS.Editor.Views
 					colorField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					colorField.style.width = 0;
 					colorField.style.flexGrow = new StyleFloat(1.5f);
+					
+					if (parameter.value != null)
+						colorField.value = (Color) parameter.value;
 					return colorField;
 				case "Single":
 					var floatField = new FloatField();
-					parameter.value ??= 0.0f;
 					floatField.value = (float)parameter.value;
 					floatField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					floatField.style.width = 0;
 					floatField.style.flexGrow = new StyleFloat(1.5f);
+					
+					floatField.value = (float) parameter.value;
 					return floatField;
 				case "Boolean":
 					var boolField = new Button();
@@ -110,19 +120,21 @@ namespace HLVS.Editor.Views
 					return boolField;
 				case "Int32":
 					var intField = new IntegerField();
-					parameter.value ??= 0;
 					intField.value = (int)parameter.value;
 					intField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					intField.style.width = 0;
 					intField.style.flexGrow = new StyleFloat(1.5f);
+					
+					intField.value = (int) parameter.value;
 					return intField;
 				case "Vector2":
 					var vector2Field = new Vector2Field();
-					parameter.value ??= new Vector2();
 					vector2Field.value = (Vector2)parameter.value;
 					vector2Field.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					vector2Field.style.width = 0;
 					vector2Field.style.flexGrow = new StyleFloat(1.5f);
+					
+					vector2Field.value = (Vector2) parameter.value;
 					return vector2Field;
 				case "Vector3":
 					var vector3Field = new Vector3Field();
@@ -131,6 +143,8 @@ namespace HLVS.Editor.Views
 					vector3Field.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					vector3Field.style.width = 0;
 					vector3Field.style.flexGrow = new StyleFloat(1.5f);
+					
+					vector3Field.value = (Vector3) parameter.value;
 					return vector3Field;
 				case "Vector4":
 					var vector4Field = new Vector4Field();
@@ -139,6 +153,8 @@ namespace HLVS.Editor.Views
 					vector4Field.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					vector4Field.style.width = 0;
 					vector4Field.style.flexGrow = new StyleFloat(1.5f);
+					
+					vector4Field.value = (Vector4) parameter.value;
 					return vector4Field;
 			}
 		}

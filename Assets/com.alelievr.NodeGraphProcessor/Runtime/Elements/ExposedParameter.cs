@@ -50,6 +50,16 @@ namespace GraphProcessor
 			this.value = value;
         }
 
+        public static ExposedParameter CopyParameter(ExposedParameter parameter)
+        {
+	        var copy = Activator.CreateInstance(parameter.GetType()) as ExposedParameter;
+	        copy.name = parameter.name;
+	        copy.guid = parameter.guid;
+	        copy.value = parameter.value;
+	        copy.settings = parameter.settings;
+	        return copy;
+        }
+
 		void ISerializationCallbackReceiver.OnAfterDeserialize()
 		{
 			// SerializeReference migration step:

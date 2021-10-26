@@ -115,6 +115,8 @@ namespace HLVS.Editor.Views
 			// ui
 			var field = CreateBlackboardRow(entryName, param);
 			_mainSection.Add(field);
+			
+			graph.OnParameterListChanged.Invoke();
 		}
 
 		protected BlackboardField CreateBlackboardRow(string entryName, ExposedParameter param)
@@ -133,6 +135,7 @@ namespace HLVS.Editor.Views
 			{
 				graph.parametersBlueprint.Remove(param);
 				_mainSection.Remove(field);
+				graph.OnParameterListChanged.Invoke();
 			});
 			removeButton.text = " - ";
 			removeButton.tooltip = "Remove entry";

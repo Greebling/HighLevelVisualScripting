@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GraphProcessor;
 using HLVS.Nodes;
 using UnityEngine;
@@ -22,6 +23,8 @@ namespace HLVS
 		/// </summary>
 		[SerializeReference]
 		public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
+
+		public Action OnParameterListChanged;
 		
 		protected override void OnEnable()
 		{

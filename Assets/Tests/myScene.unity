@@ -272,6 +272,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000, guid: 76b199881b21ce14eb04276c765dc50d, type: 2}
+  graphParameters: []
+  references:
+    version: 1
 --- !u!4 &1513702498
 Transform:
   m_ObjectHideFlags: 0
@@ -388,8 +391,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1735116950}
-  - component: {fileID: 1735116949}
   - component: {fileID: 1735116951}
+  - component: {fileID: 1735116949}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -410,6 +413,78 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000, guid: 76b199881b21ce14eb04276c765dc50d, type: 2}
+  graphParameters:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  references:
+    version: 1
+    00000000:
+      type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: String
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 4
+        val: Hi
+    00000001:
+      type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: Boolean
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 4
+        val: 0
+    00000002:
+      type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: Vector 3
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 4
+        val: {x: 0, y: 0, z: 0}
+    00000003:
+      type: {class: ColorParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 6e5c3fc6-86af-487b-a1d1-1b65618ed630
+        name: Color
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 5
+        val: {r: 0.7924528, g: 0.078497685, b: 0.078497685, a: 0}
+    00000004:
+      type: {class: , ns: , asm: }
+    00000005:
+      type: {class: ColorParameter/ColorSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 67376047-a338-4a14-8bb5-88d09b28f8c7
+        mode: 0
 --- !u!4 &1735116950
 Transform:
   m_ObjectHideFlags: 0

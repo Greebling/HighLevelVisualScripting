@@ -1,3 +1,3 @@
-.unity-imgui-container {
-    margin: 1px 3px;
+.unity-button {
+    margin-left: 0;
 }

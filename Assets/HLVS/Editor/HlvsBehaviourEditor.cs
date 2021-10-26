@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GraphProcessor;
 using HLVS.Editor.Views;
 using HLVS.Runtime;
@@ -13,6 +14,7 @@ namespace HLVS.Editor
 	public class HlvsBehaviourEditor : UnityEditor.Editor
 	{
 		private HlvsGraph _graph;
+
 		private HLVSBehaviour _behaviour => target as HLVSBehaviour;
 
 		protected VisualElement root;
@@ -20,26 +22,33 @@ namespace HLVS.Editor
 		private VisualElement _defaultContainer;
 		private VisualElement _parameterContainer;
 
-		private FieldView _parameterView = new FieldView();
+		private readonly FieldView _parameterView = new FieldView();
 
-		/// <summary>
-		/// IMGUI elements have per default a margin of 0px, however Unity's properties have a 1px, 3px margin. This fixes the differences
-		/// </summary>
-		private StyleSheet _alignmentFixSheet;
-
-		private const string ParameterFixSheet = "PropertyFieldAlignmentFix";
-
-		protected void OnEnable()
+		private void OnEnable()
 		{
-			_alignmentFixSheet = Resources.Load<StyleSheet>(ParameterFixSheet);
-			Debug.Assert(_alignmentFixSheet != null, "Did not find parameter fix style sheet");
-
 			Reinitialize();
+		}
+
+		private void OnDisable()
+		{
+			Deinitialize();
 		}
 
 		private void Reinitialize()
 		{
-			_graph = (target as HLVSBehaviour)?.graph;
+			_graph = (target as HLVSBehaviour).graph;
+			if (_graph)
+			{
+				_graph.OnParameterListChanged += OnParamsChanged;
+			}
+		}
+
+		private void Deinitialize()
+		{
+			if (_graph)
+			{
+				_graph.OnParameterListChanged -= OnParamsChanged;
+			}
 		}
 
 		public sealed override VisualElement CreateInspectorGUI()
@@ -47,87 +56,120 @@ namespace HLVS.Editor
 			Reinitialize();
 
 			root = new VisualElement();
-			root.styleSheets.Add(_alignmentFixSheet);
 			CreateInspector();
 			return root;
 		}
 
+		void OnParamsChanged()
+		{
+			_behaviour.OnParamListChanged();
+			CreateInspector();
+		}
+
 		protected void CreateInspector()
 		{
+			root.Clear();
 			_defaultContainer = new VisualElement { name = "DefaultElements" };
 			_parameterContainer = new VisualElement { name = "ExposedParameters" };
 
+			
+			// Top
 			AddDefaultElementsTo(_defaultContainer);
-
 			root.Add(_defaultContainer);
-			root.Add(new Button(() => EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(_graph))
-			{
-				text = "Open"
-			});
-
-
-			var separatorBar = new Box
-			{
-				style =
-				{
-					borderBottomColor = new Color { a = 1, r = 1, g = 1, b = 1 },
-					marginTop = 10,
-					marginBottom = 3
-				}
-			};
-			root.Add(separatorBar);
+			
+			// Bottom
+			AddGraphParametersTo(_parameterContainer);
 			root.Add(_parameterContainer);
 		}
 
 		void AddDefaultElementsTo(VisualElement container)
 		{
+			// graph field
 			var property = serializedObject.FindProperty("graph");
 			var propertyField = new PropertyField(property)
-				{ label = "Graph", tooltip = "The graph asset that describes this components actions" };
+				{ label = "Graph", tooltip = "The graph asset that describes this components behaviour" };
 			propertyField.Bind(serializedObject);
 			propertyField.RegisterValueChangeCallback(
 				evt =>
 				{
-					if (evt.changedProperty.objectReferenceValue)
-					{
-						_behaviour.CreateFittingParamList();
-						Reinitialize();
+					// check if the graph value actually changed
+					if (_graph == _behaviour.graph)
+						return;
 
-						_parameterContainer.Clear();
-						if (_graph)
-							AddGraphParametersTo(_parameterContainer);
-					}
+					Deinitialize();
+					Reinitialize();
+
+					_behaviour.CreateFittingParamList();
+					CreateInspector();
 				});
 
 			VisualElement view = new VisualElement();
 			view.Add(propertyField);
+			
+			
+			// open button
+			var button = new Button(() =>
+			{
+				if (_graph)
+					EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(_graph);
+			});
+			button.text = "Open";
+			button.name = "open-button";
+			button.SetEnabled(_graph);
+			view.Add(button);
 
 			container.Add(view);
 		}
 
 		void AddGraphParametersTo(VisualElement container)
 		{
-			var titleLabel = new Label("Parameters");
-			container.Add(titleLabel);
+			container.Clear();
+			var paramsContainer = new VisualElement();
+
+			var titleLabel = new Label("Parameters:");
+			titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+			titleLabel.style.fontSize = 13;
+			titleLabel.style.marginTop = 6;
+			titleLabel.style.marginBottom = 3;
+			paramsContainer.Add(titleLabel);
+
+
+			// add label if no params are drawn
+			if (_behaviour.graphParameters.Count == 0)
+			{
+				var noneLabel = new Label("No Graph Parameters");
+				noneLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
+				noneLabel.style.marginTop = 3;
+				noneLabel.style.marginBottom = 3;
+				noneLabel.style.unityTextAlign = new StyleEnum<TextAnchor>(TextAnchor.MiddleCenter);
+				paramsContainer.Add(noneLabel);
+			}
+
 
 			foreach (var graphParameter in _behaviour.graphParameters)
 			{
 				var fieldContainer = new VisualElement();
 				fieldContainer.style.flexDirection = FlexDirection.Row;
-				
+
 				// labeling
 				var nameLabel = new Label($"{graphParameter.name}");
 				nameLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
 				nameLabel.style.width = 150;
 				fieldContainer.Add(nameLabel);
-				
+
 				// value field
 				var field = _parameterView.CreateEntryValueField(graphParameter.GetValueType(), graphParameter);
 				field.style.width = new StyleLength(StyleKeyword.Auto);
 				fieldContainer.Add(field);
-				
-				container.Add(fieldContainer);
+
+				// fix alignment for buttons
+				if (field.ClassListContains("unity-button"))
+					field.style.marginLeft = new Length(3, LengthUnit.Pixel);
+
+				paramsContainer.Add(fieldContainer);
 			}
+
+			container.Add(paramsContainer);
 		}
 	}
 }

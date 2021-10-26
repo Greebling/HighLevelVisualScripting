@@ -19,14 +19,36 @@ namespace HLVS.Runtime
 				graphParameters.Clear();
 				return;
 			}
-			
-			graphParameters = graph.parametersBlueprint
-				.Select(param => Activator.CreateInstance(param.GetType()) as ExposedParameter)
-				.ToList();
 
-			for (int i = 0; i < graphParameters.Count; i++)
+			graphParameters = graph.parametersBlueprint
+				.Select(ExposedParameter.CopyParameter)
+				.ToList();
+		}
+
+		public void OnParamListChanged()
+		{
+			if (graph.parametersBlueprint.Count == graphParameters.Count)
 			{
-				graphParameters[i].name = graph.parametersBlueprint[i].name;
+				return;
+			}
+
+			if (graph.parametersBlueprint.Count == 0)
+			{
+				graphParameters.Clear();
+				return;
+			}
+
+			if (graph.parametersBlueprint.Count > graphParameters.Count)
+			{
+				// added an entry at the end
+				var missingParam = graph.parametersBlueprint.Last();
+				graphParameters.Add(ExposedParameter.CopyParameter(missingParam));
+			}
+			else
+			{
+				// removed an entry somewhere
+				graphParameters.FindAll(parameter => graph.parametersBlueprint.All(exposedParameter => exposedParameter.name != parameter.name))
+					.ForEach(parameter => graphParameters.Remove(parameter));
 			}
 		}
 
