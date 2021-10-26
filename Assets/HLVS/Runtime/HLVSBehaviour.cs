@@ -27,6 +27,15 @@ namespace HLVS.Runtime
 
 		public void OnParamListChanged()
 		{
+			// correct non matching names
+			foreach (var parameter in graphParameters)
+			{
+				var graphParam =
+					graph.parametersBlueprint.Find(exposedParameter => exposedParameter.guid == parameter.guid);
+				if (graphParam != null)
+					parameter.name = graphParam.name;
+			}
+
 			if (graph.parametersBlueprint.Count == graphParameters.Count)
 			{
 				return;
@@ -47,7 +56,8 @@ namespace HLVS.Runtime
 			else
 			{
 				// removed an entry somewhere
-				graphParameters.FindAll(parameter => graph.parametersBlueprint.All(exposedParameter => exposedParameter.name != parameter.name))
+				graphParameters.FindAll(parameter =>
+						graph.parametersBlueprint.All(exposedParameter => exposedParameter.guid != parameter.guid))
 					.ForEach(parameter => graphParameters.Remove(parameter));
 			}
 		}

@@ -39,7 +39,7 @@ namespace HLVS.Editor
 			_graph = (target as HLVSBehaviour).graph;
 			if (_graph)
 			{
-				_graph.OnParameterListChanged += OnParamsChanged;
+				_graph.onParameterListChanged += OnParamsChanged;
 			}
 		}
 
@@ -47,7 +47,7 @@ namespace HLVS.Editor
 		{
 			if (_graph)
 			{
-				_graph.OnParameterListChanged -= OnParamsChanged;
+				_graph.onParameterListChanged -= OnParamsChanged;
 			}
 		}
 

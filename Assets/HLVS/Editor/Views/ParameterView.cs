@@ -20,14 +20,14 @@ namespace HLVS.Editor.Views
 		public ParameterView(HlvsGraphView graphView)
 		{
 			_graphView = graphView;
-			
+
 			blackboard = new Blackboard();
 			blackboard.title = "Parameters";
 			blackboard.subTitle = "";
-			
+
 			_mainSection = new BlackboardSection();
 			blackboard.Add(_mainSection);
-			
+
 			InitBlackboardMenu();
 			blackboard.addItemRequested += OnClickedAdd;
 		}
@@ -109,14 +109,22 @@ namespace HLVS.Editor.Views
 			param.Initialize(entryName, initValue);
 
 			param.name = entryName;
-			param.guid = Guid.NewGuid().ToString();
 			graph.parametersBlueprint.Add(param);
 
 			// ui
 			var field = CreateBlackboardRow(entryName, param);
 			_mainSection.Add(field);
-			
-			graph.OnParameterListChanged.Invoke();
+
+			graph.onParameterListChanged.Invoke();
+		}
+
+		private void OnParamRenamed(ExposedParameter param, string newName)
+		{
+			if(param.name == newName)
+				return;
+
+			param.name = newName;
+			graph.onParameterListChanged.Invoke();
 		}
 
 		protected BlackboardField CreateBlackboardRow(string entryName, ExposedParameter param)
@@ -124,18 +132,18 @@ namespace HLVS.Editor.Views
 			var field = new BlackboardField();
 			field.AddToClassList("hlvs-blackboard-field");
 			field.text = entryName;
-			field.typeText = "";
-
-			var typeL = field.Q<Label>("typeLabel");
-			field.Q("contentItem").Remove(typeL);
+			field.typeText = param.GetValueType().Name;
 			field.Q("node-border").style.overflow = Overflow.Hidden;
+			
+			// add updates for name changes
+			field.Q<TextField>().RegisterValueChangedCallback(evt => OnParamRenamed(param, evt.newValue));
 
 			// display remove option
 			var removeButton = new Button(() =>
 			{
 				graph.parametersBlueprint.Remove(param);
 				_mainSection.Remove(field);
-				graph.OnParameterListChanged.Invoke();
+				graph.onParameterListChanged.Invoke();
 			});
 			removeButton.text = " - ";
 			removeButton.tooltip = "Remove entry";

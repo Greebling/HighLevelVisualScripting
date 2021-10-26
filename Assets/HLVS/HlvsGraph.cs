@@ -24,7 +24,7 @@ namespace HLVS
 		[SerializeReference]
 		public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
 
-		public Action OnParameterListChanged;
+		public Action onParameterListChanged = () => {};
 		
 		protected override void OnEnable()
 		{
