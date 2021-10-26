@@ -1,5 +1,7 @@
 ﻿using GraphProcessor;
 using UnityEditor;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace HLVS.Editor.Views
 {
@@ -12,6 +14,13 @@ namespace HLVS.Editor.Views
 		{
 			blackboardView = new BlackboardView(this);
 			paramView = new ParameterView(this);
+		}
+
+		public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+		{
+			base.BuildContextualMenu(evt);
+			// insert menu items here
+			// TODO: Remove current menu options as they are way too cluttered
 		}
 	}
 }
