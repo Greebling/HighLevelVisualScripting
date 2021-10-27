@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using PopupWindow = UnityEngine.UIElements.PopupWindow;
 
 namespace HLVS.Editor
 {
@@ -52,8 +53,18 @@ namespace HLVS.Editor
 				
 				
 				graphView.Add(_toolbarView);
-				graphView.Add(graphView.blackboardView.blackboard);
-				graphView.Add(graphView.paramView.blackboard);
+
+
+				graphView.blackboardView.blackboard.graphView = graphView;
+				graphView.paramView.blackboard.graphView = graphView;
+				var vs = new VisualElement();
+				vs.style.marginTop = 3;
+				vs.style.alignSelf = new StyleEnum<Align>(Align.FlexStart);
+				
+				vs.Add(graphView.blackboardView.blackboard);
+				vs.Add(graphView.paramView.blackboard);
+				graphView.Add(vs);
+
 				
 				
 				// background

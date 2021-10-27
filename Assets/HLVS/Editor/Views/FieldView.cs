@@ -46,6 +46,8 @@ namespace HLVS.Editor.Views
 			}
 		}
 
+		private const float fieldWidth = 1.0f;
+
 		/// <summary>
 		/// Creates an editor field for a given parameter
 		/// </summary>
@@ -61,7 +63,7 @@ namespace HLVS.Editor.Views
 					objField.objectType = entryType;
 					objField.label = "";
 					objField.allowSceneObjects = false;
-					objField.style.flexGrow = new StyleFloat(1.5f);
+					objField.style.flexGrow = new StyleFloat(fieldWidth);
 					objField.style.width =
 						0; //so it does not have such a long minimum width and is aligned with other fields
 					objField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
@@ -74,7 +76,7 @@ namespace HLVS.Editor.Views
 					parameter.value ??= "";
 					stringField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					stringField.style.width = 0;
-					stringField.style.flexGrow = new StyleFloat(1.5f);
+					stringField.style.flexGrow = new StyleFloat(fieldWidth);
 					
 					if (parameter.value != null)
 						stringField.value = (string) parameter.value;
@@ -85,7 +87,7 @@ namespace HLVS.Editor.Views
 					colorField.value = (Color)parameter.value;
 					colorField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					colorField.style.width = 0;
-					colorField.style.flexGrow = new StyleFloat(1.5f);
+					colorField.style.flexGrow = new StyleFloat(fieldWidth);
 					
 					if (parameter.value != null)
 						colorField.value = (Color) parameter.value;
@@ -95,7 +97,7 @@ namespace HLVS.Editor.Views
 					floatField.value = (float)parameter.value;
 					floatField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					floatField.style.width = 0;
-					floatField.style.flexGrow = new StyleFloat(1.5f);
+					floatField.style.flexGrow = new StyleFloat(fieldWidth);
 					
 					floatField.value = (float) parameter.value;
 					return floatField;
@@ -118,14 +120,14 @@ namespace HLVS.Editor.Views
 					// not sure why, but this is needed aligns it with other entries:
 					boolField.style.marginLeft = new Length(12, LengthUnit.Pixel);
 					boolField.style.width = 0;
-					boolField.style.flexGrow = new StyleFloat(1.5f);
+					boolField.style.flexGrow = new StyleFloat(fieldWidth);
 					return boolField;
 				case "Int32":
 					var intField = new IntegerField();
 					intField.value = (int)parameter.value;
 					intField.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					intField.style.width = 0;
-					intField.style.flexGrow = new StyleFloat(1.5f);
+					intField.style.flexGrow = new StyleFloat(fieldWidth);
 					
 					intField.value = (int) parameter.value;
 					return intField;
@@ -134,7 +136,7 @@ namespace HLVS.Editor.Views
 					vector2Field.value = (Vector2)parameter.value;
 					vector2Field.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					vector2Field.style.width = 0;
-					vector2Field.style.flexGrow = new StyleFloat(1.5f);
+					vector2Field.style.flexGrow = new StyleFloat(fieldWidth);
 					
 					vector2Field.value = (Vector2) parameter.value;
 					return vector2Field;
@@ -144,7 +146,7 @@ namespace HLVS.Editor.Views
 					vector3Field.value = (Vector3)parameter.value;
 					vector3Field.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					vector3Field.style.width = 0;
-					vector3Field.style.flexGrow = new StyleFloat(1.5f);
+					vector3Field.style.flexGrow = new StyleFloat(fieldWidth);
 					
 					vector3Field.value = (Vector3) parameter.value;
 					return vector3Field;
@@ -154,7 +156,7 @@ namespace HLVS.Editor.Views
 					vector4Field.value = (Vector4)parameter.value;
 					vector4Field.RegisterValueChangedCallback(evt => parameter.value = evt.newValue);
 					vector4Field.style.width = 0;
-					vector4Field.style.flexGrow = new StyleFloat(1.5f);
+					vector4Field.style.flexGrow = new StyleFloat(fieldWidth);
 					
 					vector4Field.value = (Vector4) parameter.value;
 					return vector4Field;

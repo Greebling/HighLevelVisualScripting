@@ -25,7 +25,9 @@ namespace HLVS.Editor.Views
 			blackboard.title = "Parameters";
 			blackboard.subTitle = "";
 			blackboard.scrollable = true;
-			blackboard.windowed = false;
+			blackboard.windowed = true;
+			blackboard.style.width = 230;
+			blackboard.style.height = 400;
 
 			_mainSection = new BlackboardSection();
 			blackboard.Add(_mainSection);
