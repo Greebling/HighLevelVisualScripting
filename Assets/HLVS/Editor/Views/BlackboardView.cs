@@ -25,17 +25,42 @@ namespace HLVS.Editor.Views
 			blackboard = new Blackboard();
 			blackboard.title = "Blackboard";
 			blackboard.subTitle = "";
+			blackboard.scrollable = true;
+			blackboard.windowed = true;
 			
 			_mainSection = new BlackboardSection();
 			blackboard.Add(_mainSection);
 			
 			InitBlackboardMenu();
 			blackboard.addItemRequested += OnClickedAdd;
+			blackboard.moveItemRequested += (blackboard1, index, element) => _mainSection.Insert(index, element);
+			blackboard.moveItemRequested += (blackboard1, index, element) => OnItemMoved(index, element);
 		}
 
 		private void OnClickedAdd(Blackboard b)
 		{
 			_addMenu.ShowAsContext();
+		}
+		
+		/// <summary>
+		/// Reorders the data lists to keep in sync with the ui
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="element"></param>
+		private void OnItemMoved(int index, VisualElement element)
+		{
+			var list = graph.blackboardFields;
+			int previousIndex = list.FindIndex(parameter => parameter.guid == element.name);
+			if (previousIndex == -1)
+				return;
+			
+			var paramToMove = list[previousIndex];
+			list.RemoveAt(previousIndex);
+			
+			if (index >= list.Count)
+				list.Add(paramToMove);
+			else
+				list.Insert(index, paramToMove);
 		}
 
 		private void InitBlackboardMenu()
@@ -120,6 +145,7 @@ namespace HLVS.Editor.Views
 		protected BlackboardField CreateBlackboardRow(Type entryType, string entryName, ExposedParameter param)
 		{
 			var field = new BlackboardField();
+			field.name = param.guid;
 			field.AddToClassList("hlvs-blackboard-field");
 			field.text = entryName;
 			field.typeText = "";

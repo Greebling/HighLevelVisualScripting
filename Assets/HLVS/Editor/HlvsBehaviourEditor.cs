@@ -51,6 +51,16 @@ namespace HLVS.Editor
 			}
 		}
 
+		/*
+		private void OnSceneGUI()
+		{
+			if (Selection.activeGameObject == _behaviour.gameObject)
+			{
+				CreateInspector();
+			}
+		}
+		*/
+
 		public sealed override VisualElement CreateInspectorGUI()
 		{
 			Reinitialize();

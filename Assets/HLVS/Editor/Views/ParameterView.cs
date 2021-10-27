@@ -24,17 +24,44 @@ namespace HLVS.Editor.Views
 			blackboard = new Blackboard();
 			blackboard.title = "Parameters";
 			blackboard.subTitle = "";
+			blackboard.scrollable = true;
+			blackboard.windowed = false;
 
 			_mainSection = new BlackboardSection();
 			blackboard.Add(_mainSection);
 
 			InitBlackboardMenu();
 			blackboard.addItemRequested += OnClickedAdd;
+			blackboard.moveItemRequested += (blackboard1, index, element) => _mainSection.Insert(index, element);
+			blackboard.moveItemRequested += (blackboard1, index, element) => OnItemMoved(index, element);
 		}
 
 		private void OnClickedAdd(Blackboard b)
 		{
 			_addMenu.ShowAsContext();
+		}
+		
+		/// <summary>
+		/// Reorders the data lists to keep in sync with the ui
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="element"></param>
+		private void OnItemMoved(int index, VisualElement element)
+		{
+			var list = graph.parametersBlueprint;
+			int previousIndex = list.FindIndex(parameter => parameter.guid == element.name);
+			if (previousIndex == -1)
+				return;
+			
+			var paramToMove = list[previousIndex];
+			list.RemoveAt(previousIndex);
+			
+			if (index >= list.Count)
+				list.Add(paramToMove);
+			else
+				list.Insert(index, paramToMove);
+			
+			graph.onParameterListChanged.Invoke();
 		}
 
 		private void InitBlackboardMenu()
@@ -120,7 +147,7 @@ namespace HLVS.Editor.Views
 
 		private void OnParamRenamed(ExposedParameter param, string newName)
 		{
-			if(param.name == newName)
+			if (param.name == newName)
 				return;
 
 			param.name = newName;
@@ -130,11 +157,12 @@ namespace HLVS.Editor.Views
 		protected BlackboardField CreateBlackboardRow(string entryName, ExposedParameter param)
 		{
 			var field = new BlackboardField();
+			field.name = param.guid;
 			field.AddToClassList("hlvs-blackboard-field");
 			field.text = entryName;
 			field.typeText = param.GetValueType().Name;
 			field.Q("node-border").style.overflow = Overflow.Hidden;
-			
+
 			// add updates for name changes
 			field.Q<TextField>().RegisterValueChangedCallback(evt => OnParamRenamed(param, evt.newValue));
 
