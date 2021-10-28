@@ -137,6 +137,11 @@ namespace HLVS.Editor.Views
 			var field = CreateBlackboardRow(entryType, entryName, param);
 			_mainSection.Add(field);
 		}
+		
+		private void OnVarRenamed(ExposedParameter param, string newName)
+		{
+			param.name = newName;
+		}
 
 		protected BlackboardField CreateBlackboardRow(Type entryType, string entryName, ExposedParameter param)
 		{
@@ -154,6 +159,7 @@ namespace HLVS.Editor.Views
 			var objField = CreateEntryValueField(entryType, param);
 			field.Add(objField);
 
+			field.Q<TextField>().RegisterValueChangedCallback(evt => OnVarRenamed(param, evt.newValue));
 
 			// display remove option
 			var removeButton = new Button(() =>
