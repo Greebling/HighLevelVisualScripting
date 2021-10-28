@@ -10,16 +10,13 @@ namespace HLVS.Editor.Views
 {
 	public class ParameterView : FieldView
 	{
-		private readonly HlvsGraphView _graphView;
 		public readonly Blackboard blackboard;
 		private GenericMenu _addMenu;
 		private readonly BlackboardSection _mainSection;
 
-		private HlvsGraph graph => _graphView.graph as HlvsGraph;
-
 		public ParameterView(HlvsGraphView graphView)
 		{
-			_graphView = graphView;
+			base.graphView = graphView;
 
 			blackboard = new Blackboard();
 			blackboard.title = "Parameters";
@@ -176,13 +173,6 @@ namespace HLVS.Editor.Views
 			removeButton.style.borderTopRightRadius = 7;
 			field.Add(removeButton);
 			return field;
-		}
-
-		string GetUniqueName(string name)
-		{
-			return ObjectNames.GetUniqueName(graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
-				ObjectNames.GetUniqueName(graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
-					name));
 		}
 	}
 }

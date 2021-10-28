@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using GraphProcessor;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -11,6 +13,16 @@ namespace HLVS.Editor.Views
 	/// </summary>
 	public class FieldView
 	{
+		protected HlvsGraph graph => graphView.graph as HlvsGraph;
+		protected HlvsGraphView graphView;
+		
+		protected string GetUniqueName(string name)
+		{
+			return ObjectNames.GetUniqueName(graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
+				ObjectNames.GetUniqueName(graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
+					name));
+		}
+		
 		/// <summary>
 		/// Creates a ExposedParameter for a given type
 		/// </summary>
