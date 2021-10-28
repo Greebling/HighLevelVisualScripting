@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using GraphProcessor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -31,7 +30,7 @@ namespace HLVS.Editor.Views
 
 			_mainSection = new BlackboardSection();
 			blackboard.Add(_mainSection);
-
+			
 			InitBlackboardMenu();
 			blackboard.addItemRequested += OnClickedAdd;
 			blackboard.moveItemRequested += (blackboard1, index, element) => _mainSection.Insert(index, element);
@@ -63,7 +62,9 @@ namespace HLVS.Editor.Views
 			else
 				list.Insert(index, paramToMove);
 		}
-
+		
+		
+		
 		private void InitBlackboardMenu()
 		{
 			_addMenu = new GenericMenu();
@@ -79,12 +80,7 @@ namespace HLVS.Editor.Views
 
 				_addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
 				{
-					var finalName =
-						ObjectNames.GetUniqueName(graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
-							niceParamName);
-					finalName =
-						ObjectNames.GetUniqueName(graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
-							niceParamName);
+					var finalName = GetUniqueName(niceParamName);
 					AddBlackboardEntry(type, finalName);
 				});
 			}
@@ -146,7 +142,7 @@ namespace HLVS.Editor.Views
 		
 		private void OnVarRenamed(ExposedParameter param, string newName)
 		{
-			param.name = newName;
+			param.name = GetUniqueName(newName);
 			graph.onBlackboardListChanged.Invoke();
 		}
 
@@ -166,7 +162,12 @@ namespace HLVS.Editor.Views
 			var objField = CreateEntryValueField(entryType, param);
 			field.Add(objField);
 
-			field.Q<TextField>().RegisterValueChangedCallback(evt => OnVarRenamed(param, evt.newValue));
+			var nameField = field.Q<TextField>();
+			nameField.RegisterValueChangedCallback(evt =>
+			{
+				OnVarRenamed(param, evt.newValue);
+				nameField.value = param.name;
+			});
 
 			// display remove option
 			var removeButton = new Button(() =>
@@ -183,6 +184,13 @@ namespace HLVS.Editor.Views
 			removeButton.style.borderTopRightRadius = 7;
 			field.Add(removeButton);
 			return field;
+		}
+		
+		string GetUniqueName(string name)
+		{
+			return ObjectNames.GetUniqueName(graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
+				ObjectNames.GetUniqueName(graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
+					name));
 		}
 	}
 }

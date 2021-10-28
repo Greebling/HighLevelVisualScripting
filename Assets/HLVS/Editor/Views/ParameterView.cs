@@ -80,13 +80,7 @@ namespace HLVS.Editor.Views
 
 				_addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
 				{
-					var finalName =
-						ObjectNames.GetUniqueName(
-							graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
-							niceParamName);
-					finalName = 	ObjectNames.GetUniqueName(
-						graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
-						niceParamName);
+					var finalName = GetUniqueName(niceParamName);
 					AddBlackboardEntry(type, finalName);
 				});
 			}
@@ -114,8 +108,8 @@ namespace HLVS.Editor.Views
 		public void DisplayExistingParameterEntries()
 		{
 			_mainSection.Clear();
-			
-			if(graph == null)
+
+			if (graph == null)
 				return;
 
 			foreach (var field in graph.parametersBlueprint)
@@ -149,10 +143,7 @@ namespace HLVS.Editor.Views
 
 		private void OnParamRenamed(ExposedParameter param, string newName)
 		{
-			if (param.name == newName)
-				return;
-
-			param.name = newName;
+			param.name = GetUniqueName(newName);
 			graph.onParameterListChanged.Invoke();
 		}
 
@@ -166,7 +157,8 @@ namespace HLVS.Editor.Views
 			field.Q("node-border").style.overflow = Overflow.Hidden;
 
 			// add updates for name changes
-			field.Q<TextField>().RegisterValueChangedCallback(evt => OnParamRenamed(param, evt.newValue));
+			var nameField = field.Q<TextField>();
+			nameField.RegisterValueChangedCallback(evt => OnParamRenamed(param, evt.newValue));
 
 			// display remove option
 			var removeButton = new Button(() =>
@@ -184,6 +176,13 @@ namespace HLVS.Editor.Views
 			removeButton.style.borderTopRightRadius = 7;
 			field.Add(removeButton);
 			return field;
+		}
+
+		string GetUniqueName(string name)
+		{
+			return ObjectNames.GetUniqueName(graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
+				ObjectNames.GetUniqueName(graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
+					name));
 		}
 	}
 }
