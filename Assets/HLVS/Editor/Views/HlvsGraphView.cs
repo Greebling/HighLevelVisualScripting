@@ -28,6 +28,7 @@ namespace HLVS.Editor.Views
 			boardContainer.name = "boards-container";
 			boardContainer.style.alignSelf = new StyleEnum<Align>(Align.FlexStart);
 			boardContainer.style.width = 300;
+			boardContainer.style.marginTop = 1;
 
 			boardContainer.Add(blackboardView.blackboard);
 			boardContainer.Add(paramView.blackboard);
