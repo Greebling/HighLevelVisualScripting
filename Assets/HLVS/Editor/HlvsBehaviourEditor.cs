@@ -34,6 +34,11 @@ namespace HLVS.Editor
 			Deinitialize();
 		}
 
+		private void OnDestroy()
+		{
+			Deinitialize();
+		}
+
 		private void Reinitialize()
 		{
 			_graph = (target as HLVSBehaviour).graph;
@@ -50,16 +55,6 @@ namespace HLVS.Editor
 				_graph.onParameterListChanged -= OnParamsChanged;
 			}
 		}
-
-		/*
-		private void OnSceneGUI()
-		{
-			if (Selection.activeGameObject == _behaviour.gameObject)
-			{
-				CreateInspector();
-			}
-		}
-		*/
 
 		public sealed override VisualElement CreateInspectorGUI()
 		{
@@ -78,6 +73,11 @@ namespace HLVS.Editor
 
 		protected void CreateInspector()
 		{
+			if (_behaviour.IsParameterListOutdated())
+			{
+				_behaviour.OnParamListChanged();
+			}
+			
 			root.Clear();
 			_defaultContainer = new VisualElement { name = "DefaultElements" };
 			_parameterContainer = new VisualElement { name = "ExposedParameters" };

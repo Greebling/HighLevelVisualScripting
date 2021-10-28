@@ -5,28 +5,27 @@ namespace HLVS.Editor.Views
 {
 	public class HlvsToolbarView : ToolbarView
 	{
-		
-		protected ToolbarButtonData showBlackboard;
-		protected ToolbarButtonData showParametersButton;
-		protected HlvsGraphView view;
+		private readonly HlvsGraphView _view;
 
 
 		public HlvsToolbarView(BaseGraphView graphView) : base(graphView)
 		{
-			view = graphView as HlvsGraphView;
+			_view = graphView as HlvsGraphView;
+			style.minHeight = 20; // fix for overlapping ui elements
 		}
 
 		protected override void AddButtons()
 		{
-			showBlackboard = AddToggle("Show Blackboard", view.blackboardView.blackboard.visible, v =>
+			AddToggle("Show Boards", _view.boardContainer.visible, v =>
 			{
-				view.blackboardView.blackboard.visible = v;
-			});
-			showParametersButton = AddToggle("Show Parameters", view.paramView.blackboard.visible, v =>
-			{
-				view.paramView.blackboard.visible = v;
+				_view.boardContainer.visible = v;
 			});
 
+			AddButton("Save", () =>
+			{
+				EditorUtility.SetDirty(_view.graph);
+				AssetDatabase.SaveAssets();
+			}, false);
 			AddButton("Show In Project", () => EditorGUIUtility.PingObject(graphView.graph), false);
 		}
 	}

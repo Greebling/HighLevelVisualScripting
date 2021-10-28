@@ -1,4 +1,5 @@
-﻿using GraphProcessor;
+﻿using System;
+using GraphProcessor;
 using HLVS.Editor.Views;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -11,8 +12,6 @@ namespace HLVS.Editor
 	public class HlvsWindow : BaseGraphWindow
 	{
 		private BaseGraph _tmpGraph;
-		private HlvsToolbarView _toolbarView;
-		private TwoPaneSplitView _splitView;
 
 		private StyleSheet _customStyling;
 
@@ -30,7 +29,6 @@ namespace HLVS.Editor
 
 			return graphWindow;
 		}
-
 		protected override void OnDestroy()
 		{
 			graphView?.Dispose();
@@ -48,31 +46,19 @@ namespace HLVS.Editor
 			{
 				var graphView = new HlvsGraphView(this);
 				this.graphView = graphView;
-				
-				_toolbarView = new HlvsToolbarView(graphView);
-				
-				
-				graphView.Add(_toolbarView);
 
 
+				// blackboard and parameter-board registration
 				graphView.blackboardView.blackboard.graphView = graphView;
 				graphView.paramView.blackboard.graphView = graphView;
-				var vs = new VisualElement();
-				vs.style.marginTop = 3;
-				vs.style.alignSelf = new StyleEnum<Align>(Align.FlexStart);
-				
-				vs.Add(graphView.blackboardView.blackboard);
-				vs.Add(graphView.paramView.blackboard);
-				graphView.Add(vs);
 
-				
-				
+
 				// background
 				var bg = new GridBackground();
 				bg.AddToClassList("my-grid");
 				graphView.Insert(0, bg);
 			}
-			
+
 			rootView.Add(graphView);
 		}
 

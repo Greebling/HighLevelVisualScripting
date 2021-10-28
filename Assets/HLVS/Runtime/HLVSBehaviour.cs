@@ -51,6 +51,15 @@ namespace HLVS.Runtime
 				.ToList();
 		}
 
+		public bool IsParameterListOutdated()
+		{
+			if (!graph || graphParameters.Count == 0)
+				return false;
+
+			return graphParameters.Zip(graph.parametersBlueprint,
+				(parameter, exposedParameter) => parameter.guid == exposedParameter.guid).All(b => b);
+		}
+
 		public void OnParamListChanged()
 		{
 			if (graph.parametersBlueprint.Count == 0)

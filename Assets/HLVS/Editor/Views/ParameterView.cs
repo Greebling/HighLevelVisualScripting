@@ -26,7 +26,6 @@ namespace HLVS.Editor.Views
 			blackboard.subTitle = "";
 			blackboard.scrollable = true;
 			blackboard.windowed = true;
-			blackboard.style.width = 230;
 			blackboard.style.height = 400;
 
 			_mainSection = new BlackboardSection();
@@ -42,7 +41,7 @@ namespace HLVS.Editor.Views
 		{
 			_addMenu.ShowAsContext();
 		}
-		
+
 		/// <summary>
 		/// Reorders the data lists to keep in sync with the ui
 		/// </summary>
@@ -54,15 +53,15 @@ namespace HLVS.Editor.Views
 			int previousIndex = list.FindIndex(parameter => parameter.guid == element.name);
 			if (previousIndex == -1)
 				return;
-			
+
 			var paramToMove = list[previousIndex];
 			list.RemoveAt(previousIndex);
-			
+
 			if (index >= list.Count)
 				list.Add(paramToMove);
 			else
 				list.Insert(index, paramToMove);
-			
+
 			graph.onParameterListChanged.Invoke();
 		}
 
@@ -115,20 +114,15 @@ namespace HLVS.Editor.Views
 
 			foreach (var field in graph.parametersBlueprint)
 			{
-				if (field.GetValueType() == null)
-				{
-					Debug.Log($"Field {field.name} has no type!");
-				}
-				else
-				{
-					var row = CreateBlackboardRow(field.name, field);
-					_mainSection.Add(row);
-				}
+				Debug.Assert(field.GetValueType() != null, $"Field {field.name} has no type");
+				var row = CreateBlackboardRow(field.name, field);
+				_mainSection.Add(row);
 			}
 		}
 
 		protected void AddBlackboardEntry(Type entryType, string entryName)
 		{
+			Undo.RecordObject(graph, "Create Parameter Field");
 			ExposedParameter param = CreateParamFor(entryType);
 
 			object initValue = null;
@@ -178,6 +172,10 @@ namespace HLVS.Editor.Views
 			removeButton.text = " - ";
 			removeButton.tooltip = "Remove entry";
 			removeButton.style.flexGrow = 0;
+			removeButton.style.borderBottomLeftRadius = 7;
+			removeButton.style.borderBottomRightRadius = 7;
+			removeButton.style.borderTopLeftRadius = 7;
+			removeButton.style.borderTopRightRadius = 7;
 			field.Add(removeButton);
 			return field;
 		}

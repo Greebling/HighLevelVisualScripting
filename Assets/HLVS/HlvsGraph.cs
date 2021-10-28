@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphProcessor;
 using HLVS.Nodes;
 using UnityEngine;
@@ -15,17 +16,15 @@ namespace HLVS
 		/// <summary>
 		/// Blackboard variables of a graph. They are shared amongst all instances of a graph asset
 		/// </summary>
-		[SerializeReference]
-		public List<ExposedParameter> blackboardFields = new List<ExposedParameter>();
-		
+		[SerializeReference] public List<ExposedParameter> blackboardFields = new List<ExposedParameter>();
+
 		/// <summary>
 		/// Blueprint of which types are needed as parameters
 		/// </summary>
-		[SerializeReference]
-		public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
+		[SerializeReference] public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
 
-		public Action onParameterListChanged = () => {};
-		
+		public Action onParameterListChanged = () => { };
+
 		protected override void OnEnable()
 		{
 			base.OnEnable();
@@ -34,6 +33,17 @@ namespace HLVS
 			updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
 			triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
 		}
+
+		public List<ExposedParameter> GetParameters()
+		{
+			return parametersBlueprint.OrderBy(parameter => parameter.name).ToList();
+		}
+
+		public List<ExposedParameter> GetBlackboardFields()
+		{
+			return blackboardFields.OrderBy(parameter => parameter.name).ToList();
+		}
+
 		public void RunStartNodes(List<ExposedParameter> parameters)
 		{
 			startNodeProcessor.UpdateComputeOrder();
