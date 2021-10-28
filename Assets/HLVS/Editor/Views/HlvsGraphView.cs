@@ -38,7 +38,6 @@ namespace HLVS.Editor.Views
 		public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
 		{
 			//base.BuildContextualMenu(evt);
-			// insert menu items here
 
 			if (evt.target is GraphView && nodeCreationRequest != null)
 			{
@@ -54,7 +53,6 @@ namespace HLVS.Editor.Views
 			}
 
 			evt.menu.AppendSeparator();
-
 			if (evt.target is GraphView || evt.target is Node)
 				evt.menu.AppendAction("Copy", action => CopySelectionCallback(),
 					action => canCopySelection ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);

@@ -22,6 +22,8 @@ namespace HLVS
 		/// Blueprint of which types are needed as parameters
 		/// </summary>
 		[SerializeReference] public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
+		
+		public List<ExposedParameter> parametersValues { get; protected set; }
 
 		public Action onParameterListChanged = () => { };
 
@@ -46,18 +48,21 @@ namespace HLVS
 
 		public void RunStartNodes(List<ExposedParameter> parameters)
 		{
+			parametersValues = parameters;
 			startNodeProcessor.UpdateComputeOrder();
 			startNodeProcessor.Run();
 		}
 
 		public void RunUpdateNodes(List<ExposedParameter> parameters)
 		{
+			parametersValues = parameters;
 			updateNodeProcessor.UpdateComputeOrder();
 			updateNodeProcessor.Run();
 		}
 
 		public void RunOnTriggerEnteredNodes(List<ExposedParameter> parameters)
 		{
+			parametersValues = parameters;
 			triggerNodeProcessor.UpdateComputeOrder();
 			triggerNodeProcessor.Run();
 		}

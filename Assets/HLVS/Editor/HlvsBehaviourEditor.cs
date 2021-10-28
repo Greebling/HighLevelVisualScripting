@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphProcessor;
 using HLVS.Editor.Views;
 using HLVS.Runtime;
@@ -27,6 +28,7 @@ namespace HLVS.Editor
 		private void OnEnable()
 		{
 			Reinitialize();
+			_behaviour.OnParamListChanged();
 		}
 
 		private void OnDisable()
@@ -77,16 +79,16 @@ namespace HLVS.Editor
 			{
 				_behaviour.OnParamListChanged();
 			}
-			
+
 			root.Clear();
 			_defaultContainer = new VisualElement { name = "DefaultElements" };
 			_parameterContainer = new VisualElement { name = "ExposedParameters" };
 
-			
+
 			// Top
 			AddDefaultElementsTo(_defaultContainer);
 			root.Add(_defaultContainer);
-			
+
 			// Bottom
 			AddGraphParametersTo(_parameterContainer);
 			root.Add(_parameterContainer);
@@ -115,8 +117,8 @@ namespace HLVS.Editor
 
 			VisualElement view = new VisualElement();
 			view.Add(propertyField);
-			
-			
+
+
 			// open button
 			var button = new Button(() =>
 			{
@@ -156,13 +158,67 @@ namespace HLVS.Editor
 			}
 
 
-			foreach (var graphParameter in _behaviour.graphParameters)
+			var displayedParams = _behaviour.graphParameters.OrderBy(parameter =>
 			{
+				var slashIndex = parameter.name.LastIndexOf('/');
+				if (slashIndex == -1)
+				{
+					return "zzzzzzzzz";
+				}
+				else
+				{
+					return parameter.name.Substring(0, slashIndex);
+				}
+			});
+
+			int previousCategory = 0;
+			foreach (var graphParameter in displayedParams)
+			{
+				string fieldName;
+				var slashIndex = graphParameter.name.LastIndexOf('/');
+				if (slashIndex >= 0 && slashIndex + 1 < graphParameter.name.Length - 1)
+				{
+					fieldName = graphParameter.name.Substring(slashIndex + 1, graphParameter.name.Length - (slashIndex + 1));
+				}
+				else
+				{
+					fieldName = graphParameter.name;
+				}
+
+				// TODO: Refactor this to accomodate for nested categories and use string.split there
+				// add category label if necessary
+				if (slashIndex != -1)
+				{
+					var category = graphParameter.name.Substring(0, slashIndex);
+					int currCategory = category.GetHashCode();
+					if (previousCategory != currCategory)
+					{
+						previousCategory = currCategory;
+						
+						var categoryLabel = new Label(category);
+						categoryLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+						categoryLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
+						categoryLabel.style.width = 150;
+						paramsContainer.Add(categoryLabel);
+					}
+				} else if (previousCategory != 0) // check if we start with uncategorized parameters
+				{
+					// add separator
+					previousCategory = 0; // changed so that we don't add additional separators
+
+					var box = new Box();
+					box.style.height = 0;
+					box.style.marginTop = 3;
+					box.style.marginBottom = 3;
+					paramsContainer.Add(box);
+				}
+				
+				
 				var fieldContainer = new VisualElement();
 				fieldContainer.style.flexDirection = FlexDirection.Row;
 
 				// labeling
-				var nameLabel = new Label($"{graphParameter.name}");
+				var nameLabel = new Label(fieldName);
 				nameLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
 				nameLabel.style.width = 150;
 				fieldContainer.Add(nameLabel);
