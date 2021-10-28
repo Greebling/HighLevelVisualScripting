@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using GraphProcessor;
 using HLVS.Editor.Views;
 using HLVS.Runtime;
 using UnityEditor;
@@ -171,61 +169,63 @@ namespace HLVS.Editor
 				}
 			});
 
-			int previousCategory = 0;
+			void AddCategoryLabel(string categroyName, int depth)
+			{
+				var categoryLabel = new Label(categroyName.PadLeft(depth + categroyName.Length));
+				categoryLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+				categoryLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
+				categoryLabel.style.width = 150;
+				paramsContainer.Add(categoryLabel);
+			}
+
+			List<int> prevCategoriesHash = new List<int>();
 			foreach (var graphParameter in displayedParams)
 			{
-				string fieldName;
-				var slashIndex = graphParameter.name.LastIndexOf('/');
-				if (slashIndex >= 0 && slashIndex + 1 < graphParameter.name.Length - 1)
-				{
-					fieldName = graphParameter.name.Substring(slashIndex + 1, graphParameter.name.Length - (slashIndex + 1));
-				}
-				else
-				{
-					fieldName = graphParameter.name;
-				}
+				var nameAndCategories = graphParameter.name.Split('/');
+				string fieldName = nameAndCategories.Last();
 
-				// TODO: Refactor this to accomodate for nested categories and use string.split there
-				// add category label if necessary
-				if (slashIndex != -1)
+				// add heading labels
+				if(nameAndCategories.Length != 1)
 				{
-					var category = graphParameter.name.Substring(0, slashIndex);
-					int currCategory = category.GetHashCode();
-					if (previousCategory != currCategory)
+					for (int i = 0; i < nameAndCategories.Length - 1; i++)
 					{
-						previousCategory = currCategory;
-						
-						var categoryLabel = new Label(category);
-						categoryLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-						categoryLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
-						categoryLabel.style.width = 150;
-						paramsContainer.Add(categoryLabel);
+						var currHash = nameAndCategories[i].GetHashCode();
+						if (prevCategoriesHash.Count <= i)
+						{
+							prevCategoriesHash.Add(currHash);
+							AddCategoryLabel(nameAndCategories[i], i);
+						}
+						else if (prevCategoriesHash[i] != currHash)
+						{
+							prevCategoriesHash.RemoveRange(i, prevCategoriesHash.Count - i);
+							prevCategoriesHash.Add(currHash);
+							AddCategoryLabel(nameAndCategories[i], i);
+						}
 					}
-				} else if (previousCategory != 0) // check if we start with uncategorized parameters
-				{
-					// add separator
-					previousCategory = 0; // changed so that we don't add additional separators
-
-					var box = new Box();
-					box.style.height = 0;
-					box.style.marginTop = 3;
-					box.style.marginBottom = 3;
-					paramsContainer.Add(box);
 				}
-				
-				
+				else if(prevCategoriesHash.Count != 0)
+				{
+					// Add separator to separate uncategorized variables
+					prevCategoriesHash.Clear();
+					var separator = new Box();
+					separator.style.height = 0;
+					separator.style.marginTop = 3;
+					separator.style.marginBottom = 3;
+					paramsContainer.Add(separator);
+				}
+
+
 				var fieldContainer = new VisualElement();
 				fieldContainer.style.flexDirection = FlexDirection.Row;
 
 				// labeling
-				var nameLabel = new Label(fieldName);
+				var nameLabel = new Label(fieldName.PadLeft(prevCategoriesHash.Count + fieldName.Length + 1));
 				nameLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
 				nameLabel.style.width = 150;
 				fieldContainer.Add(nameLabel);
 
 				// value field
 				var field = _parameterView.CreateEntryValueField(graphParameter.GetValueType(), graphParameter);
-				field.style.width = new StyleLength(StyleKeyword.Auto);
 				fieldContainer.Add(field);
 
 				// fix alignment for buttons

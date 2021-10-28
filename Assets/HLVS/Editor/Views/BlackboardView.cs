@@ -109,9 +109,6 @@ namespace HLVS.Editor.Views
 		public void DisplayExistingBlackboardEntries()
 		{
 			_mainSection.Clear();
-			
-			if(graph == null)
-				return;
 
 			foreach (var field in graph.blackboardFields)
 			{

@@ -63,8 +63,6 @@ namespace HLVS.Editor
 		protected override void InitializeGraphView(BaseGraphView baseView)
 		{
 			var view = baseView as HlvsGraphView;
-			view.blackboardView = new BlackboardView(view);
-			view.paramView = new ParameterView(view);
 			
 			view.blackboardView.DisplayExistingBlackboardEntries();
 			view.paramView.DisplayExistingParameterEntries();

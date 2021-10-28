@@ -111,9 +111,6 @@ namespace HLVS.Editor.Views
 		public void DisplayExistingParameterEntries()
 		{
 			_mainSection.Clear();
-			
-			if(graph == null || graph.parametersBlueprint == null)
-				return;
 
 			foreach (var field in graph.parametersBlueprint)
 			{
