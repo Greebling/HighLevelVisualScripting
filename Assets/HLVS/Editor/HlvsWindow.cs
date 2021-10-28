@@ -1,18 +1,16 @@
-﻿using System;
+﻿using System.Runtime.InteropServices;
 using GraphProcessor;
 using HLVS.Editor.Views;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using PopupWindow = UnityEngine.UIElements.PopupWindow;
 
 namespace HLVS.Editor
 {
 	public class HlvsWindow : BaseGraphWindow
 	{
 		private BaseGraph _tmpGraph;
-
 		private StyleSheet _customStyling;
 
 		[MenuItem("HLVS/Graph Editor")]
@@ -31,12 +29,12 @@ namespace HLVS.Editor
 		}
 		protected override void OnDestroy()
 		{
-			graphView?.Dispose();
-			DestroyImmediate(_tmpGraph);
+			UnloadTempGraph();
 		}
 
 		protected override void InitializeWindow(BaseGraph startingGraph)
 		{
+			UnloadTempGraph();
 			titleContent = new GUIContent($"{HlvsSettings.Name} Graph");
 
 			_customStyling = Resources.Load<StyleSheet>("HlvsGraphStyle");
@@ -65,8 +63,23 @@ namespace HLVS.Editor
 		protected override void InitializeGraphView(BaseGraphView baseView)
 		{
 			var view = baseView as HlvsGraphView;
+			view.blackboardView = new BlackboardView(view);
+			view.paramView = new ParameterView(view);
+			
 			view.blackboardView.DisplayExistingBlackboardEntries();
 			view.paramView.DisplayExistingParameterEntries();
+		}
+
+		private void UnloadTempGraph()
+		{
+			if(_tmpGraph)
+			{
+				Debug.Log("Closing temp graph");
+				graphView?.Dispose();
+				DestroyImmediate(_tmpGraph);
+			}
+
+			_tmpGraph = null;
 		}
 	}
 }

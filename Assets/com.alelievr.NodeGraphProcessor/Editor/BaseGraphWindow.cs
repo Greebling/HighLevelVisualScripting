@@ -117,13 +117,6 @@ namespace GraphProcessor
 			graphView.Initialize(graph);
 
 			InitializeGraphView(graphView);
-
-			// TOOD: onSceneLinked...
-
-			if (graph.IsLinkedToScene())
-				LinkGraphWindowToScene(graph.GetLinkedScene());
-			else
-				graph.onSceneLinked += LinkGraphWindowToScene;
 		}
 
 		void LinkGraphWindowToScene(Scene scene)
