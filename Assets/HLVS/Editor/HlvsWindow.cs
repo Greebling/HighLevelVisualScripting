@@ -72,7 +72,6 @@ namespace HLVS.Editor
 		{
 			if(_tmpGraph)
 			{
-				Debug.Log("Closing temp graph");
 				graphView?.Dispose();
 				DestroyImmediate(_tmpGraph);
 			}
