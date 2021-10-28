@@ -82,6 +82,9 @@ namespace HLVS.Editor.Views
 					var finalName =
 						ObjectNames.GetUniqueName(graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
 							niceParamName);
+					finalName =
+						ObjectNames.GetUniqueName(graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
+							niceParamName);
 					AddBlackboardEntry(type, finalName);
 				});
 			}
@@ -144,6 +147,7 @@ namespace HLVS.Editor.Views
 		private void OnVarRenamed(ExposedParameter param, string newName)
 		{
 			param.name = newName;
+			graph.onBlackboardListChanged.Invoke();
 		}
 
 		protected BlackboardField CreateBlackboardRow(Type entryType, string entryName, ExposedParameter param)

@@ -84,6 +84,9 @@ namespace HLVS.Editor.Views
 						ObjectNames.GetUniqueName(
 							graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
 							niceParamName);
+					finalName = 	ObjectNames.GetUniqueName(
+						graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
+						niceParamName);
 					AddBlackboardEntry(type, finalName);
 				});
 			}

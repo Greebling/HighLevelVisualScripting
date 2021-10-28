@@ -7,9 +7,9 @@ namespace HLVS.Nodes
 	[Serializable, NodeMenuItem("HLVS/Data/Get Variable")]
 	public class GetVariableNode : HlvsDataNode
 	{
-		[Input("Name"), ShowAsDrawer] public string variableName;
+		public string variableName;
 
-		[Output("Data")] public object data;
+		[NonSerialized] public object data;
 
 		public override string name  {
 			get
@@ -28,22 +28,15 @@ namespace HLVS.Nodes
 		protected override void Process()
 		{
 			Debug.Assert(!(variableName is ""), "A variable name must be given");
-			var blackboardField =
-				(graph as HlvsGraph).blackboardFields.Find(parameter => parameter.name == variableName);
-			var parameterField =
-				(graph as HlvsGraph).parametersValues.Find(parameter => parameter.name == variableName);
+			var field = (graph as HlvsGraph).GetVariable(variableName);
 
-			if (blackboardField != null)
+			if (field != null)
 			{
-				data = blackboardField.value;
-			}
-			else if (parameterField != null)
-			{
-				data = parameterField.value;
+				data = field.value;
 			}
 			else
 			{
-				Debug.Assert(false, $"No blackboard variable or parameter variable called {variableName} found");
+				Debug.Assert(false, $"No variable called '{variableName}' found");
 			}
 		}
 	}
