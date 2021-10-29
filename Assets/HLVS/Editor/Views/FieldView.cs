@@ -112,7 +112,26 @@ namespace HLVS.Editor.Views
 				section.Add(fieldContainer);
 
 				categorySections.Add(allCategories, section);
-				blackboard.Add(section);
+
+				var sections = blackboard.contentContainer.hierarchy.Children().Skip(1).ToArray();
+				int insertionPlace = blackboard.contentContainer.childCount;
+				int maxSameness = 0;
+				for (int i = 0; i < sections.Length; i++)
+				{
+					var currName = GetCategoriesFromName(sections[i].name);
+					
+					if(currName.Length == 0)
+						continue;
+
+					// calculates to what position two strings are same
+					int sameness = currName.Zip(allCategories, (c, c1) => c == c1).TakeWhile(b => b).Count();
+					//Debug.Log($"{allCategories} and {currName} is {sameness} same");
+					if (sameness > maxSameness)
+					{
+						insertionPlace = i + 2;
+					}
+				}
+				blackboard.Insert(insertionPlace, section);
 			}
 			
 			if(sectionHasOneChild && previousParent.name != allCategories)
