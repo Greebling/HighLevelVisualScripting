@@ -10,7 +10,7 @@ namespace HLVS.Editor
 {
 	public class HlvsWindow : BaseGraphWindow
 	{
-		private BaseGraph _tmpGraph;
+		private HlvsGraph _tmpGraph;
 		private StyleSheet _customStyling;
 
 		[MenuItem("HLVS/Graph Editor")]
@@ -19,7 +19,7 @@ namespace HLVS.Editor
 			var graphWindow = CreateWindow<HlvsWindow>();
 
 			// When the graph is opened from the window, we don't save the graph to disk
-			graphWindow._tmpGraph = CreateInstance<BaseGraph>();
+			graphWindow._tmpGraph = CreateInstance<HlvsGraph>();
 			graphWindow._tmpGraph.hideFlags = HideFlags.HideAndDontSave;
 			graphWindow.InitializeGraph(graphWindow._tmpGraph);
 

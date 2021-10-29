@@ -1,0 +1,35 @@
+#node-border {
+    border-radius: 3px;
+}
+
+#title{
+    background-color: #3E3E3E;
+}
+
+#input {
+    background-color: #3C3C3C;
+}
+
+#output {
+    background-color: #383838;
+}
+
+#selection-border {
+    border-radius: 3px;
+    border-color: #2C5D87;
+}
+
+:hover > #selection-border {
+    border-width: 1px;
+    border-color: #2C5D87;
+}
+
+:selected > #selection-border {
+    border-width: 2px;
+    border-color: #2C5D87;
+}
+
+:selected:hover > #selection-border {
+    border-width: 2px;
+    border-color: #2C5D87;
+}
