@@ -189,8 +189,8 @@ MonoBehaviour:
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   - position:
       serializedVersion: 2
-      x: 0
-      y: 35
+      x: 68
+      y: 127
       width: 294
       height: 345
     opened: 1
@@ -318,8 +318,8 @@ MonoBehaviour:
     title: New Sticky Note
     content: Write your text here
   nodeInspectorReference: {fileID: 0}
-  position: {x: 781, y: -9.999998, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
+  position: {x: 713, y: 234, z: 0}
+  scale: {x: 1, y: 1, z: 1}
   references:
     version: 1
     00000000:

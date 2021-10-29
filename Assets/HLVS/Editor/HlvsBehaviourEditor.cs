@@ -40,7 +40,7 @@ namespace HLVS.Editor
 		{
 			Deinitialize();
 		}
-
+		
 		private void Reinitialize()
 		{
 			_graph = (target as HLVSBehaviour).graph;

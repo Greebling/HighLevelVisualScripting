@@ -39,6 +39,7 @@ namespace HLVS.Editor.Views
 		public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
 		{
 			//base.BuildContextualMenu(evt);
+			Debug.Assert(graph is HlvsGraph, "Graph is not a HlvsGraph");
 
 			if (evt.target is GraphView && nodeCreationRequest != null)
 			{
@@ -47,19 +48,15 @@ namespace HLVS.Editor.Views
 				evt.menu.AppendSeparator();
 			}
 
-			foreach (var parameter in (graph as HlvsGraph).GetParameters())
-			{
-				evt.menu.AppendAction($"Add Parameters/{parameter.name}",
-					action => Debug.Log($"Adding {parameter.name}")); // TODO: Actually add param as node
-			}
-
 			evt.menu.AppendSeparator();
+			/*
 			if (evt.target is GraphView || evt.target is Node)
 				evt.menu.AppendAction("Copy", action => CopySelectionCallback(),
 					action => canCopySelection ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
 			if (evt.target is GraphView)
 				evt.menu.AppendAction("Paste", action => this.PasteCallback(),
 					action => canPaste ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
+			*/ 
 			if (evt.target is GraphView || evt.target is Node || evt.target is Edge)
 			{
 				evt.menu.AppendAction("Delete",
