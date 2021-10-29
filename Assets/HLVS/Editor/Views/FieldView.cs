@@ -48,7 +48,7 @@ namespace HLVS.Editor.Views
 
 			return slashIndex != -1 ? name.Substring(slashIndex + 1, name.Length - (slashIndex + 1)) : name;
 		}
-		
+
 		public static string GetCategoriesFromName(string name)
 		{
 			var slashIndex = name.LastIndexOf('/');
@@ -56,12 +56,13 @@ namespace HLVS.Editor.Views
 			return slashIndex != -1 ? name.Substring(0, slashIndex) : name;
 		}
 
-		protected void AfterFieldRenamed(ExposedParameter field, VisualElement fieldContainer, TextField nameField = null)
+		protected void AfterFieldRenamed(ExposedParameter field, VisualElement fieldContainer,
+			TextField nameField = null)
 		{
 			var previousParent = fieldContainer.parent;
 			bool sectionHasOneChild = false;
 			// remove from current parent
-			if(previousParent != null)
+			if (previousParent != null)
 			{
 				// delete parent if there are no more field in the section
 				if (previousParent.contentContainer.childCount == 1)
@@ -69,9 +70,10 @@ namespace HLVS.Editor.Views
 					Debug.Assert(previousParent is BlackboardSection, "Visual Element hierarchy was not as expected");
 					sectionHasOneChild = true;
 				}
+
 				previousParent.contentContainer.Remove(fieldContainer);
 			}
-			
+
 
 			var paramName = field.name;
 			var slashIndex = paramName.LastIndexOf('/');
@@ -87,11 +89,12 @@ namespace HLVS.Editor.Views
 			if (slashIndex == -1)
 			{
 				categorySections[String.Empty].Add(fieldContainer);
-				
-				if(sectionHasOneChild && previousParent.name != String.Empty)
+
+				if (sectionHasOneChild && previousParent.name != String.Empty)
 				{
 					previousParent.parent.Remove(previousParent);
 				}
+
 				return;
 			}
 
@@ -112,29 +115,29 @@ namespace HLVS.Editor.Views
 				section.Add(fieldContainer);
 
 				categorySections.Add(allCategories, section);
-
-				var sections = blackboard.contentContainer.hierarchy.Children().Skip(1).ToArray();
-				int insertionPlace = blackboard.contentContainer.childCount;
-				int maxSameness = 0;
-				for (int i = 0; i < sections.Length; i++)
+				blackboard.Add(section);
+				
+				// sort categories displayed in blackboard
+				blackboard.Sort((element, element2) =>
 				{
-					var currName = GetCategoriesFromName(sections[i].name);
-					
-					if(currName.Length == 0)
-						continue;
-
-					// calculates to what position two strings are same
-					int sameness = currName.Zip(allCategories, (c, c1) => c == c1).TakeWhile(b => b).Count();
-					//Debug.Log($"{allCategories} and {currName} is {sameness} same");
-					if (sameness > maxSameness)
+					var name1 = element.name;
+					var name2 = element2.name;
+					if (name1.Length < name2.Length)
 					{
-						insertionPlace = i + 2;
+						return string.CompareOrdinal(name1, name2.Substring(0, name1.Length));
 					}
-				}
-				blackboard.Insert(insertionPlace, section);
+					else if (name1.Length > name2.Length)
+					{
+						return string.CompareOrdinal(name1.Substring(0, name2.Length), name2);
+					}
+					else
+					{
+						return string.CompareOrdinal(name1, name2);
+					}
+				});
 			}
-			
-			if(sectionHasOneChild && previousParent.name != allCategories)
+
+			if (sectionHasOneChild && previousParent.name != string.Empty && previousParent.name != allCategories)
 			{
 				previousParent.parent.Remove(previousParent);
 			}
@@ -144,7 +147,7 @@ namespace HLVS.Editor.Views
 		{
 			var previousParent = container.parent;
 			// remove from current parent
-			if(previousParent != null)
+			if (previousParent != null)
 			{
 				previousParent.contentContainer.Remove(container);
 				// delete parent if there are no more field in the section
