@@ -10,34 +10,26 @@ namespace HLVS.Editor.Views
 {
 	public class BlackboardView : FieldView
 	{
-		public readonly Blackboard blackboard;
-		private GenericMenu _addMenu;
-		private readonly BlackboardSection _mainSection;
-
-
 		public BlackboardView(HlvsGraphView graphView)
 		{
-			base.graphView = graphView;
+			this.graphView = graphView;
 
-			blackboard = new Blackboard();
 			blackboard.title = "Blackboard";
 			blackboard.subTitle = "";
 			blackboard.scrollable = true;
 			blackboard.windowed = true;
 			blackboard.style.height = 400;
 
-			_mainSection = new BlackboardSection();
-			blackboard.Add(_mainSection);
-			
-			InitBlackboardMenu();
 			blackboard.addItemRequested += OnClickedAdd;
-			blackboard.moveItemRequested += (blackboard1, index, element) => _mainSection.Insert(index, element);
+			blackboard.moveItemRequested += (blackboard1, index, element) => element.parent.Insert(index, element);
 			blackboard.moveItemRequested += (blackboard1, index, element) => OnItemMoved(index, element);
+
+			InitBlackboardMenu();
 		}
 
 		private void OnClickedAdd(Blackboard b)
 		{
-			_addMenu.ShowAsContext();
+			addMenu.ShowAsContext();
 		}
 
 		/// <summary>
@@ -60,13 +52,10 @@ namespace HLVS.Editor.Views
 			else
 				list.Insert(index, paramToMove);
 		}
-		
-		
-		
+
+
 		private void InitBlackboardMenu()
 		{
-			_addMenu = new GenericMenu();
-
 			foreach (var type in HlvsTypes.BuiltInTypes)
 			{
 				string niceParamName = type.Name switch
@@ -76,49 +65,55 @@ namespace HLVS.Editor.Views
 					_ => ObjectNames.NicifyVariableName(type.Name)
 				};
 
-				_addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
+				addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
 				{
 					var finalName = GetUniqueName(niceParamName);
 					AddBlackboardEntry(type, finalName);
 				});
 			}
 
-			_addMenu.AddSeparator("");
+			addMenu.AddSeparator("");
 
 			foreach (var type in HlvsTypes.GetUserTypes())
 			{
 				var niceParamName = ObjectNames.NicifyVariableName(type.Name);
-				_addMenu.AddItem(new GUIContent("Add " + niceParamName), false,
+				addMenu.AddItem(new GUIContent("Add " + niceParamName), false,
 					() => { AddBlackboardEntry(type, niceParamName); });
 			}
 
 			// Debug Stuff
-			_addMenu.AddSeparator("");
-			_addMenu.AddSeparator("");
-			_addMenu.AddItem(new GUIContent("Clear Blackboard"), false,
-				() =>
-				{
-					blackboard.Clear();
-					graph.blackboardFields.Clear();
-				});
+			addMenu.AddSeparator("");
+			addMenu.AddSeparator("");
+			addMenu.AddItem(new GUIContent("Clear Blackboard"), false, ClearBoard);
+		}
+
+		private void ClearBoard()
+		{
+			blackboard.Clear();
+			categorySections.Clear();
+			CreateDefaultSection();
+			graph.blackboardFields.Clear();
+			graph.onBlackboardListChanged.Invoke();
 		}
 
 		public void DisplayExistingBlackboardEntries()
 		{
-			_mainSection.Clear();
-			
-			if(graph == null)
+			// need to clear existing shown entries as each gets created anew
+			blackboard.Clear();
+			categorySections.Clear();
+			CreateDefaultSection();
+
+			if (graph == null)
 				return;
 
 			foreach (var field in graph.blackboardFields)
 			{
 				Debug.Assert(field.GetValueType() != null, $"Field {field.name} has no type");
-				var row = CreateBlackboardRow(field.GetValueType(), field.name, field);
-				_mainSection.Add(row);
+				CreateBlackboardField(field.GetValueType(), field.name, field);
 			}
 		}
 
-		protected void AddBlackboardEntry(Type entryType, string entryName)
+		private void AddBlackboardEntry(Type entryType, string entryName)
 		{
 			Undo.RecordObject(graph, "Create Blackboard Field");
 			ExposedParameter param = CreateParamFor(entryType);
@@ -134,17 +129,16 @@ namespace HLVS.Editor.Views
 			graph.blackboardFields.Add(param);
 
 			// ui
-			var field = CreateBlackboardRow(entryType, entryName, param);
-			_mainSection.Add(field);
+			CreateBlackboardField(entryType, entryName, param);
 		}
-		
+
 		private void OnVarRenamed(ExposedParameter param, string newName)
 		{
 			param.name = GetUniqueName(newName);
 			graph.onBlackboardListChanged.Invoke();
 		}
 
-		protected BlackboardField CreateBlackboardRow(Type entryType, string entryName, ExposedParameter param)
+		private BlackboardField CreateBlackboardField(Type entryType, string entryName, ExposedParameter param)
 		{
 			var field = new BlackboardField();
 			field.name = param.guid;
@@ -166,12 +160,15 @@ namespace HLVS.Editor.Views
 				OnVarRenamed(param, evt.newValue);
 				nameField.value = param.name;
 			});
+			// callback to show category names when editing name
+			nameField.RegisterCallback<FocusInEvent>(evt => nameField.SetValueWithoutNotify(param.name));
+			nameField.RegisterCallback<FocusOutEvent>(evt => AfterFieldRenamed(param, field, nameField));
 
 			// display remove option
 			var removeButton = new Button(() =>
 			{
 				graph.blackboardFields.Remove(param);
-				_mainSection.Remove(field);
+				RemoveField(param, field);
 			});
 			removeButton.text = " - ";
 			removeButton.tooltip = "Remove entry";
@@ -181,6 +178,9 @@ namespace HLVS.Editor.Views
 			removeButton.style.borderTopLeftRadius = 7;
 			removeButton.style.borderTopRightRadius = 7;
 			field.Add(removeButton);
+			
+			// not renamed, but needs categorization
+			AfterFieldRenamed(param, field, field.Q<TextField>());
 			return field;
 		}
 	}

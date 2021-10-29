@@ -21,10 +21,12 @@ namespace HLVS.Editor
 		private VisualElement _defaultContainer;
 		private VisualElement _parameterContainer;
 
-		private readonly FieldView _parameterView = new FieldView();
+		private FieldView _parameterView;
 
 		private void OnEnable()
 		{
+			_parameterView = new FieldView();
+			
 			Reinitialize();
 			_behaviour.OnParamListChanged();
 		}
@@ -161,7 +163,7 @@ namespace HLVS.Editor
 				var slashIndex = parameter.name.LastIndexOf('/');
 				if (slashIndex == -1)
 				{
-					return "zzzzzzzzz";
+					return "zzzzzzzzz"; // TODO: There must be a more elegant solution to this
 				}
 				else
 				{
@@ -169,9 +171,9 @@ namespace HLVS.Editor
 				}
 			});
 
-			void AddCategoryLabel(string categroyName, int depth)
+			void AddCategoryLabel(string categoryName, int depth)
 			{
-				var categoryLabel = new Label(categroyName.PadLeft(depth + categroyName.Length));
+				var categoryLabel = new Label(categoryName.PadLeft(depth + categoryName.Length));
 				categoryLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
 				categoryLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
 				categoryLabel.style.width = 150;
@@ -211,6 +213,7 @@ namespace HLVS.Editor
 					separator.style.height = 0;
 					separator.style.marginTop = 3;
 					separator.style.marginBottom = 3;
+					separator.style.borderBottomColor = new Color(1f, 1f, 1f, 0.22f);
 					paramsContainer.Add(separator);
 				}
 

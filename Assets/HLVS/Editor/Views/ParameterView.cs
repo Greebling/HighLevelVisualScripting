@@ -10,33 +10,26 @@ namespace HLVS.Editor.Views
 {
 	public class ParameterView : FieldView
 	{
-		public readonly Blackboard blackboard;
-		private GenericMenu _addMenu;
-		private readonly BlackboardSection _mainSection;
-
 		public ParameterView(HlvsGraphView graphView)
 		{
-			base.graphView = graphView;
+			this.graphView = graphView;
 
-			blackboard = new Blackboard();
 			blackboard.title = "Parameters";
 			blackboard.subTitle = "";
 			blackboard.scrollable = true;
 			blackboard.windowed = true;
 			blackboard.style.height = 400;
 
-			_mainSection = new BlackboardSection();
-			blackboard.Add(_mainSection);
+			blackboard.addItemRequested += OnClickedAdd;
+			blackboard.moveItemRequested += (blackboard1, index, element) => element.parent.Insert(index, element);
+			blackboard.moveItemRequested += (blackboard1, index, element) => OnItemMoved(index, element);
 
 			InitBlackboardMenu();
-			blackboard.addItemRequested += OnClickedAdd;
-			blackboard.moveItemRequested += (blackboard1, index, element) => _mainSection.Insert(index, element);
-			blackboard.moveItemRequested += (blackboard1, index, element) => OnItemMoved(index, element);
 		}
 
 		private void OnClickedAdd(Blackboard b)
 		{
-			_addMenu.ShowAsContext();
+			addMenu.ShowAsContext();
 		}
 
 		/// <summary>
@@ -64,8 +57,6 @@ namespace HLVS.Editor.Views
 
 		private void InitBlackboardMenu()
 		{
-			_addMenu = new GenericMenu();
-
 			foreach (var type in HlvsTypes.BuiltInTypes)
 			{
 				string niceParamName = type.Name switch
@@ -75,36 +66,43 @@ namespace HLVS.Editor.Views
 					_ => ObjectNames.NicifyVariableName(type.Name)
 				};
 
-				_addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
+				addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
 				{
 					var finalName = GetUniqueName(niceParamName);
 					AddBlackboardEntry(type, finalName);
 				});
 			}
 
-			_addMenu.AddSeparator("");
+			addMenu.AddSeparator("");
 
 			foreach (var type in HlvsTypes.GetUserTypes())
 			{
 				var niceParamName = ObjectNames.NicifyVariableName(type.Name);
-				_addMenu.AddItem(new GUIContent("Add " + niceParamName), false,
+				addMenu.AddItem(new GUIContent("Add " + niceParamName), false,
 					() => { AddBlackboardEntry(type, niceParamName); });
 			}
 
 			// Debug Stuff
-			_addMenu.AddSeparator("");
-			_addMenu.AddSeparator("");
-			_addMenu.AddItem(new GUIContent("Clear Parameters"), false,
-				() =>
-				{
-					blackboard.Clear();
-					graph.parametersBlueprint.Clear();
-				});
+			addMenu.AddSeparator("");
+			addMenu.AddSeparator("");
+			addMenu.AddItem(new GUIContent("Clear Parameters"), false, ClearBoard);
+		}
+
+		private void ClearBoard()
+		{
+			blackboard.Clear();
+			categorySections.Clear();
+			CreateDefaultSection();
+			graph.parametersBlueprint.Clear();
+			graph.onParameterListChanged.Invoke();
 		}
 
 		public void DisplayExistingParameterEntries()
 		{
-			_mainSection.Clear();
+			// need to clear existing shown entries as each gets created anew
+			blackboard.Clear();
+			categorySections.Clear();
+			CreateDefaultSection();
 
 			if (graph == null)
 				return;
@@ -112,12 +110,11 @@ namespace HLVS.Editor.Views
 			foreach (var field in graph.parametersBlueprint)
 			{
 				Debug.Assert(field.GetValueType() != null, $"Field {field.name} has no type");
-				var row = CreateBlackboardRow(field.name, field);
-				_mainSection.Add(row);
+				CreateBlackboardField(field.name, field);
 			}
 		}
 
-		protected void AddBlackboardEntry(Type entryType, string entryName)
+		private void AddBlackboardEntry(Type entryType, string entryName)
 		{
 			Undo.RecordObject(graph, "Create Parameter Field");
 			ExposedParameter param = CreateParamFor(entryType);
@@ -132,8 +129,7 @@ namespace HLVS.Editor.Views
 			graph.parametersBlueprint.Add(param);
 
 			// ui
-			var field = CreateBlackboardRow(entryName, param);
-			_mainSection.Add(field);
+			CreateBlackboardField(entryName, param);
 
 			graph.onParameterListChanged.Invoke();
 		}
@@ -141,10 +137,9 @@ namespace HLVS.Editor.Views
 		private void OnParamRenamed(ExposedParameter param, string newName)
 		{
 			param.name = GetUniqueName(newName);
-			graph.onParameterListChanged.Invoke();
 		}
 
-		protected BlackboardField CreateBlackboardRow(string entryName, ExposedParameter param)
+		private BlackboardField CreateBlackboardField(string entryName, ExposedParameter param)
 		{
 			var field = new BlackboardField();
 			field.name = param.guid;
@@ -156,12 +151,19 @@ namespace HLVS.Editor.Views
 			// add updates for name changes
 			var nameField = field.Q<TextField>();
 			nameField.RegisterValueChangedCallback(evt => OnParamRenamed(param, evt.newValue));
-
+			// callback to show category names when editing name
+			nameField.RegisterCallback<FocusInEvent>(evt => nameField.SetValueWithoutNotify(param.name));
+			nameField.RegisterCallback<FocusOutEvent>(evt =>
+			{
+				AfterFieldRenamed(param, field, nameField);
+				graph.onParameterListChanged.Invoke();
+			});
+			
 			// display remove option
 			var removeButton = new Button(() =>
 			{
 				graph.parametersBlueprint.Remove(param);
-				_mainSection.Remove(field);
+				RemoveField(param, field);
 				graph.onParameterListChanged.Invoke();
 			});
 			removeButton.text = " - ";
@@ -172,6 +174,9 @@ namespace HLVS.Editor.Views
 			removeButton.style.borderTopLeftRadius = 7;
 			removeButton.style.borderTopRightRadius = 7;
 			field.Add(removeButton);
+			
+			// not renamed, but needs categorization
+			AfterFieldRenamed(param, field, field.Q<TextField>());
 			return field;
 		}
 	}
