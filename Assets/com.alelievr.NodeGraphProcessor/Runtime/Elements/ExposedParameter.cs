@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace GraphProcessor
 {
@@ -152,6 +154,22 @@ namespace GraphProcessor
 
             return clonedParam;
         }
+
+        public virtual VisualElement GetPropertyDrawer()
+        {
+	        var objField = new ObjectField();
+	        objField.objectType = GetValueType();
+	        objField.label = "";
+	        objField.allowSceneObjects = false;
+	        objField.style.flexGrow = new StyleFloat(1.0f);
+	        objField.style.width =
+		        0; //so it does not have such a long minimum width and is aligned with other fields
+	        objField.RegisterValueChangedCallback(evt => value = evt.newValue);
+
+	        if (value != null)
+		        objField.value = (UnityEngine.Object)value;
+	        return objField;
+        }
 	}
 
     // Due to polymorphic constraints with [SerializeReference] we need to explicitly create a class for
@@ -178,6 +196,18 @@ namespace GraphProcessor
 
         public override object value { get => val; set => val = (Color)value; }
         protected override Settings CreateSettings() => new ColorSettings();
+
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var colorField = new ColorField();
+	        colorField.value = val;
+	        colorField.RegisterValueChangedCallback(evt => value = evt.newValue);
+	        colorField.style.width = 0;
+	        colorField.style.flexGrow = new StyleFloat(1.0f);
+
+	        colorField.value = val;
+	        return colorField;
+        }
     }
 
     [System.Serializable]
@@ -204,6 +234,16 @@ namespace GraphProcessor
 
         public override object value { get => val; set => val = (float)value; }
         protected override Settings CreateSettings() => new FloatSettings();
+
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var floatField = new FloatField();
+	        floatField.value = val;
+	        floatField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        floatField.style.width = 0;
+	        floatField.style.flexGrow = new StyleFloat(1.0f);
+	        return floatField;
+        }
     }
 
     [System.Serializable]
@@ -230,6 +270,17 @@ namespace GraphProcessor
 
         public override object value { get => val; set => val = (Vector2)value; }
         protected override Settings CreateSettings() => new Vector2Settings();
+
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var vector2Field = new Vector2Field();
+	        vector2Field.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        vector2Field.style.width = 0;
+	        vector2Field.style.flexGrow = new StyleFloat(1.0f);
+
+	        vector2Field.value = val;
+	        return vector2Field;
+        }
     }
 
     [System.Serializable]
@@ -238,6 +289,17 @@ namespace GraphProcessor
         [SerializeField] Vector3 val;
 
         public override object value { get => val; set => val = (Vector3)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var vector3Field = new Vector3Field();
+	        vector3Field.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        vector3Field.style.width = 0;
+	        vector3Field.style.flexGrow = new StyleFloat(1.0f);
+
+	        vector3Field.value = val;
+	        return vector3Field;
+        }
     }
 
     [System.Serializable]
@@ -246,6 +308,17 @@ namespace GraphProcessor
         [SerializeField] Vector4 val;
 
         public override object value { get => val; set => val = (Vector4)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var vector4Field = new Vector4Field();
+	        vector4Field.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        vector4Field.style.width = 0;
+	        vector4Field.style.flexGrow = new StyleFloat(1.0f);
+
+	        vector4Field.value = val;
+	        return vector4Field;
+        }
     }
 
     [System.Serializable]
@@ -272,6 +345,17 @@ namespace GraphProcessor
 
         public override object value { get => val; set => val = (int)value; }
         protected override Settings CreateSettings() => new IntSettings();
+
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var intField = new IntegerField();
+	        intField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        intField.style.width = 0;
+	        intField.style.flexGrow = new StyleFloat(1.0f);
+
+	        intField.value = val;
+	        return intField;
+        }
     }
 
     [System.Serializable]
@@ -280,6 +364,17 @@ namespace GraphProcessor
         [SerializeField] Vector2Int val;
 
         public override object value { get => val; set => val = (Vector2Int)value; }
+
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var vector2Field = new Vector2IntField();
+	        vector2Field.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        vector2Field.style.width = 0;
+	        vector2Field.style.flexGrow = new StyleFloat(1.0f);
+
+	        vector2Field.value = val;
+	        return vector2Field;
+        }
     }
 
     [System.Serializable]
@@ -288,6 +383,17 @@ namespace GraphProcessor
         [SerializeField] Vector3Int val;
 
         public override object value { get => val; set => val = (Vector3Int)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var vector3Field = new Vector3IntField();
+	        vector3Field.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        vector3Field.style.width = 0;
+	        vector3Field.style.flexGrow = new StyleFloat(1.0f);
+
+	        vector3Field.value = val;
+	        return vector3Field;
+        }
     }
 
     [System.Serializable]
@@ -296,6 +402,17 @@ namespace GraphProcessor
         [SerializeField] Double val;
 
         public override object value { get => val; set => val = (Double)value; }
+
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var doubleField = new DoubleField();
+	        doubleField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        doubleField.style.width = 0;
+	        doubleField.style.flexGrow = new StyleFloat(1.0f);
+
+	        doubleField.value = val;
+	        return doubleField;
+        }
     }
 
     [System.Serializable]
@@ -304,6 +421,17 @@ namespace GraphProcessor
         [SerializeField] long val;
 
         public override object value { get => val; set => val = (long)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var longField = new LongField();
+	        longField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        longField.style.width = 0;
+	        longField.style.flexGrow = new StyleFloat(1.0f);
+
+	        longField.value = val;
+	        return longField;
+        }
     }
 
     [System.Serializable]
@@ -313,6 +441,18 @@ namespace GraphProcessor
 
         public override object value { get => val; set => val = (string)value; }
         public override Type GetValueType() => typeof(String);
+
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var stringField = new TextField();
+	        stringField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        stringField.style.width = 0;
+	        stringField.style.flexGrow = new StyleFloat(1.0f);
+
+	        if (val != null)
+		        stringField.value = val;
+	        return stringField;
+        }
     }
 
     [System.Serializable]
@@ -321,6 +461,18 @@ namespace GraphProcessor
         [SerializeField] Rect val;
 
         public override object value { get => val; set => val = (Rect)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var rectField = new RectField();
+	        rectField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        rectField.style.width = 0;
+	        rectField.style.flexGrow = new StyleFloat(1.0f);
+
+	        if (val != null)
+		        rectField.value = val;
+	        return rectField;
+        }
     }
 
     [System.Serializable]
@@ -329,6 +481,17 @@ namespace GraphProcessor
         [SerializeField] RectInt val;
 
         public override object value { get => val; set => val = (RectInt)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var rectField = new RectIntField();
+	        rectField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        rectField.style.width = 0;
+	        rectField.style.flexGrow = new StyleFloat(1.0f);
+
+	        rectField.value = val;
+	        return rectField;
+        }
     }
 
     [System.Serializable]
@@ -337,6 +500,18 @@ namespace GraphProcessor
         [SerializeField] Bounds val;
 
         public override object value { get => val; set => val = (Bounds)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var boundsField = new BoundsField();
+	        boundsField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        boundsField.style.width = 0;
+	        boundsField.style.flexGrow = new StyleFloat(1.0f);
+
+	        if (val != null)
+		        boundsField.value = val;
+	        return boundsField;
+        }
     }
 
     [System.Serializable]
@@ -345,6 +520,18 @@ namespace GraphProcessor
         [SerializeField] BoundsInt val;
 
         public override object value { get => val; set => val = (BoundsInt)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var boundsField = new BoundsIntField();
+	        boundsField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        boundsField.style.width = 0;
+	        boundsField.style.flexGrow = new StyleFloat(1.0f);
+	        
+	        if (val != null) 
+		        boundsField.value = val;
+	        return boundsField;
+        }
     }
 
     [System.Serializable]
@@ -380,6 +567,18 @@ namespace GraphProcessor
         public override object value { get => val; set => val = (Gradient)value; }
         public override Type GetValueType() => typeof(Gradient);
         protected override Settings CreateSettings() => new GradientSettings();
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var gradientField = new GradientField();
+	        gradientField.RegisterValueChangedCallback(evt => val = evt.newValue);
+	        gradientField.style.width = 0;
+	        gradientField.style.flexGrow = new StyleFloat(1.0f);
+	        
+	        if (val != null) 
+		        gradientField.value = val;
+	        return gradientField;
+        }
     }
 
     [System.Serializable]
@@ -397,6 +596,22 @@ namespace GraphProcessor
         [SerializeField] bool val;
 
         public override object value { get => val; set => val = (bool)value; }
+        
+        public override VisualElement GetPropertyDrawer()
+        {
+	        var boolField = new Button();
+	        boolField.text = val ? "Yes" : "No ";
+	        boolField.clicked += () =>
+	        {
+		        val = !val;
+		        boolField.text = val ? "Yes" : "No ";
+	        };
+	        // not sure why, but this is needed aligns it with other entries:
+	        boolField.style.marginLeft = new Length(12, LengthUnit.Pixel);
+	        boolField.style.width = 0;
+	        boolField.style.flexGrow = new StyleFloat(1.0f);
+	        return boolField;
+        }
     }
 
     [System.Serializable]

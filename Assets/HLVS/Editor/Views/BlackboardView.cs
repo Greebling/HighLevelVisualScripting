@@ -151,7 +151,7 @@ namespace HLVS.Editor.Views
 			field.Q("node-border").style.overflow = Overflow.Hidden;
 
 			// displays the value of the field
-			var objField = CreateEntryValueField(entryType, param);
+			var objField = param.GetPropertyDrawer();
 			field.Add(objField);
 
 			var nameField = field.Q<TextField>();

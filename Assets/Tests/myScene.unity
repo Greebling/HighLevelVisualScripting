@@ -258,9 +258,79 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000, guid: 76b199881b21ce14eb04276c765dc50d, type: 2}
-  graphParameters: []
+  graphParameters:
+  - id: 0
+  - id: 1
+  - id: 2
   references:
     version: 1
+    00000000:
+      type: {class: ColorParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 696a9355-cc51-4dad-b4f8-fa60403a22b7
+        name: My Category/My Color
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 3
+        val: {r: 0, g: 0, b: 0, a: 0}
+    00000001:
+      type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: d6a6e981-c21b-4078-ae75-0557a830318f
+        name: Int
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 4
+        val: 0
+    00000002:
+      type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: a9fd41cb-9773-4056-9467-adfd2b6695d6
+        name: My Category/A/C
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 5
+        val: 0
+    00000003:
+      type: {class: ColorParameter/ColorSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 696a9355-cc51-4dad-b4f8-fa60403a22b7
+        mode: 0
+    00000004:
+      type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: d6a6e981-c21b-4078-ae75-0557a830318f
+        mode: 0
+        min: 0
+        max: 10
+    00000005:
+      type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: a9fd41cb-9773-4056-9467-adfd2b6695d6
+        mode: 0
+        min: 0
+        max: 10
 --- !u!4 &1166849796
 Transform:
   m_ObjectHideFlags: 0
@@ -269,7 +339,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1166849794}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5095668, y: 0.056114197, z: 0.19626331}
+  m_LocalPosition: {x: -0.99, y: 0.056114197, z: -0.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

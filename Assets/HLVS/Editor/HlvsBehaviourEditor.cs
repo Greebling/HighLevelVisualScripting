@@ -228,7 +228,7 @@ namespace HLVS.Editor
 				fieldContainer.Add(nameLabel);
 
 				// value field
-				var field = _parameterView.CreateEntryValueField(graphParameter.GetValueType(), graphParameter);
+				var field = graphParameter.GetPropertyDrawer();
 				fieldContainer.Add(field);
 
 				// fix alignment for buttons
