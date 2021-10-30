@@ -1,7 +1,11 @@
+using System.Linq;
 using System.Reflection;
 using GraphProcessor;
+using HLVS.Editor.Views;
+using HLVS.Runtime;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.SceneManagement;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace HLVS.Editor.NodeViews
@@ -17,13 +21,56 @@ namespace HLVS.Editor.NodeViews
 		/// <summary>
 		/// Used in HlvsNodeView
 		/// </summary>
-		public new static HlvsPortView CreatePortView(Direction direction, FieldInfo fieldInfo, PortData portData,
+		public static HlvsPortView CreatePortView(HlvsGraph graph, BaseNode targetNode, Direction direction,
+			FieldInfo fieldInfo, PortData portData,
 			BaseEdgeConnectorListener edgeConnectorListener)
 		{
 			var pv = new HlvsPortView(direction, fieldInfo, portData, edgeConnectorListener);
 			pv.m_EdgeConnector = new BaseEdgeConnector(edgeConnectorListener);
 			pv.AddManipulator(pv.m_EdgeConnector);
+			AddDefaultPortElements(portData, pv);
 
+
+			if (direction == Direction.Input && fieldInfo.FieldType != typeof(ExecutionLink))
+			{
+				// add value field
+				var field = FieldView.CreateEntryValueField(fieldInfo.FieldType);
+				field.style.width = 100f;
+				field.style.flexGrow = 0;
+				pv.Add(field);
+
+
+				// add button to link to blackboard variables and graph parameters
+				var varButton = new Button(() =>
+				{
+					var menu = new GenericMenu();
+					foreach (var parameter in graph.GetParameters()
+						.Where(parameter => parameter.GetValueType() == fieldInfo.FieldType))
+					{
+						menu.AddItem(new GUIContent(parameter.name), false, () => Debug.Log(parameter.name));
+					}
+
+					menu.AddSeparator("");
+					foreach (var parameter in graph.GetBlackboardFields()
+						.Where(parameter => parameter.GetValueType() == fieldInfo.FieldType))
+					{
+						menu.AddItem(new GUIContent(parameter.name), false, () => Debug.Log(parameter.name));
+					}
+
+					if (menu.GetItemCount() > 1)
+					{
+						menu.ShowAsContext();
+					}
+				});
+				varButton.AddToClassList("variable-selector");
+				pv.Add(varButton);
+			}
+
+			return pv;
+		}
+
+		private static void AddDefaultPortElements(PortData portData, HlvsPortView pv)
+		{
 			// Force picking in the port label to enlarge the edge creation zone
 			var portLabel = pv.Q("type");
 			if (portLabel != null)
@@ -39,9 +86,6 @@ namespace HLVS.Editor.NodeViews
 			// Fixup picking mode for vertical top ports
 			if (portData.vertical)
 				pv.Q("connector").pickingMode = PickingMode.Position;
-
-			// TODO: Add custom elements here
-			return pv;
 		}
 	}
 }

@@ -1,0 +1,21 @@
+.variable-selector
+{
+    border-radius: 4px;
+    
+    max-width:  20px;
+    width:      20px;
+    height:     18px;
+    padding: 0;
+    margin: 3px;
+    
+    flex-grow: 0;
+    flex-shrink: 0;
+    
+    align-self: center;
+    -unity-text-align: middle-center;
+    
+    background-color: #373737;
+    background-image: resource("uipackageresources/images/d_pick_uielements.png");
+    
+    flex-direction: column-reverse;
+}

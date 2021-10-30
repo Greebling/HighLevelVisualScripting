@@ -12,18 +12,19 @@ namespace HLVS.Editor.NodeViews
 	{
 		// TODO: Create customized port view to create here
 		protected override PortView CreatePortView(Direction direction, FieldInfo fieldInfo, PortData portData, BaseEdgeConnectorListener listener)
-			=> HlvsPortView.CreatePortView(direction, fieldInfo, portData, listener);
+			=> HlvsPortView.CreatePortView(graph, nodeTarget, direction, fieldInfo, portData, listener);
 
 		public HlvsGraph graph => owner.graph as HlvsGraph;
-
-		private StyleSheet _nodeStyle;
 
 		public override void Enable(bool fromInspector = false)
 		{
 			base.Enable(fromInspector);
 
-			_nodeStyle = Resources.Load<StyleSheet>("HlvsNodeStyling");
-			styleSheets.Add(_nodeStyle);
+			var nodeStyle = Resources.Load<StyleSheet>("HlvsNodeStyling");
+			styleSheets.Add(nodeStyle);
+			
+			var portStyle = Resources.Load<StyleSheet>("PortVariableSelector");
+			styleSheets.Add(portStyle);
 		}
 	}
 }
