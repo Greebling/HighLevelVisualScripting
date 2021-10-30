@@ -65,6 +65,12 @@ namespace HLVS.Editor.NodeViews
 					}
 				});
 				varButton.AddToClassList("variable-selector");
+				var imageHolder = new VisualElement();
+				imageHolder.AddToClassList("selector-image");
+				varButton.Add(imageHolder);
+				
+				
+				
 				pv.Add(varButton);
 			}
 

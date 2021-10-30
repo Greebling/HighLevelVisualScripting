@@ -4,7 +4,6 @@
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     
-    max-width:  22px;
     width:      22px;
     height:     18px;
     padding: 0;
@@ -14,12 +13,19 @@
     flex-shrink: 0;
     
     align-self: center;
+    align-items: center;
     -unity-text-align: middle-center;
+    flex-direction: column-reverse;
     
     background-color: #373737;
+}
+
+.selector-image
+{
+    width:      19px;
+    height:     19px;
+    margin: 0;
     background-image: resource("uipackageresources/images/d_pick_uielements.png");
-    
-    flex-direction: column-reverse;
 }
 
 .variable-selectable-field
