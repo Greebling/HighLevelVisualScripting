@@ -8,9 +8,12 @@ namespace HLVS.Nodes
 	public class TestNode : HlvsActionNode
 	{
 		[Input("Gobj")] public GameObject gobj;
+		[Input("Text")] public string string1Field;
 		[Input("Float Val")] public float floatVal;
+		[Input("Integer")] public int intValue;
+		[Input("Vector")] public Vector3 vecValue;
 		[Input("A Color")] public Color colorVal;
-		[Input("An enumeration"), ShowAsDrawer] public MyEnum enumField;
+		[Input("An enumeration")] public MyEnum enumField;
 
 		public enum MyEnum
 		{

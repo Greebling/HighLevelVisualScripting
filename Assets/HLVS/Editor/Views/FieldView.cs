@@ -239,6 +239,7 @@ namespace HLVS.Editor.Views
 						var colorField = new ColorField();
 						colorField.value = new Color(1, 1, 1, 1);
 						field = colorField;
+						field.style.height = 20;
 						break;
 					case "Single":
 						var floatField = new FloatField();

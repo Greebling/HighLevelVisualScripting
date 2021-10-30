@@ -33,3 +33,15 @@
     border-width: 2px;
     border-color: #2C5D87;
 }
+
+.unity-base-text-field__input
+{
+    border-top-width: 0;
+    padding-top: 2px;
+}
+
+:hover > .unity-base-text-field__input
+{
+    border-top-width: 1px;
+    padding-top: 1px;
+}

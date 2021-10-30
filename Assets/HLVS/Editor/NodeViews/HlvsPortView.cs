@@ -36,7 +36,9 @@ namespace HLVS.Editor.NodeViews
 				// add value field
 				var field = FieldView.CreateEntryValueField(fieldInfo.FieldType);
 				field.style.width = 100f;
+				field.style.height = 18f;
 				field.style.flexGrow = 0;
+				field.AddToClassList("variable-selectable-field");
 				pv.Add(field);
 
 
