@@ -29,7 +29,7 @@ namespace HLVS.Nodes
 
 		[Output("Value")] public Direction output;
 
-		protected override void Process()
+		public override void Evaluate()
 		{
 			output = new Direction(direction);
 		}

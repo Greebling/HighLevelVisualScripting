@@ -19,5 +19,10 @@ namespace HLVS.Nodes
 		{
 			FirstOption, SecondOption, AnotherOption,
 		}
+
+		public override void Evaluate()
+		{
+			Debug.Log(colorVal);
+		}
 	}
 }

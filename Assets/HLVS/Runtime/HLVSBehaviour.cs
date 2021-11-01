@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using GraphProcessor;
 using UnityEngine;
@@ -9,17 +8,10 @@ namespace HLVS.Runtime
 {
 	public class HLVSBehaviour : MonoBehaviour
 	{
+		[HideInInspector] 
 		public HlvsGraph graph;
 
-		[SerializeReference] public List<ExposedParameter> graphParameters = new List<ExposedParameter>();
-
-		public void SetVariable(string name, object value)
-		{
-			Debug.Assert(graph, "SetVariable called on behaviour without a graph");
-			var param = graphParameters.Find(parameter => parameter.name == name);
-			Debug.Assert(param != null, $"Parameter {name} not found in graph {graph.name}");
-			param.value = value;
-		}
+		[SerializeReference] [HideInInspector] public List<ExposedParameter> graphParameters = new List<ExposedParameter>();
 
 		public void CreateFittingParamList()
 		{
@@ -135,19 +127,28 @@ namespace HLVS.Runtime
 		private void Start()
 		{
 			if (graph)
-				graph.RunStartNodes(graphParameters);
+			{
+				graph.SetParameterValues(graphParameters);
+				graph.RunStartNodes();
+			}
 		}
 
 		private void Update()
 		{
 			if (graph)
-				graph.RunUpdateNodes(graphParameters);
+			{
+				graph.SetParameterValues(graphParameters);
+				graph.RunUpdateNodes();
+			}
 		}
 
 		private void OnTriggerEnter(Collider other)
 		{
 			if (graph)
-				graph.RunOnTriggerEnteredNodes(graphParameters);
+			{
+				graph.SetParameterValues(graphParameters);
+				graph.RunOnTriggerEnteredNodes();
+			}
 		}
 	}
 }

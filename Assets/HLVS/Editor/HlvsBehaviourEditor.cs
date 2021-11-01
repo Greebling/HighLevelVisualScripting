@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using GraphProcessor;
 using HLVS.Editor.Views;
 using HLVS.Runtime;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -21,12 +24,8 @@ namespace HLVS.Editor
 		private VisualElement _defaultContainer;
 		private VisualElement _parameterContainer;
 
-		private FieldView _parameterView;
-
 		private void OnEnable()
 		{
-			_parameterView = new FieldView();
-			
 			Reinitialize();
 			_behaviour.OnParamListChanged();
 		}
@@ -40,7 +39,7 @@ namespace HLVS.Editor
 		{
 			Deinitialize();
 		}
-		
+
 		private void Reinitialize()
 		{
 			_graph = (target as HLVSBehaviour).graph;
@@ -187,7 +186,7 @@ namespace HLVS.Editor
 				string fieldName = nameAndCategories.Last();
 
 				// add heading labels
-				if(nameAndCategories.Length != 1)
+				if (nameAndCategories.Length != 1)
 				{
 					for (int i = 0; i < nameAndCategories.Length - 1; i++)
 					{
@@ -205,7 +204,7 @@ namespace HLVS.Editor
 						}
 					}
 				}
-				else if(prevCategoriesHash.Count != 0)
+				else if (prevCategoriesHash.Count != 0)
 				{
 					// Add separator to separate uncategorized variables
 					prevCategoriesHash.Clear();
@@ -228,7 +227,15 @@ namespace HLVS.Editor
 				fieldContainer.Add(nameLabel);
 
 				// value field
-				var field = graphParameter.GetPropertyDrawer();
+				var field = graphParameter.GetPropertyDrawer(o =>
+				{
+					EditorUtility.SetDirty(_behaviour);
+					EditorSceneManager.MarkSceneDirty(_behaviour.gameObject.scene);
+				});
+				field.RegisterCallback<FocusInEvent>(evt =>
+				{
+					Undo.RecordObject(_behaviour, $"Changed {graphParameter.name}");
+				});
 				fieldContainer.Add(field);
 
 				// fix alignment for buttons

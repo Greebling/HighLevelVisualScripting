@@ -25,7 +25,7 @@ namespace HLVS.Nodes
 			}
 		}
 
-		protected override void Process()
+		public override void Evaluate()
 		{
 			Debug.Assert(!(variableName is ""), "A variable name must be given");
 			var field = (graph as HlvsGraph).GetVariable(variableName);

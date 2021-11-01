@@ -13,7 +13,8 @@ namespace HLVS.Nodes
 		[Input("Load Additive"), ShowAsDrawer] public bool loadAdditive;
 		
 		public override string name => "Load Scene";
-		protected override void Process()
+		
+		public override void Evaluate()
 		{
 			SceneManager.LoadScene(scene.buildIndex, loadAdditive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 		}

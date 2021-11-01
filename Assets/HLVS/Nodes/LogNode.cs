@@ -15,7 +15,7 @@ namespace HLVS.Nodes
 		
 		public override string name => "Log in Console";
 
-		protected override void Process()
+		public override void Evaluate()
 		{
 			if (!string.IsNullOrEmpty(textToLog))
 				Debug.Log(textToLog);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
 using HLVS.Nodes;
-using HLVS.Runtime;
 using UnityEngine;
 
 namespace HLVS
@@ -23,8 +22,6 @@ namespace HLVS
 		/// Blueprint of which types are needed as parameters
 		/// </summary>
 		[SerializeReference] public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
-
-		public List<ExposedParameter> parametersValues { get; protected set; }
 
 		public Action onParameterListChanged = () => { };
 		public Action onBlackboardListChanged = () => { };
@@ -65,23 +62,30 @@ namespace HLVS
 			return blackboardFields.OrderBy(parameter => parameter.name).ToList();
 		}
 
-		public void RunStartNodes(List<ExposedParameter> parameters)
+		public void SetParameterValues(List<ExposedParameter> parameters)
 		{
-			parametersValues = parameters;
+			Debug.Assert(parameters.Count == parametersBlueprint.Count, "Parameter lists don't match");
+			foreach (var valueTuple in 
+				parametersBlueprint.Zip(parameters, (graphParam, instanceParam) => (graphParam, instanceParam)))
+			{
+				valueTuple.graphParam.value = valueTuple.instanceParam.value;
+			}
+		}
+
+		public void RunStartNodes()
+		{
 			startNodeProcessor.UpdateComputeOrder();
 			startNodeProcessor.Run();
 		}
 
-		public void RunUpdateNodes(List<ExposedParameter> parameters)
+		public void RunUpdateNodes()
 		{
-			parametersValues = parameters;
 			updateNodeProcessor.UpdateComputeOrder();
 			updateNodeProcessor.Run();
 		}
 
-		public void RunOnTriggerEnteredNodes(List<ExposedParameter> parameters)
+		public void RunOnTriggerEnteredNodes()
 		{
-			parametersValues = parameters;
 			triggerNodeProcessor.UpdateComputeOrder();
 			triggerNodeProcessor.Run();
 		}
