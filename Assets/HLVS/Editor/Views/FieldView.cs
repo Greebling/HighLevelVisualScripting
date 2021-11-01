@@ -151,7 +151,7 @@ namespace HLVS.Editor.Views
 			{
 				previousParent.contentContainer.Remove(container);
 				// delete parent if there are no more field in the section
-				if (previousParent.contentContainer.childCount == 1)
+				if (previousParent.contentContainer.childCount == 0)
 				{
 					Debug.Assert(previousParent is BlackboardSection, "Visual Element hierarchy was not as expected");
 					previousParent.parent.Remove(previousParent);
