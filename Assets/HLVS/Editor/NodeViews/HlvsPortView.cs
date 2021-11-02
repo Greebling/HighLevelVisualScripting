@@ -5,6 +5,7 @@ using HLVS.Editor.Views;
 using HLVS.Nodes;
 using HLVS.Runtime;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Direction = UnityEditor.Experimental.GraphView.Direction;
@@ -22,7 +23,8 @@ namespace HLVS.Editor.NodeViews
 		/// <summary>
 		/// Used in HlvsNodeView
 		/// </summary>
-		public static HlvsPortView CreatePortView(HlvsGraph graph, BaseNode targetNode, Direction direction,
+		public static HlvsPortView CreatePortView(HlvsGraph graph, BaseGraphView owner, BaseNode targetNode,
+			Direction direction,
 			FieldInfo fieldInfo, PortData portData, BaseEdgeConnectorListener edgeConnectorListener)
 		{
 			var pv = new HlvsPortView(direction, fieldInfo, portData, edgeConnectorListener);
@@ -33,24 +35,20 @@ namespace HLVS.Editor.NodeViews
 
 			if (direction == Direction.Input && fieldInfo.FieldType != typeof(ExecutionLink))
 			{
+				var nodeIndex = graph.nodes.FindIndex(n => n == targetNode);
+				var serializedProp = owner.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex)
+					.FindPropertyRelative(fieldInfo.Name);
+				var field = new PropertyField(serializedProp);
+				field.Bind(owner.serializedGraph);
+
+
 				// add value field
-				var field = FieldView.CreateEntryValueField(fieldInfo.FieldType);
 				field.style.width = 100f;
 				field.style.height = 18f;
+				field.style.marginRight = 0;
 				field.style.flexGrow = 0;
 				field.AddToClassList("variable-selectable-field");
-				field.RegisterCallback<FocusOutEvent>(evt => EditorUtility.SetDirty(graph));
-				field.RegisterCallback<FocusOutEvent>(evt =>
-				{
-					var fieldValue = field.GetType().InvokeMember("value",
-						BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty, null, field,
-						new object[] { });
-					targetNode.GetType().InvokeMember(fieldInfo.Name,
-						BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetField, null, targetNode,
-						new[] { fieldValue });
-				});
 				pv.Add(field);
-
 
 				// add button to link to blackboard variables and graph parameters
 				var varButton = new Button(() =>
@@ -59,11 +57,9 @@ namespace HLVS.Editor.NodeViews
 
 					menu.AddItem(new GUIContent("Reset"), false, () =>
 					{
-						field.GetType().InvokeMember("SetEnabled",
-							BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod, null, field,
-							new[] { (object)true });
-						field.GetType().InvokeMember("value",
-							BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty, null, field,
+						field.SetEnabled(true);
+						targetNode.GetType().InvokeMember(fieldInfo.Name,
+							BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetField, null, targetNode,
 							new[] { (object)null });
 					});
 					menu.AddSeparator("");
@@ -73,11 +69,9 @@ namespace HLVS.Editor.NodeViews
 					{
 						menu.AddItem(new GUIContent(parameter.name), false, () =>
 						{
-							field.GetType().InvokeMember("SetEnabled",
-								BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod, null, field,
-								new[] { (object)false });
-							field.GetType().InvokeMember("value",
-								BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetProperty, null, field,
+							field.SetEnabled(false);
+							targetNode.GetType().InvokeMember(fieldInfo.Name,
+								BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetField, null, targetNode,
 								new[] { parameter.value });
 							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid,
 								ReferenceType.Blackboard);
@@ -90,9 +84,7 @@ namespace HLVS.Editor.NodeViews
 					{
 						menu.AddItem(new GUIContent(parameter.name), false, () =>
 						{
-							field.GetType().InvokeMember("SetEnabled",
-								BindingFlags.Public | BindingFlags.Instance | BindingFlags.InvokeMethod, null, field,
-								new[] { (object)false });
+							field.SetEnabled(false);
 							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid,
 								ReferenceType.Blackboard);
 						});

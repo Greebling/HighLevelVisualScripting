@@ -12,7 +12,7 @@ namespace HLVS.Editor.NodeViews
 	{
 		// TODO: Create customized port view to create here
 		protected override PortView CreatePortView(Direction direction, FieldInfo fieldInfo, PortData portData, BaseEdgeConnectorListener listener)
-			=> HlvsPortView.CreatePortView(graph, nodeTarget, direction, fieldInfo, portData, listener);
+			=> HlvsPortView.CreatePortView(graph, owner, nodeTarget, direction, fieldInfo, portData, listener);
 
 		public HlvsGraph graph => owner.graph as HlvsGraph;
 

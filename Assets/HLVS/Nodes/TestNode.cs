@@ -13,6 +13,7 @@ namespace HLVS.Nodes
 		[Input("Integer")] public int intValue;
 		[Input("Vector")] public Vector3 vecValue;
 		[Input("A Color")] public Color colorVal;
+		[Input("A Truth Value")] public bool boolField;
 		[Input("An enumeration")] public MyEnum enumField;
 
 		public enum MyEnum

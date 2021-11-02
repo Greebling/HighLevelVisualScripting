@@ -255,7 +255,7 @@ MonoBehaviour:
         input: 1
         settings:
           id: 3
-        val: {r: 0.6698113, g: 0.21421416, b: 0.11058204, a: 0}
+        val: {r: 0.80298626, g: 0.25490192, b: 0.83137256, a: 0}
     00000001:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
@@ -269,7 +269,7 @@ MonoBehaviour:
         input: 1
         settings:
           id: 4
-        val: 9
+        val: 0
     00000002:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
@@ -283,7 +283,7 @@ MonoBehaviour:
         input: 1
         settings:
           id: 5
-        val: 8
+        val: 0
     00000003:
       type: {class: ColorParameter/ColorSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:

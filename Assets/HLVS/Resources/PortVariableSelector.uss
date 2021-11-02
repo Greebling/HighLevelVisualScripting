@@ -1,45 +1,65 @@
-.variable-selector
-{
+.variable-selector {
     border-radius: 4px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    
-    width:      22px;
-    height:     18px;
+
+    width: 22px;
+    height: 18px;
     padding: 0;
     margin: 0;
-    
+
     flex-grow: 0;
     flex-shrink: 0;
-    
+
     align-self: center;
     align-items: center;
     -unity-text-align: middle-center;
     flex-direction: column-reverse;
-    
+
     background-color: #373737;
 }
 
-.selector-image
-{
-    width:      19px;
-    height:     19px;
+.selector-image {
+    width: 19px;
+    height: 19px;
     margin: 0;
     background-image: resource("uipackageresources/images/d_pick_uielements.png");
 }
 
-.variable-selectable-field
-{
+.variable-selectable-field {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     margin-right: 0;
     border-right-width: 0;
 }
 
-.variable-selectable-field > .unity-base-field__input
-{
+.variable-selectable-field > .unity-base-field__input {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     margin-right: 0;
     border-right-width: 0;
+}
+
+.variable-selectable-field > .unity-base-field > .unity-label {
+    width: 0;
+    min-width: 0;
+    visibility: hidden;
+}
+
+.variable-selectable-field > .unity-base-field > .unity-base-field__input {
+    width: 150px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: 0;
+    border-right-width: 0;
+}
+
+.unity-base-field{
+    margin-right: 0;
+    height: 18px;
+    margin-top: 0;
+}
+
+.unity-object-field__input{
+    border-top-width: 0;
 }

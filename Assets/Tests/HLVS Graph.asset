@@ -33,18 +33,17 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -125, y: 175, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: 39, y: 193, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   blackboardFields:
   - id: 3
   - id: 4
   - id: 5
   - id: 6
-  - id: 7
   parametersBlueprint:
+  - id: 7
   - id: 8
   - id: 9
-  - id: 10
   references:
     version: 1
     00000000:
@@ -55,26 +54,26 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 342.71506
-          y: -140.09538
-          width: 126
+          x: 415
+          y: -160
+          width: 245
           height: 99
         expanded: 0
         debug: 0
         nodeLock: 0
-        textToLog: dfgdfgdfgdgf
+        textToLog: dfsfdsfds
         Outp: 0
     00000001:
       type: {class: TestNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
         GUID: 91e9620b-c405-4750-8611-4c045260fdba
-        computeOrder: 1
+        computeOrder: 2
         position:
           serializedVersion: 2
-          x: 437.5
-          y: 12.5
-          width: 283
+          x: 478.8696
+          y: 26.043459
+          width: 280
           height: 243
         expanded: 0
         debug: 0
@@ -84,14 +83,15 @@ MonoBehaviour:
         floatVal: 123131
         intValue: 23
         vecValue: {x: 0, y: 0, z: 0}
-        colorVal: {r: 0.183553, g: 0.8113208, b: 0.08802067, a: 1}
+        colorVal: {r: 0.1511659, g: 0.33349138, b: 0.4056604, a: 1}
+        boolField: 1
         enumField: 0
     00000002:
       type: {class: OnStartNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
         GUID: 598ab6a3-c535-4326-ba45-519d6e5c0096
-        computeOrder: 0
+        computeOrder: 1
         position:
           serializedVersion: 2
           x: 217.36484
@@ -113,7 +113,7 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 11
+          id: 10
         val: {r: 0.8301887, g: 0.101070635, b: 0.05090782, a: 0}
     00000004:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
@@ -127,13 +127,27 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 12
+          id: 11
         val: {fileID: 1636575971871760, guid: f78111bdbdeaf6644806fc49fcaf1d30, type: 3}
     00000005:
+      type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: a2915057-cb27-4906-af07-2b01423463c6
+        name: My Categoory/A variable
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 12
+        val: 0
+    00000006:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
-        guid: c2d4f62f-5273-4ca0-8228-fde8367cb7a7
-        name: String
+        guid: 43d51280-88f2-4153-a6d6-ae18b064bc10
+        name: My Category/Another Category/Variable
         type: 
         serializedValue:
           serializedType: 
@@ -142,36 +156,8 @@ MonoBehaviour:
         input: 1
         settings:
           id: 13
-        val: LMAO
-    00000006:
-      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: fe84a91f-f29e-4212-9dc6-0cac2827d566
-        name: A float
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 14
-        val: 324
+        val: dfgdfgdf
     00000007:
-      type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 01d6bfbb-63da-4bda-954f-c2ced10be19e
-        name: Vector 3
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 15
-        val: {x: 0, y: 0, z: 0}
-    00000008:
       type: {class: ColorParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 696a9355-cc51-4dad-b4f8-fa60403a22b7
@@ -183,9 +169,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 16
+          id: 14
         val: {r: 0.80298626, g: 0.25490192, b: 0.83137256, a: 0}
-    00000009:
+    00000008:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: d6a6e981-c21b-4078-ae75-0557a830318f
@@ -197,9 +183,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 17
+          id: 15
         val: 0
-    0000000A:
+    00000009:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: a9fd41cb-9773-4056-9467-adfd2b6695d6
@@ -211,50 +197,44 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 18
+          id: 16
         val: 0
-    0000000B:
+    0000000A:
       type: {class: ColorParameter/ColorSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: 8bce779a-d5c5-4bac-9bd6-6d81e0f528bf
         mode: 0
-    0000000C:
+    0000000B:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: 0dd92778-6ed6-4214-8a0e-562fff9c543d
+    0000000C:
+      type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 5aa54291-1c5b-4b31-9bf1-8b65ddf3fde0
+        mode: 0
+        min: 0
+        max: 10
     0000000D:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
-        guid: 3b68fe27-9a5d-4a85-8f59-8db30b80f18b
+        guid: ee5f8c0a-e0e9-480e-a990-d96930c05e24
     0000000E:
-      type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 95779459-a0f4-4dbd-b1e9-d15a356640c4
-        mode: 0
-        min: 0
-        max: 1
-    0000000F:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: d836b5fb-fbc1-4351-b33a-8f4684ac92d9
-    00000010:
       type: {class: ColorParameter/ColorSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: 696a9355-cc51-4dad-b4f8-fa60403a22b7
         mode: 0
-    00000011:
+    0000000F:
       type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
@@ -263,7 +243,7 @@ MonoBehaviour:
         mode: 0
         min: 0
         max: 10
-    00000012:
+    00000010:
       type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
