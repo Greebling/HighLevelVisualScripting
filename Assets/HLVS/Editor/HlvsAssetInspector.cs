@@ -35,6 +35,13 @@ namespace HLVS.Editor
 			var graph = CreateInstance<HlvsGraph>();
 			ProjectWindowUtil.CreateAsset(graph, HlvsSettings.DefaultAssetName);
 		}
+		
+		[MenuItem("Assets/Create/HLVS Blackboard", false, 128)]
+		public static void CreateBlackboard()
+		{
+			var board = CreateInstance<HlvsBlackboard>();
+			ProjectWindowUtil.CreateAsset(board, HlvsSettings.DefaultBlackboardAssetName);
+		}
 
 		[OnOpenAsset(0)]
 		public static bool OnBaseGraphOpened(int instanceID, int line)

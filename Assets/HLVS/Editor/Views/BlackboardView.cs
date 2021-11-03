@@ -10,11 +10,13 @@ namespace HLVS.Editor.Views
 {
 	public class BlackboardView : FieldView
 	{
-		public BlackboardView(HlvsGraphView graphView)
+		private readonly HlvsBlackboard _target;
+		public BlackboardView(HlvsGraphView graphView, HlvsBlackboard target)
 		{
 			this.graphView = graphView;
+			_target = target;
 
-			blackboard.title = "Blackboard";
+			blackboard.title =  target.name;
 			blackboard.subTitle = "";
 			blackboard.scrollable = true;
 			blackboard.windowed = true;
@@ -39,7 +41,7 @@ namespace HLVS.Editor.Views
 		/// <param name="element"></param>
 		private void OnItemMoved(int index, VisualElement element)
 		{
-			var list = graph.blackboardFields;
+			var list = _target.fields;
 			int previousIndex = list.FindIndex(parameter => parameter.guid == element.name);
 			if (previousIndex == -1)
 				return;
@@ -92,7 +94,7 @@ namespace HLVS.Editor.Views
 			blackboard.Clear();
 			categorySections.Clear();
 			CreateDefaultSection();
-			graph.blackboardFields.Clear();
+			_target.fields.Clear();
 			graph.onBlackboardListChanged.Invoke();
 		}
 
@@ -106,7 +108,7 @@ namespace HLVS.Editor.Views
 			if (graph == null)
 				return;
 
-			foreach (var field in graph.blackboardFields)
+			foreach (var field in _target.fields)
 			{
 				Debug.Assert(field.GetValueType() != null, $"Field {field.name} has no type");
 				CreateBlackboardField(field.GetValueType(), field.name, field);
@@ -126,7 +128,7 @@ namespace HLVS.Editor.Views
 
 			param.name = entryName;
 			param.guid = Guid.NewGuid().ToString();
-			graph.blackboardFields.Add(param);
+			_target.fields.Add(param);
 
 			// ui
 			CreateBlackboardField(entryType, entryName, param);
@@ -167,16 +169,21 @@ namespace HLVS.Editor.Views
 			// display remove option
 			var removeButton = new Button(() =>
 			{
-				graph.blackboardFields.Remove(param);
+				_target.fields.Remove(param);
 				RemoveField(param, field);
-			});
-			removeButton.text = " - ";
-			removeButton.tooltip = "Remove entry";
-			removeButton.style.flexGrow = 0;
-			removeButton.style.borderBottomLeftRadius = 7;
-			removeButton.style.borderBottomRightRadius = 7;
-			removeButton.style.borderTopLeftRadius = 7;
-			removeButton.style.borderTopRightRadius = 7;
+			})
+			{
+				text = " - ",
+				tooltip = "Remove entry",
+				style =
+				{
+					flexGrow = 0,
+					borderBottomLeftRadius = 7,
+					borderBottomRightRadius = 7,
+					borderTopLeftRadius = 7,
+					borderTopRightRadius = 7
+				}
+			};
 			field.Add(removeButton);
 			
 			// not renamed, but needs categorization

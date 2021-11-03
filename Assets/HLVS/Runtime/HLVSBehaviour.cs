@@ -54,7 +54,7 @@ namespace HLVS.Runtime
 
 		public void OnParamListChanged()
 		{
-			if (graph.parametersBlueprint.Count == 0)
+			if (!graph || graph.parametersBlueprint.Count == 0)
 			{
 				graphParameters.Clear();
 				return;

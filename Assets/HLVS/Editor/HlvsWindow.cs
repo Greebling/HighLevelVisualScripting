@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using GraphProcessor;
+﻿using GraphProcessor;
 using HLVS.Editor.Views;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -10,7 +9,7 @@ namespace HLVS.Editor
 {
 	public class HlvsWindow : BaseGraphWindow
 	{
-		private HlvsGraph _tmpGraph;
+		private HlvsGraph  _tmpGraph;
 		private StyleSheet _customStyling;
 
 		[MenuItem("HLVS/Graph Editor")]
@@ -27,6 +26,7 @@ namespace HLVS.Editor
 
 			return graphWindow;
 		}
+
 		protected override void OnDestroy()
 		{
 			UnloadTempGraph();
@@ -42,12 +42,12 @@ namespace HLVS.Editor
 
 			if (graphView == null)
 			{
-				var graphView = new HlvsGraphView(this);
+				var graphView = new HlvsGraphView(this, startingGraph as HlvsGraph);
 				this.graphView = graphView;
 
 
 				// blackboard and parameter-board registration
-				graphView.blackboardView.blackboard.graphView = graphView;
+				graphView.blackboardView.ForEach(view => view.blackboard.graphView = graphView);
 				graphView.paramView.blackboard.graphView = graphView;
 
 
@@ -63,14 +63,14 @@ namespace HLVS.Editor
 		protected override void InitializeGraphView(BaseGraphView baseView)
 		{
 			var view = baseView as HlvsGraphView;
-			
-			view.blackboardView.DisplayExistingBlackboardEntries();
+
+			view.blackboardView.ForEach(blackboardView => blackboardView.DisplayExistingBlackboardEntries());
 			view.paramView.DisplayExistingParameterEntries();
 		}
 
 		private void UnloadTempGraph()
 		{
-			if(_tmpGraph)
+			if (_tmpGraph)
 			{
 				graphView?.Dispose();
 				DestroyImmediate(_tmpGraph);

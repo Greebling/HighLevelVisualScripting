@@ -13,24 +13,33 @@ namespace HLVS
 		protected HlvsGraphProcessor<OnUpdateNode> updateNodeProcessor;
 		protected HlvsGraphProcessor<OnTriggerEnteredNode> triggerNodeProcessor;
 
-		/// <summary>
-		/// Blackboard variables of a graph. They are shared amongst all instances of a graph asset
-		/// </summary>
-		[SerializeReference] public List<ExposedParameter> blackboardFields = new List<ExposedParameter>();
+		public List<HlvsBlackboard> blackboards;
 
 		/// <summary>
 		/// Blueprint of which types are needed as parameters
 		/// </summary>
 		[SerializeReference] public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
 
-		public Action onParameterListChanged = () => { };
-		public Action onBlackboardListChanged = () => { };
+		public Action                 onParameterListChanged  = () => { };
+		public Action                 onBlackboardListChanged = () => { };
+		public Action<HlvsBlackboard> onBlackboardAdded       = (HlvsBlackboard) => { };
 
 		private readonly Dictionary<string, ExposedParameter> _nameToVar = new Dictionary<string, ExposedParameter>();
 
 		protected override void OnEnable()
 		{
 			base.OnEnable();
+			
+			if (blackboards == null)
+			{
+				blackboards = new List<HlvsBlackboard>();
+			}
+			else
+			{
+				// take care of deleted blackboards
+				blackboards = blackboards.Where(blackboard => blackboard).ToList();
+			}
+			
 			BuildVariableDict();
 			onParameterListChanged += BuildVariableDict;
 			onBlackboardListChanged += BuildVariableDict;
@@ -38,6 +47,12 @@ namespace HLVS
 			startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
 			updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
 			triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
+		}
+
+		public void AddBlackboard(HlvsBlackboard board)
+		{
+			blackboards.Add(board);
+			onBlackboardAdded(board);
 		}
 
 		public ExposedParameter GetVariable(string variableName)
@@ -48,7 +63,7 @@ namespace HLVS
 		private void BuildVariableDict()
 		{
 			_nameToVar.Clear();
-			blackboardFields.ForEach(parameter => _nameToVar.Add(parameter.name, parameter));
+			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _nameToVar.Add(parameter.name, parameter)));
 			parametersBlueprint.ForEach(parameter => _nameToVar.Add(parameter.name, parameter));
 		}
 
@@ -59,7 +74,7 @@ namespace HLVS
 
 		public List<ExposedParameter> GetBlackboardFields()
 		{
-			return blackboardFields.OrderBy(parameter => parameter.name).ToList();
+			return blackboards.SelectMany(blackboard => blackboard.fields).OrderBy(parameter => parameter.name).ToList();
 		}
 
 		public void SetParameterValues(List<ExposedParameter> parameters)

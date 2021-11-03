@@ -16,9 +16,18 @@ namespace HLVS.Editor.Views
 
 		protected override void AddButtons()
 		{
-			AddToggle("Show Boards", _view.boardContainer.visible, v =>
+			AddToggle("Show Boards", _view.boardContainer.visible, v => { _view.boardContainer.visible = v; });
+
+			AddButton("Add blackboard", () =>
 			{
-				_view.boardContainer.visible = v;
+				var board = Selection.activeObject as HlvsBlackboard;
+				if (board)
+				{
+					var graph = _view.graph as HlvsGraph;
+
+					if (!graph.blackboards.Contains(board))
+						graph.AddBlackboard(board);
+				}
 			});
 
 			AddButton("Save", () =>

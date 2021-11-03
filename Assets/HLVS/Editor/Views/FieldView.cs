@@ -16,13 +16,13 @@ namespace HLVS.Editor.Views
 	/// </summary>
 	public class FieldView
 	{
-		public readonly Blackboard blackboard;
-		protected HlvsGraph graph => graphView.graph as HlvsGraph;
-		protected HlvsGraphView graphView;
-		protected readonly GenericMenu addMenu;
+		public readonly    Blackboard    blackboard;
+		protected          HlvsGraph     graph => graphView.graph as HlvsGraph;
+		protected          HlvsGraphView graphView;
+		protected readonly GenericMenu   addMenu;
 
 		protected readonly Dictionary<string, BlackboardSection> categorySections;
-		protected BlackboardSection defaultSection;
+		protected          BlackboardSection                     defaultSection;
 
 		public FieldView()
 		{
@@ -57,7 +57,7 @@ namespace HLVS.Editor.Views
 		}
 
 		protected void AfterFieldRenamed(ExposedParameter field, VisualElement fieldContainer,
-			TextField nameField = null)
+		                                 TextField        nameField = null)
 		{
 			var previousParent = fieldContainer.parent;
 			bool sectionHasOneChild = false;
@@ -119,22 +119,22 @@ namespace HLVS.Editor.Views
 
 				// sort categories displayed in blackboard
 				blackboard.Sort((element, element2) =>
-				{
-					var name1 = element.name;
-					var name2 = element2.name;
-					if (name1.Length < name2.Length)
-					{
-						return string.CompareOrdinal(name1, name2.Substring(0, name1.Length));
-					}
-					else if (name1.Length > name2.Length)
-					{
-						return string.CompareOrdinal(name1.Substring(0, name2.Length), name2);
-					}
-					else
-					{
-						return string.CompareOrdinal(name1, name2);
-					}
-				});
+				                {
+					                var name1 = element.name;
+					                var name2 = element2.name;
+					                if (name1.Length < name2.Length)
+					                {
+						                return string.CompareOrdinal(name1, name2.Substring(0, name1.Length));
+					                }
+					                else if (name1.Length > name2.Length)
+					                {
+						                return string.CompareOrdinal(name1.Substring(0, name2.Length), name2);
+					                }
+					                else
+					                {
+						                return string.CompareOrdinal(name1, name2);
+					                }
+				                });
 			}
 
 			if (sectionHasOneChild && previousParent.name != string.Empty && previousParent.name != allCategories)
@@ -166,9 +166,10 @@ namespace HLVS.Editor.Views
 
 		protected string GetUniqueName(string name)
 		{
-			return ObjectNames.GetUniqueName(graph.blackboardFields.Select(parameter => parameter.name).ToArray(),
-				ObjectNames.GetUniqueName(graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
-					name));
+			var uniqueParamName = ObjectNames.GetUniqueName(graph.parametersBlueprint.Select(parameter => parameter.name).ToArray(),
+			                                                name);
+			return ObjectNames.GetUniqueName(graph.blackboards.SelectMany(board => board.fields).Select(parameter => parameter.name).ToArray(),
+			                                 uniqueParamName);
 		}
 
 		/// <summary>
@@ -267,8 +268,7 @@ namespace HLVS.Editor.Views
 						break;
 				}
 			}
-			
-			
+
 
 			return field;
 		}

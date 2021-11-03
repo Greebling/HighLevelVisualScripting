@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GraphProcessor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -10,14 +11,16 @@ namespace HLVS.Editor.Views
 {
 	public class HlvsGraphView : BaseGraphView
 	{
-		public BlackboardView blackboardView;
-		public ParameterView paramView;
-		public readonly VisualElement boardContainer;
-		public readonly HlvsToolbarView toolbarView;
+		public          List<BlackboardView> blackboardView;
+		public          ParameterView        paramView;
+		public readonly VisualElement        boardContainer;
+		public readonly HlvsToolbarView      toolbarView;
+		
+		private HlvsGraph _graph => graph as HlvsGraph;
 
-		public HlvsGraphView(EditorWindow window) : base(window)
+		public HlvsGraphView(EditorWindow window, HlvsGraph graph) : base(window)
 		{
-			blackboardView = new BlackboardView(this);
+			this.graph = graph;
 			paramView = new ParameterView(this);
 
 			toolbarView = new HlvsToolbarView(this);
@@ -30,16 +33,31 @@ namespace HLVS.Editor.Views
 			boardContainer.style.width = 300;
 			boardContainer.style.marginTop = 1;
 
-			boardContainer.Add(blackboardView.blackboard);
 			boardContainer.Add(paramView.blackboard);
+			
+			Debug.Assert(_graph);
+			blackboardView = new List<BlackboardView>();
+			foreach (HlvsBlackboard graphBlackboard in _graph.blackboards)
+			{
+				AddBlackboardView(graphBlackboard);
+			}
+
+			_graph.onBlackboardAdded += AddBlackboardView;
+
 
 			Add(boardContainer);
+		}
+
+		void AddBlackboardView(HlvsBlackboard board)
+		{
+			var view = new BlackboardView(this, board);
+			blackboardView.Add(view);
+			boardContainer.Add(view.blackboard);
 		}
 
 		public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
 		{
 			//base.BuildContextualMenu(evt);
-			Debug.Assert(graph is HlvsGraph, "Graph is not a HlvsGraph");
 
 			if (evt.target is GraphView && nodeCreationRequest != null)
 			{
@@ -70,17 +88,17 @@ namespace HLVS.Editor.Views
 			evt.menu.AppendAction("Undo", action =>
 			{
 				Undo.PerformUndo();
-				blackboardView.DisplayExistingBlackboardEntries();
+				blackboardView.ForEach(view => view.DisplayExistingBlackboardEntries());
 				paramView.DisplayExistingParameterEntries();
-				(graph as HlvsGraph).onParameterListChanged.Invoke();
+				_graph.onParameterListChanged.Invoke();
 			});
 
 			evt.menu.AppendAction("Redo", action =>
 			{
 				Undo.PerformRedo();
-				blackboardView.DisplayExistingBlackboardEntries();
+				blackboardView.ForEach(view => view.DisplayExistingBlackboardEntries());
 				paramView.DisplayExistingParameterEntries();
-				(graph as HlvsGraph).onParameterListChanged.Invoke();
+				_graph.onParameterListChanged.Invoke();
 			});
 		}
 
