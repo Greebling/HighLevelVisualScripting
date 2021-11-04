@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using GraphProcessor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -11,12 +10,13 @@ namespace HLVS.Editor.Views
 	public class BlackboardView : FieldView
 	{
 		public readonly HlvsBlackboard target;
+
 		public BlackboardView(HlvsGraphView graphView, HlvsBlackboard target)
 		{
 			this.graphView = graphView;
 			this.target = target;
 
-			blackboard.title =  target.name;
+			blackboard.title = target.name;
 			blackboard.subTitle = "";
 			blackboard.scrollable = true;
 			blackboard.windowed = true;
@@ -27,7 +27,7 @@ namespace HLVS.Editor.Views
 			blackboard.moveItemRequested += (blackboard1, index, element) => OnItemMoved(index, element);
 
 			InitBlackboardMenu();
-			
+
 			blackboard.RegisterCallback<MouseDownEvent>(evt =>
 			{
 				if (evt.button == 1)
@@ -40,10 +40,7 @@ namespace HLVS.Editor.Views
 		private void OnRightClick()
 		{
 			GenericMenu menu = new GenericMenu();
-			menu.AddItem(new GUIContent("Remove Blackboard"), false,() =>
-			{
-				graph.RemoveBlackboard(target);
-			});
+			menu.AddItem(new GUIContent("Remove Blackboard"), false, () => { graph.RemoveBlackboard(target); });
 			menu.ShowAsContext();
 		}
 
@@ -72,7 +69,6 @@ namespace HLVS.Editor.Views
 			else
 				list.Insert(index, paramToMove);
 		}
-
 
 		private void InitBlackboardMenu()
 		{
@@ -203,7 +199,7 @@ namespace HLVS.Editor.Views
 				}
 			};
 			field.Add(removeButton);
-			
+
 			// not renamed, but needs categorization
 			AfterFieldRenamed(param, field, field.Q<TextField>());
 			return field;
