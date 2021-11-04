@@ -79,12 +79,6 @@ namespace GraphProcessor
 					deleg = Expression.Lambda< CustomPortIODelegate >(ex, p1, p2, p3).Compile();
 #endif
 
-					if (deleg == null)
-					{
-						Debug.LogWarning("Can't use custom IO port function " + method + ": The method have to respect this format: " + typeof(CustomPortIODelegate));
-						continue ;
-					}
-
 					string fieldName = (portInputAttr == null) ? portOutputAttr.fieldName : portInputAttr.fieldName;
 					Type customType = (portInputAttr == null) ? portOutputAttr.outputType : portInputAttr.inputType;
 					var field = type.GetField(fieldName, bindingFlags);
