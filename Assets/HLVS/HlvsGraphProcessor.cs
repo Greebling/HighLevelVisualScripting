@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
@@ -22,8 +23,10 @@ namespace HLVS
 			
 			_startNodes.Sort((node1, node2) => Mathf.CeilToInt(node1.position.y - node2.position.y));
 			
-
-			// eval compute order for all nodes
+			// reset computation order
+			graph.nodes.ForEach(node => node.computeOrder = Int32.MaxValue);
+			
+			// evaluate compute order for all nodes
 			int executionOrder = -1;
 			foreach (var startNode in _startNodes)
 			{
@@ -46,6 +49,7 @@ namespace HLVS
 				if (dependencyNode is HlvsActionNode || dependencyNode is ExecutionStarterNode)
 				{
 					// TODO: Check if this dependency works
+					Debug.Assert(dependencyNode.computeOrder <= computeOrder);
 					continue;
 				}
 				
@@ -86,19 +90,19 @@ namespace HLVS
 			}
 		}
 
-		private static void GetNodeDataDependencies(BaseNode currNode) // TODO: Make this a HlvsNode
+		private static void GetNodeDataDependencies(HlvsNode currNode)
 		{
 			// get own dependencies
 			foreach (var node in currNode.GetInputNodes())
 			{
-				// ignore action flow as input TODO: Will the node design force action nodes to have no other outputs except the action flow?
+				// ignore action flow as input
 				if (node is HlvsActionNode || node is ExecutionStarterNode)
 					continue;
 
 				// fetch own data dependencies
 				foreach (var nodeInputPort in node.GetInputNodes())
 				{
-					GetNodeDataDependencies(nodeInputPort);
+					GetNodeDataDependencies(nodeInputPort as HlvsNode);
 				}
 				node.OnProcess();
 
