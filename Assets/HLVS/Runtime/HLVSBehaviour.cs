@@ -73,10 +73,6 @@ namespace HLVS.Runtime
 			}
 			else if (graph.parametersBlueprint.Count < graphParameters.Count)
 			{
-				// TODO: Somewhere in here is a bug
-				Debug.Assert(graph);
-				Debug.Assert(graph.parametersBlueprint != null);
-				Debug.Assert(graphParameters != null);
 				// removed entries
 				var removedElements = graphParameters.FindAll(parameter =>
 					graph.parametersBlueprint.All(blueprintP => blueprintP.guid != parameter.guid)).ToArray();

@@ -57,7 +57,7 @@ namespace HLVS.Editor
 			}
 		}
 
-		public sealed override VisualElement CreateInspectorGUI()
+		public override VisualElement CreateInspectorGUI()
 		{
 			Reinitialize();
 

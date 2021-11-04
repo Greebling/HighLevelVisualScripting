@@ -68,8 +68,8 @@ namespace HLVS.Editor.Views
 			var view = new BlackboardView(this, board);
 			blackboardViews.Add(view);
 			boardContainer.Add(view.blackboard);
-		}	
-		
+		}
+
 		void RemoveBlackboardView(HlvsBlackboard board)
 		{
 			var view = blackboardViews.Find(view1 => view1.target == board);
