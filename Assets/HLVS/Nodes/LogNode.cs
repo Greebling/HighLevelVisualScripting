@@ -10,9 +10,6 @@ namespace HLVS.Nodes
 	{
 		[Input("Text"), SerializeField] public string textToLog;
 
-		[Output("Outp")] public bool Outp;
-
-		
 		public override string name => "Log in Console";
 
 		public override void Evaluate()
