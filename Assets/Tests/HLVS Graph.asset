@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: HLVS Graph
   m_EditorClassIdentifier: 
   serializedNodes: []
-  nodes: []
+  nodes:
+  - id: 0
+  - id: 1
   edges: []
   groups: []
   stackNodes: []
@@ -22,11 +24,42 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 108, y: -151, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
-  blackboards:
-  - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
-  - {fileID: 11400000, guid: d62014d508677b6478348463f46510f5, type: 2}
+  position: {x: 119, y: 109, z: 0}
+  scale: {x: 0.57175326, y: 0.57175326, z: 1}
+  blackboards: []
   parametersBlueprint: []
   references:
     version: 1
+    00000000:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 0a74cd50-74d5-496b-a127-170ea3666163
+        computeOrder: -1
+        position:
+          serializedVersion: 2
+          x: 926.97327
+          y: 103.19136
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        textToLog: 
+    00000001:
+      type: {class: ConsoleNode, ns: NodeGraphProcessor.Examples, asm: Assembly-CSharp}
+      data:
+        nodeCustomName: 
+        GUID: 0303ffd2-3d84-482b-a382-c9d125ef8d55
+        computeOrder: -1
+        position:
+          serializedVersion: 2
+          x: 533.4469
+          y: 216.87677
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        logText: Log
+        logType: 3
