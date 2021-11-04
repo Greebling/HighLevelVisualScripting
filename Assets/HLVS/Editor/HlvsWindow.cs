@@ -47,7 +47,7 @@ namespace HLVS.Editor
 
 
 				// blackboard and parameter-board registration
-				graphView.blackboardView.ForEach(view => view.blackboard.graphView = graphView);
+				graphView.blackboardViews.ForEach(view => view.blackboard.graphView = graphView);
 				graphView.paramView.blackboard.graphView = graphView;
 
 
@@ -64,7 +64,7 @@ namespace HLVS.Editor
 		{
 			var view = baseView as HlvsGraphView;
 
-			view.blackboardView.ForEach(blackboardView => blackboardView.DisplayExistingBlackboardEntries());
+			view.blackboardViews.ForEach(blackboardView => blackboardView.DisplayExistingBlackboardEntries());
 			view.paramView.DisplayExistingParameterEntries();
 		}
 

@@ -18,18 +18,6 @@ namespace HLVS.Editor.Views
 		{
 			AddToggle("Show Boards", _view.boardContainer.visible, v => { _view.boardContainer.visible = v; });
 
-			AddButton("Add blackboard", () =>
-			{
-				var board = Selection.activeObject as HlvsBlackboard;
-				if (board)
-				{
-					var graph = _view.graph as HlvsGraph;
-
-					if (!graph.blackboards.Contains(board))
-						graph.AddBlackboard(board);
-				}
-			});
-
 			AddButton("Save", () =>
 			{
 				EditorUtility.SetDirty(_view.graph);

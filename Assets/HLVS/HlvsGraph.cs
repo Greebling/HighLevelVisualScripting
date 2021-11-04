@@ -23,6 +23,7 @@ namespace HLVS
 		public Action                 onParameterListChanged  = () => { };
 		public Action                 onBlackboardListChanged = () => { };
 		public Action<HlvsBlackboard> onBlackboardAdded       = (HlvsBlackboard) => { };
+		public Action<HlvsBlackboard> onBlackboardRemoved      = (HlvsBlackboard) => { };
 
 		private readonly Dictionary<string, ExposedParameter> _nameToVar = new Dictionary<string, ExposedParameter>();
 
@@ -51,8 +52,18 @@ namespace HLVS
 
 		public void AddBlackboard(HlvsBlackboard board)
 		{
+			if (blackboards.Contains(board))
+				return;
+			
 			blackboards.Add(board);
 			onBlackboardAdded(board);
+		}
+
+		public void RemoveBlackboard(HlvsBlackboard board)
+		{
+			Debug.Assert(blackboards.Contains(board));
+			blackboards.Remove(board);
+			onBlackboardRemoved(board);
 		}
 
 		public ExposedParameter GetVariable(string variableName)

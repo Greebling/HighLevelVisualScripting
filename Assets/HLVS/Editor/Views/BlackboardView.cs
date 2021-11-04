@@ -10,11 +10,11 @@ namespace HLVS.Editor.Views
 {
 	public class BlackboardView : FieldView
 	{
-		private readonly HlvsBlackboard _target;
+		public readonly HlvsBlackboard target;
 		public BlackboardView(HlvsGraphView graphView, HlvsBlackboard target)
 		{
 			this.graphView = graphView;
-			_target = target;
+			this.target = target;
 
 			blackboard.title =  target.name;
 			blackboard.subTitle = "";
@@ -27,6 +27,24 @@ namespace HLVS.Editor.Views
 			blackboard.moveItemRequested += (blackboard1, index, element) => OnItemMoved(index, element);
 
 			InitBlackboardMenu();
+			
+			blackboard.RegisterCallback<MouseDownEvent>(evt =>
+			{
+				if (evt.button == 1)
+				{
+					OnRightClick();
+				}
+			});
+		}
+
+		private void OnRightClick()
+		{
+			GenericMenu menu = new GenericMenu();
+			menu.AddItem(new GUIContent("Remove Blackboard"), false,() =>
+			{
+				graph.RemoveBlackboard(target);
+			});
+			menu.ShowAsContext();
 		}
 
 		private void OnClickedAdd(Blackboard b)
@@ -41,7 +59,7 @@ namespace HLVS.Editor.Views
 		/// <param name="element"></param>
 		private void OnItemMoved(int index, VisualElement element)
 		{
-			var list = _target.fields;
+			var list = target.fields;
 			int previousIndex = list.FindIndex(parameter => parameter.guid == element.name);
 			if (previousIndex == -1)
 				return;
@@ -94,7 +112,7 @@ namespace HLVS.Editor.Views
 			blackboard.Clear();
 			categorySections.Clear();
 			CreateDefaultSection();
-			_target.fields.Clear();
+			target.fields.Clear();
 			graph.onBlackboardListChanged.Invoke();
 		}
 
@@ -108,7 +126,7 @@ namespace HLVS.Editor.Views
 			if (graph == null)
 				return;
 
-			foreach (var field in _target.fields)
+			foreach (var field in target.fields)
 			{
 				Debug.Assert(field.GetValueType() != null, $"Field {field.name} has no type");
 				CreateBlackboardField(field.GetValueType(), field.name, field);
@@ -128,7 +146,7 @@ namespace HLVS.Editor.Views
 
 			param.name = entryName;
 			param.guid = Guid.NewGuid().ToString();
-			_target.fields.Add(param);
+			target.fields.Add(param);
 
 			// ui
 			CreateBlackboardField(entryType, entryName, param);
@@ -169,7 +187,7 @@ namespace HLVS.Editor.Views
 			// display remove option
 			var removeButton = new Button(() =>
 			{
-				_target.fields.Remove(param);
+				target.fields.Remove(param);
 				RemoveField(param, field);
 			})
 			{

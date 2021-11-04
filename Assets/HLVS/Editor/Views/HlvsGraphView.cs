@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphProcessor;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -11,11 +12,11 @@ namespace HLVS.Editor.Views
 {
 	public class HlvsGraphView : BaseGraphView
 	{
-		public          List<BlackboardView> blackboardView;
-		public          ParameterView        paramView;
-		public readonly VisualElement        boardContainer;
-		public readonly HlvsToolbarView      toolbarView;
-		
+		public List<BlackboardView> blackboardViews;
+		public ParameterView paramView;
+		public readonly VisualElement boardContainer;
+		public readonly HlvsToolbarView toolbarView;
+
 		private HlvsGraph _graph => graph as HlvsGraph;
 
 		public HlvsGraphView(EditorWindow window, HlvsGraph graph) : base(window)
@@ -33,17 +34,31 @@ namespace HLVS.Editor.Views
 			boardContainer.style.width = 300;
 			boardContainer.style.marginTop = 1;
 
+			// handle adding of blackboards via drag n drop TODO: Set drag indicator on blackboards correct
+			RegisterCallback<DragExitedEvent>(evt =>
+			{
+				if (DragAndDrop.objectReferences.Length > 0 &&
+					DragAndDrop.objectReferences.All(o => o is HlvsBlackboard))
+				{
+					foreach (var draggedObject in DragAndDrop.objectReferences)
+					{
+						_graph.AddBlackboard(draggedObject as HlvsBlackboard);
+					}
+				}
+			});
+
+
 			boardContainer.Add(paramView.blackboard);
-			
-			Debug.Assert(_graph);
-			blackboardView = new List<BlackboardView>();
+
+
+			blackboardViews = new List<BlackboardView>();
 			foreach (HlvsBlackboard graphBlackboard in _graph.blackboards)
 			{
 				AddBlackboardView(graphBlackboard);
 			}
 
 			_graph.onBlackboardAdded += AddBlackboardView;
-
+			_graph.onBlackboardRemoved += RemoveBlackboardView;
 
 			Add(boardContainer);
 		}
@@ -51,8 +66,18 @@ namespace HLVS.Editor.Views
 		void AddBlackboardView(HlvsBlackboard board)
 		{
 			var view = new BlackboardView(this, board);
-			blackboardView.Add(view);
+			blackboardViews.Add(view);
 			boardContainer.Add(view.blackboard);
+		}	
+		
+		void RemoveBlackboardView(HlvsBlackboard board)
+		{
+			var view = blackboardViews.Find(view1 => view1.target == board);
+			if (view != null)
+			{
+				boardContainer.Remove(view.blackboard);
+				blackboardViews.Remove(view);
+			}
 		}
 
 		public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
@@ -74,7 +99,7 @@ namespace HLVS.Editor.Views
 			if (evt.target is GraphView)
 				evt.menu.AppendAction("Paste", action => this.PasteCallback(),
 					action => canPaste ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled);
-			*/ 
+			*/
 			if (evt.target is GraphView || evt.target is Node || evt.target is Edge)
 			{
 				evt.menu.AppendAction("Delete",
@@ -88,7 +113,7 @@ namespace HLVS.Editor.Views
 			evt.menu.AppendAction("Undo", action =>
 			{
 				Undo.PerformUndo();
-				blackboardView.ForEach(view => view.DisplayExistingBlackboardEntries());
+				blackboardViews.ForEach(view => view.DisplayExistingBlackboardEntries());
 				paramView.DisplayExistingParameterEntries();
 				_graph.onParameterListChanged.Invoke();
 			});
@@ -96,7 +121,7 @@ namespace HLVS.Editor.Views
 			evt.menu.AppendAction("Redo", action =>
 			{
 				Undo.PerformRedo();
-				blackboardView.ForEach(view => view.DisplayExistingBlackboardEntries());
+				blackboardViews.ForEach(view => view.DisplayExistingBlackboardEntries());
 				paramView.DisplayExistingParameterEntries();
 				_graph.onParameterListChanged.Invoke();
 			});
