@@ -17,7 +17,13 @@ namespace HLVS.Editor.Views
 		protected override void AddButtons()
 		{
 			AddToggle("Show Boards", _view.boardContainer.visible, v => { _view.boardContainer.visible = v; });
-
+			
+			AddButton("Run Start", () =>
+			{
+				var graph = _view.graph as HlvsGraph;
+				graph.RunStartNodes();
+			});
+			
 			AddButton("Save", () =>
 			{
 				EditorUtility.SetDirty(_view.graph);
