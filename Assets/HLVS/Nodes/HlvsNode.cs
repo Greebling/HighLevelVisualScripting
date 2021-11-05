@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using GraphProcessor;
 using UnityEngine;
 
 namespace HLVS.Nodes
 {
-	[Serializable]
-	internal enum ReferenceType
-	{
-		Blackboard,
-		GraphParameter
-	}
-
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
