@@ -20,12 +20,12 @@ namespace HLVS.Nodes
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
 		/// </summary>
-		internal Dictionary<string, (string, ReferenceType)> fieldToParamGuid = new Dictionary<string, (string, ReferenceType)>();
+		internal Dictionary<string, string> fieldToParamGuid = new Dictionary<string, string>();
 
 		/// <summary>
 		/// Used for serialization of fieldToParamGuid
 		/// </summary>
-		[SerializeField] private List<(string, string, ReferenceType)> varToGuidSerialization;
+		[SerializeField] private List<(string, string)> varToGuidSerialization;
 
 		protected sealed override void Process()
 		{
@@ -44,22 +44,22 @@ namespace HLVS.Nodes
 		internal void UpdateParameterValues()
 		{
 			var graph = this.graph as HlvsGraph;
-			foreach (var valueTuple in fieldToParamGuid)
+			foreach (var fieldToParam in fieldToParamGuid)
 			{
-				var parameter = graph.GetVariable(valueTuple.Value.Item1);
-				GetType().GetField(valueTuple.Key).SetValue(this, parameter.value);
+				var parameter = graph.GetVariable(fieldToParam.Value);
+				GetType().GetField(fieldToParam.Key).SetValue(this, parameter.value);
 			}
 		}
 
 		public void OnBeforeSerialize()
 		{
 			// save dictionary as list
-			varToGuidSerialization = new List<(string, string, ReferenceType)>();
+			varToGuidSerialization = new List<(string, string)>();
 			if (fieldToParamGuid != null)
 			{
 				foreach (var keyValuePair in fieldToParamGuid)
 				{
-					varToGuidSerialization.Add((keyValuePair.Key, keyValuePair.Value.Item1, keyValuePair.Value.Item2));
+					varToGuidSerialization.Add((keyValuePair.Key, keyValuePair.Value));
 				}
 			}
 		}
@@ -68,10 +68,10 @@ namespace HLVS.Nodes
 		{
 			if (varToGuidSerialization != null)
 			{
-				fieldToParamGuid = new Dictionary<string, (string, ReferenceType)>();
+				fieldToParamGuid = new Dictionary<string, string>();
 				foreach (var serializedValues in varToGuidSerialization)
 				{
-					fieldToParamGuid.Add(serializedValues.Item1, (serializedValues.Item2, serializedValues.Item3));
+					fieldToParamGuid.Add(serializedValues.Item1, serializedValues.Item2);
 				}
 			}
 		}

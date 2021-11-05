@@ -73,8 +73,7 @@ namespace HLVS.Editor.NodeViews
 							targetNode.GetType().InvokeMember(fieldInfo.Name,
 								BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetField, null, targetNode,
 								new[] { parameter.value });
-							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid,
-								ReferenceType.Blackboard);
+							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid);
 						});
 					}
 
@@ -85,8 +84,7 @@ namespace HLVS.Editor.NodeViews
 						menu.AddItem(new GUIContent(parameter.name), false, () =>
 						{
 							field.SetEnabled(false);
-							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid,
-								ReferenceType.Blackboard);
+							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid);
 						});
 					}
 
@@ -108,18 +106,17 @@ namespace HLVS.Editor.NodeViews
 			return pv;
 		}
 
-		private static void OnReferenceVariable(HlvsNode node, string nameOfField, string parameterGuid,
-			ReferenceType variant)
+		private static void OnReferenceVariable(HlvsNode node, string nameOfField, string parameterGuid)
 		{
 			Debug.Assert(node != null);
 
 			if (node.fieldToParamGuid.ContainsKey(nameOfField))
 			{
-				node.fieldToParamGuid[nameOfField] = (parameterGuid, variant);
+				node.fieldToParamGuid[nameOfField] = parameterGuid;
 			}
 			else
 			{
-				node.fieldToParamGuid.Add(nameOfField, (parameterGuid, variant));
+				node.fieldToParamGuid.Add(nameOfField, parameterGuid);
 			}
 		}
 
