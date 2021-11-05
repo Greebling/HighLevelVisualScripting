@@ -1,8 +1,10 @@
+using System;
 using GraphProcessor;
 using HLVS.Nodes;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Direction = UnityEditor.Experimental.GraphView.Direction;
 
 namespace HLVS.Editor.NodeViews
 {
@@ -39,9 +41,7 @@ namespace HLVS.Editor.NodeViews
 			else
 			{
 				// TODO: Add output port
-				
-				outputContainer.Clear();
-				outputContainer.Add(new Label($"Value = {_parameter.GetValueType().Name}"));
+				(outputPortViews[0] as HlvsPortView).SetPortType(_parameter.GetValueType());
 				RefreshPorts();
 			}
 		}
@@ -51,12 +51,15 @@ namespace HLVS.Editor.NodeViews
 			Undo.RecordObject(owner.graph, "Set GetVariable node");
 			
 			target.variableName = _nameField.value;
-			_titleLabel.text = target.name;
-			_parameter = graph.GetVariable(target.variableName);
+			
+			if(target.variableName != String.Empty)
+			{
+				_titleLabel.text = target.name;
+				_parameter = graph.GetVariable(target.variableName);
+				UpdateVisuals();
+			}
 			
 			EditorUtility.SetDirty(owner.graph);
-
-			UpdateVisuals();
 		}
 	}
 }

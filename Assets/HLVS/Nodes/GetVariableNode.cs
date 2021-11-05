@@ -9,7 +9,7 @@ namespace HLVS.Nodes
 	{
 		public string variableName;
 
-		[NonSerialized] public object data;
+		[Output("out")] public object data;
 
 		public override string name  {
 			get

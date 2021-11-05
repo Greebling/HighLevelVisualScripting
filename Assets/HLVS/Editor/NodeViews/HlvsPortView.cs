@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Reflection;
 using GraphProcessor;
@@ -104,6 +105,13 @@ namespace HLVS.Editor.NodeViews
 			}
 
 			return pv;
+		}
+
+		public void SetPortType(Type type)
+		{
+			RemoveFromClassList("Port_" + portType.Name);
+			portType = type;
+			AddToClassList("Port_" + portType.Name);
 		}
 
 		private static void OnReferenceVariable(HlvsNode node, string nameOfField, string parameterGuid)
