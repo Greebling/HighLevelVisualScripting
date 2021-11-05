@@ -8,7 +8,7 @@ namespace HLVS.Nodes
 	[Serializable, NodeMenuItem("HLVS/Log")]
 	public class LogNode : HlvsActionNode
 	{
-		[Input("Text"), SerializeField] public string textToLog;
+		[Input("Text")] public string textToLog;
 
 		public override string name => "Log in Console";
 
@@ -16,13 +16,6 @@ namespace HLVS.Nodes
 		{
 			if (!string.IsNullOrEmpty(textToLog))
 				Debug.Log(textToLog);
-		}
-
-		[CustomPortOutput("Outp", typeof(bool))]
-		public bool Print(List<SerializableEdge> s)
-		{
-			Debug.Log(s);
-			return false;
 		}
 	}
 }
