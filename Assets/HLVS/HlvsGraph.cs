@@ -29,21 +29,13 @@ namespace HLVS
 
 		protected override void OnEnable()
 		{
-			base.OnEnable();
-			
-			if (blackboards == null)
-			{
-				blackboards = new List<HlvsBlackboard>();
-			}
-			else
-			{
-				// take care of deleted blackboards
-				blackboards = blackboards.Where(blackboard => blackboard).ToList();
-			}
+			blackboards = blackboards == null ? new List<HlvsBlackboard>() : blackboards.Where(blackboard => blackboard).ToList();
 			
 			BuildVariableDict();
 			onParameterListChanged += BuildVariableDict;
 			onBlackboardListChanged += BuildVariableDict;
+			base.OnEnable();
+			
 
 			startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
 			updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);

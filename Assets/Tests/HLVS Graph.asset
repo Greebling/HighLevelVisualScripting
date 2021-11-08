@@ -27,6 +27,14 @@ MonoBehaviour:
     outputFieldName: followingAction
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: fdcf31f4-e9f7-4e7b-badb-25ccba07cca5
+    owner: {fileID: 11400000}
+    inputNodeGUID: 446284c4-9cda-4223-9e73-8fc64378ab85
+    outputNodeGUID: 53f4ce32-1f57-4082-b07b-1fce6cb564bb
+    inputFieldName: textToLog
+    outputFieldName: data
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements: []
@@ -34,15 +42,13 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -96, y: -145, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: 53, y: -305, z: 0}
+  scale: {x: 1.7490063, y: 1.7490063, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   - {fileID: 11400000, guid: d62014d508677b6478348463f46510f5, type: 2}
   parametersBlueprint:
   - id: 4
-  - id: 5
-  - id: 6
   references:
     version: 1
     00000000:
@@ -65,7 +71,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 446284c4-9cda-4223-9e73-8fc64378ab85
-        computeOrder: 1
+        computeOrder: 2
         position:
           serializedVersion: 2
           x: 504.8015
@@ -75,13 +81,13 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
-        textToLog: 
+        textToLog: String!
     00000002:
       type: {class: GetVariableNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
         GUID: 53f4ce32-1f57-4082-b07b-1fce6cb564bb
-        computeOrder: 2
+        computeOrder: 1
         position:
           serializedVersion: 2
           x: 160.99995
@@ -91,13 +97,13 @@ MonoBehaviour:
         expanded: 1
         debug: 0
         nodeLock: 0
-        variableName: A float
+        variableName: AVal
     00000003:
       type: {class: TestNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
         GUID: fa495e3a-87fa-4cc8-a7d3-21cea98bdda7
-        computeOrder: 3
+        computeOrder: 2147483647
         position:
           serializedVersion: 2
           x: 505.00006
@@ -116,34 +122,6 @@ MonoBehaviour:
         boolField: 0
         enumField: 0
     00000004:
-      type: {class: Vector2Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 62237137-40c8-4203-9072-ccc9859fc987
-        name: Cat/thing
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 7
-        val: {x: 0, y: 0}
-    00000005:
-      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 39aea48c-f0ce-4c63-8fd3-56755638f968
-        name: Cat/float
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 8
-        val: 0
-    00000006:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
@@ -155,27 +133,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 9
-        val: 
-    00000007:
-      type: {class: Vector2Parameter/Vector2Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 62237137-40c8-4203-9072-ccc9859fc987
-        mode: 0
-        min: 0
-        max: 1
-    00000008:
-      type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 39aea48c-f0ce-4c63-8fd3-56755638f968
-        mode: 0
-        min: 0
-        max: 1
-    00000009:
+          id: 5
+        val: String!
+    00000005:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0

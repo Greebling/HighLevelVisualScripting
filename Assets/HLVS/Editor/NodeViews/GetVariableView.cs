@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 
 namespace HLVS.Editor.NodeViews
 {
-	[NodeCustomEditor(typeof(GetVariableNode))]
+	[NodeCustomEditor(typeof(GetVariableNode))] [DefaultExecutionOrder(512)]
 	public class GetVariableView : HlvsNodeView
 	{
 		private GetVariableNode target => nodeTarget as GetVariableNode;
@@ -27,6 +27,7 @@ namespace HLVS.Editor.NodeViews
 			_nameField.Q("unity-text-input").style.minWidth = 75;
 			_nameField.RegisterCallback<FocusOutEvent>(e => OnNameChanged());
 			inputContainer.Add(_nameField);
+			GetVariableData();
 		}
 
 		private void UpdateVisuals()
@@ -48,14 +49,19 @@ namespace HLVS.Editor.NodeViews
 			
 			target.variableName = _nameField.value;
 			
-			if(target.variableName != String.Empty)
+			GetVariableData();
+			
+			EditorUtility.SetDirty(owner.graph);
+		}
+
+		private void GetVariableData()
+		{
+			if (target.variableName != String.Empty)
 			{
 				_titleLabel.text = target.name;
 				_parameter = graph.GetVariable(target.variableName);
 				UpdateVisuals();
 			}
-			
-			EditorUtility.SetDirty(owner.graph);
 		}
 	}
 }
