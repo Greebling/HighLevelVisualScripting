@@ -37,7 +37,6 @@ namespace HLVS.Editor.NodeViews
 			}
 			else
 			{
-				// TODO: Add output port
 				(outputPortViews[0] as HlvsPortView).SetPortType(_parameter.GetValueType());
 				RefreshPorts();
 			}
