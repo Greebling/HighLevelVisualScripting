@@ -4,7 +4,6 @@ using HLVS.Nodes;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Direction = UnityEditor.Experimental.GraphView.Direction;
 
 namespace HLVS.Editor.NodeViews
 {
@@ -28,8 +27,6 @@ namespace HLVS.Editor.NodeViews
 			_nameField.Q("unity-text-input").style.minWidth = 75;
 			_nameField.RegisterCallback<FocusOutEvent>(e => OnNameChanged());
 			inputContainer.Add(_nameField);
-
-			OnNameChanged();
 		}
 
 		private void UpdateVisuals()
