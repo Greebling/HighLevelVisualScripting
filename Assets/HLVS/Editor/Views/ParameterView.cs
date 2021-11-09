@@ -131,7 +131,7 @@ namespace HLVS.Editor.Views
 			// ui
 			CreateBlackboardField(entryName, param);
 
-			graph.onParameterListChanged.Invoke();
+			graph.onParameterListChanged();
 		}
 
 		private void OnParamRenamed(ExposedParameter param, string newName)
@@ -156,7 +156,7 @@ namespace HLVS.Editor.Views
 			nameField.RegisterCallback<FocusOutEvent>(evt =>
 			{
 				AfterFieldRenamed(param, field, nameField);
-				graph.onParameterListChanged.Invoke();
+				graph.onParameterListChanged();
 			});
 			
 			// display remove option
@@ -164,7 +164,7 @@ namespace HLVS.Editor.Views
 			{
 				graph.parametersBlueprint.Remove(param);
 				RemoveField(field);
-				graph.onParameterListChanged.Invoke();
+				graph.onParameterListChanged();
 			});
 			removeButton.text = " - ";
 			removeButton.tooltip = "Remove entry";
