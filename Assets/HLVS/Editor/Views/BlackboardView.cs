@@ -83,7 +83,7 @@ namespace HLVS.Editor.Views
 
 				addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
 				{
-					var finalName = GetUniqueName(niceParamName);
+					var finalName = GetUniqueName("My " + niceParamName);
 					AddBlackboardEntry(type, finalName);
 				});
 			}
