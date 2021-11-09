@@ -36,7 +36,7 @@ namespace HLVS.Nodes
 			}
 			else
 			{
-				Debug.Assert(false, $"No variable called '{variableName}' found");
+				throw new Exception($"No variable called '{variableName}' found");
 			}
 		}
 	}

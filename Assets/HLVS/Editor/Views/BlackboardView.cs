@@ -143,6 +143,7 @@ namespace HLVS.Editor.Views
 			param.name = entryName;
 			param.guid = Guid.NewGuid().ToString();
 			target.fields.Add(param);
+			graph.onBlackboardListChanged();
 
 			// ui
 			CreateBlackboardField(entryType, entryName, param);
@@ -184,7 +185,7 @@ namespace HLVS.Editor.Views
 			var removeButton = new Button(() =>
 			{
 				target.fields.Remove(param);
-				RemoveField(param, field);
+				RemoveField(field);
 			})
 			{
 				text = " - ",

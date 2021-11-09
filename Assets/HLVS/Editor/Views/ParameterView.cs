@@ -163,7 +163,7 @@ namespace HLVS.Editor.Views
 			var removeButton = new Button(() =>
 			{
 				graph.parametersBlueprint.Remove(param);
-				RemoveField(param, field);
+				RemoveField(field);
 				graph.onParameterListChanged.Invoke();
 			});
 			removeButton.text = " - ";

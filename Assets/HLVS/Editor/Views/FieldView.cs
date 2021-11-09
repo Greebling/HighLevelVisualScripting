@@ -143,7 +143,7 @@ namespace HLVS.Editor.Views
 			}
 		}
 
-		public void RemoveField(ExposedParameter field, VisualElement container)
+		public void RemoveField(VisualElement container)
 		{
 			var previousParent = container.parent;
 			// remove from current parent
@@ -157,6 +157,8 @@ namespace HLVS.Editor.Views
 					previousParent.parent.Remove(previousParent);
 				}
 			}
+
+			graph.onBlackboardListChanged();
 		}
 
 		public static string GetSectionNameFromCategories(string categories)
@@ -185,7 +187,7 @@ namespace HLVS.Editor.Views
 					Debug.Log($"Unknown param type {type.Name}");
 					return null;
 				case "String":
-					return new StringParameter();
+					return new StringParameter(){value = String.Empty};
 				case "Color":
 					return new ColorParameter();
 				case "Single":
