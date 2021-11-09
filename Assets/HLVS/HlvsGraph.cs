@@ -90,21 +90,35 @@ namespace HLVS
 			}
 		}
 
+		public void Init()
+		{
+			foreach (BaseNode baseNode in nodes)
+			{
+				((HlvsNode) baseNode).Reset();
+			}
+			
+			startNodeProcessor.UpdateComputeOrder();
+			updateNodeProcessor.UpdateComputeOrder();
+			triggerNodeProcessor.UpdateComputeOrder();
+		}
+
 		public void RunStartNodes()
 		{
-			startNodeProcessor.UpdateComputeOrder();
 			startNodeProcessor.Run();
 		}
 
 		public void RunUpdateNodes()
 		{
-			updateNodeProcessor.UpdateComputeOrder();
+			if (startNodeProcessor.status == ProcessingStatus.Unfinished)
+			{
+				startNodeProcessor.Run();
+			}
+			
 			updateNodeProcessor.Run();
 		}
 
 		public void RunOnTriggerEnteredNodes()
 		{
-			triggerNodeProcessor.UpdateComputeOrder();
 			triggerNodeProcessor.Run();
 		}
 	}

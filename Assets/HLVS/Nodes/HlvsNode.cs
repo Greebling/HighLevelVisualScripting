@@ -5,9 +5,19 @@ using UnityEngine;
 
 namespace HLVS.Nodes
 {
+	public enum ProcessingStatus
+	{
+		Finished, Unfinished
+	}
+	
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
+		/// <summary>
+		/// Used for communicating when a node has not finished its processing in one frame. Useful for coroutine like nodes
+		/// </summary>
+		public ProcessingStatus status { get; protected set; } = ProcessingStatus.Finished;
+		
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
 		/// </summary>
@@ -28,6 +38,11 @@ namespace HLVS.Nodes
 		/// Called when node shall be evaluated and execute its actions
 		/// </summary>
 		public virtual void Evaluate(){}
+		
+		/// <summary>
+		/// Useful for coroutine like nodes to reset their status
+		/// </summary>
+		public virtual void Reset(){}
 
 		/// <summary>
 		/// Gets the values of blackboard and graph parameter variables

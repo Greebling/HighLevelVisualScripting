@@ -42,8 +42,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 112.8, y: -480, z: 0}
-  scale: {x: 1.520875, y: 1.520875, z: 1}
+  position: {x: 186.4, y: -271.2, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
@@ -80,7 +80,8 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
-        textToLog: 
+        textToLog: Ello
+        amount: 10
     00000002:
       type: {class: GetVariableNode, ns: HLVS.Nodes, asm: HLVS}
       data:
@@ -102,13 +103,13 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: fa495e3a-87fa-4cc8-a7d3-21cea98bdda7
-        computeOrder: 2147483647
+        computeOrder: 3
         position:
           serializedVersion: 2
-          x: 505.00006
-          y: 385.00006
-          width: 280
-          height: 267
+          x: 504.80002
+          y: 509.5513
+          width: 283.99997
+          height: 267.19995
         expanded: 0
         debug: 0
         nodeLock: 0

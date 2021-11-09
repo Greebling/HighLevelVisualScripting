@@ -117,7 +117,11 @@ namespace HLVS.Runtime
 		private void OnEnable()
 		{
 			if (graph)
+			{
+				graph = Instantiate(graph);
+				graph.Init();
 				graph.LinkToScene(gameObject.scene);
+			}
 		}
 
 		private void Start()

@@ -7,35 +7,40 @@ using UnityEngine;
 
 namespace HLVS
 {
-	public class HlvsGraphProcessor<TExecutionStartNode> : BaseGraphProcessor where TExecutionStartNode : HlvsNode
+	public class HlvsGraphProcessor<TExecutionStartNode> where TExecutionStartNode : HlvsNode
 	{
-		List<TExecutionStartNode> _startNodes;
+		List<HlvsNode> _startNodes;
 
-		public HlvsGraphProcessor(BaseGraph graph) : base(graph)
+		private readonly HlvsGraph _graph;
+
+		public ProcessingStatus status { get; private set; } = ProcessingStatus.Finished;
+
+		public HlvsGraphProcessor(HlvsGraph graph)
 		{
+			_graph = graph;
 		}
 
-		public override void UpdateComputeOrder()
+		public void UpdateComputeOrder()
 		{
-			_startNodes = graph.nodes.OfType<TExecutionStartNode>().ToList();
+			_startNodes = _graph.nodes.Where(node => node is TExecutionStartNode).Cast<HlvsNode>().ToList();
 			if (_startNodes.Count == 0)
 				return;
-			
+
 			_startNodes.Sort((node1, node2) => Mathf.CeilToInt(node1.position.y - node2.position.y));
-			
+
 			// reset computation order
-			graph.nodes.ForEach(node => node.computeOrder = Int32.MaxValue);
-			
+			_graph.nodes.ForEach(node => node.computeOrder = Int32.MaxValue);
+
 			// evaluate compute order for all nodes
 			int executionOrder = -1;
 			foreach (var startNode in _startNodes)
 			{
 				executionOrder++;
 				startNode.computeOrder = executionOrder;
-				ApplyToGraph(startNode, node =>
+				Apply(startNode, node =>
 				{
 					ComputeDependencyComputeOrder(node, ref executionOrder);
-					
+
 					executionOrder++;
 					node.computeOrder = executionOrder;
 				});
@@ -52,42 +57,88 @@ namespace HLVS
 					Debug.Assert(dependencyNode.computeOrder <= computeOrder);
 					continue;
 				}
-				
+
 				ComputeDependencyComputeOrder(dependencyNode, ref computeOrder);
-				
+
 				computeOrder++;
 				dependencyNode.computeOrder = computeOrder;
 			}
 		}
 
-		public override void Run()
+
+		public void Run()
 		{
+			if (_startNodes == null)
+				UpdateComputeOrder();
+
+			status = ProcessingStatus.Finished;
+			List<HlvsNode> nextStartNode = new List<HlvsNode>();
 			foreach (var startNode in _startNodes)
 			{
-				ApplyToGraph(startNode, hlvsNode =>
+				var node = WalkGraph(startNode, hlvsNode =>
 				{
 					GetNodeDataDependencies(hlvsNode);
-			
+
 					hlvsNode.OnProcess();
 				});
+
+				if (!(node is TExecutionStartNode))
+				{
+					status = ProcessingStatus.Unfinished;
+				}
+
+				nextStartNode.Add(node);
 			}
+
+			_startNodes = nextStartNode;
 		}
 
 		protected delegate void ApplyFunction(HlvsNode node);
 
-		/// <summary>
-		/// Applies a given function to all nodes, beginning AFTER startNode
-		/// </summary>
-		/// <param name="startNode"></param>
-		/// <param name="func">To apply to following nodes</param>
-		protected void ApplyToGraph(TExecutionStartNode startNode, ApplyFunction func)
+		protected void Apply(HlvsNode beginNode, ApplyFunction func)
 		{
-			HlvsNode currNode = GetNextNode(startNode);
+			HlvsNode currNode = GetNextNode(beginNode);
 			while (currNode != null)
 			{
 				func(currNode);
+
 				currNode = GetNextNode(currNode);
 			}
+		}
+
+		/// <summary>
+		/// Applies a given function to all nodes, beginning AFTER startNode
+		/// </summary>
+		/// <param name="beginNode"></param>
+		/// <param name="func">To apply to following nodes</param>
+		protected HlvsNode WalkGraph(HlvsNode beginNode, ApplyFunction func)
+		{
+			HlvsNode currNode = beginNode.status == ProcessingStatus.Finished ? GetNextNode(beginNode) : beginNode;
+			while (currNode != null)
+			{
+				func(currNode);
+
+				if (currNode.status == ProcessingStatus.Unfinished)
+				{
+					return currNode;
+				}
+
+				currNode = GetNextNode(currNode);
+			}
+
+			// we ran fully through the network so we will begin with the start node next time
+			return beginNode is TExecutionStartNode ? beginNode : GetStarterNodeOf(beginNode);
+		}
+
+		private TExecutionStartNode GetStarterNodeOf(HlvsNode node)
+		{
+			while (!(node is TExecutionStartNode))
+			{
+				Debug.Assert(node.GetInputNodes().Count(baseNode => true) != 0);
+				node = GetPreviousNode(node);
+			}
+
+			return (TExecutionStartNode)node;
 		}
 
 		private static void GetNodeDataDependencies(HlvsNode currNode)
@@ -104,6 +155,7 @@ namespace HLVS
 				{
 					GetNodeDataDependencies(nodeInputPort as HlvsNode);
 				}
+
 				node.OnProcess();
 
 				foreach (var outputPort in node.outputPorts)
@@ -117,10 +169,10 @@ namespace HLVS
 		{
 			return node.GetOutputNodes().FirstOrDefault() as HlvsNode;
 		}
-		
+
 		public static HlvsNode GetPreviousNode(HlvsNode node)
 		{
-			return  node.GetInputNodes().FirstOrDefault() as HlvsNode;
+			return node.GetInputNodes().Last() as HlvsNode;
 		}
 	}
 }

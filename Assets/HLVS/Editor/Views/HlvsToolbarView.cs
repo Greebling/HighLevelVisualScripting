@@ -6,7 +6,7 @@ namespace HLVS.Editor.Views
 	public class HlvsToolbarView : ToolbarView
 	{
 		private readonly HlvsGraphView _view;
-
+		private          bool          _isUpdating;
 
 		public HlvsToolbarView(BaseGraphView graphView) : base(graphView)
 		{
@@ -17,13 +17,20 @@ namespace HLVS.Editor.Views
 		protected override void AddButtons()
 		{
 			AddToggle("Show Boards", _view.boardContainer.visible, v => { _view.boardContainer.visible = v; });
-			
+
 			AddButton("Run Start", () =>
 			{
 				var graph = _view.graph as HlvsGraph;
+				graph.Init();
 				graph.RunStartNodes();
 			});
-			
+
+			AddButton("Run Update", () =>
+			{
+				var graph = (HlvsGraph)_view.graph;
+				graph.RunUpdateNodes();
+			});
+
 			AddButton("Save", () =>
 			{
 				EditorUtility.SetDirty(_view.graph);
