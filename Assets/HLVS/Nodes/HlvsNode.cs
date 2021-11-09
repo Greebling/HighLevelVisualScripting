@@ -17,16 +17,6 @@ namespace HLVS.Nodes
 		/// Used for communicating when a node has not finished its processing in one frame. Useful for coroutine like nodes
 		/// </summary>
 		public ProcessingStatus status { get; protected set; } = ProcessingStatus.Finished;
-		
-		/// <summary>
-		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
-		/// </summary>
-		internal Dictionary<string, string> fieldToParamGuid = new Dictionary<string, string>();
-
-		/// <summary>
-		/// Used for serialization of fieldToParamGuid
-		/// </summary>
-		[SerializeField] private List<(string, string)> varToGuidSerialization;
 
 		protected sealed override void Process()
 		{
@@ -43,6 +33,16 @@ namespace HLVS.Nodes
 		/// Useful for coroutine like nodes to reset their status
 		/// </summary>
 		public virtual void Reset(){}
+		
+		/// <summary>
+		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
+		/// </summary>
+		internal Dictionary<string, string> fieldToParamGuid = new Dictionary<string, string>();
+
+		/// <summary>
+		/// Used for serialization of fieldToParamGuid
+		/// </summary>
+		[SerializeField] private List<(string, string)> varToGuidSerialization;
 
 		/// <summary>
 		/// Gets the values of blackboard and graph parameter variables
@@ -72,6 +72,7 @@ namespace HLVS.Nodes
 
 		public void OnAfterDeserialize()
 		{
+			// transform list back to dictionary
 			if (varToGuidSerialization != null)
 			{
 				fieldToParamGuid = new Dictionary<string, string>();
