@@ -1,16 +1,15 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using System;
-using System.Reflection;
-using Unity.Jobs;
 using System.Linq;
+using System.Reflection;
+using UnityEngine;
 
 namespace GraphProcessor
 {
 	public delegate IEnumerable< PortData > CustomPortBehaviorDelegate(List< SerializableEdge > edges);
 	public delegate IEnumerable< PortData > CustomPortTypeBehaviorDelegate(string fieldName, string displayName, object value);
 
+	
 	[Serializable]
 	public abstract class BaseNode
 	{
@@ -631,7 +630,7 @@ namespace GraphProcessor
 		{
 			inputPorts.PullDatas();
 
-			ExceptionToLog.Call(() => Process());
+			Process();
 
 			InvokeOnProcessed();
 
