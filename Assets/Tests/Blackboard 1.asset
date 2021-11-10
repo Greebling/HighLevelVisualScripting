@@ -12,6 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8c2d94c4aba4c89804e1320d246dd3e, type: 3}
   m_Name: Blackboard 1
   m_EditorClassIdentifier: 
-  fields: []
+  fields:
+  - id: 0
   references:
     version: 1
+    00000000:
+      type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 58ac7db6-fbb0-49e7-bcb4-2d73435cb06c
+        name: My String
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 1
+        val: Hi
+    00000001:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: d707899b-d3ed-44a9-a68b-24c9ee0ae9d8

@@ -42,7 +42,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 186.4, y: -271.2, z: 0}
+  position: {x: 181, y: -199, z: 0}
   scale: {x: 1.15, y: 1.15, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
@@ -80,8 +80,8 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
-        textToLog: Ello
-        amount: 10
+        textToLog: Hi
+        amount: 5
     00000002:
       type: {class: GetVariableNode, ns: HLVS.Nodes, asm: HLVS}
       data:
@@ -97,7 +97,7 @@ MonoBehaviour:
         expanded: 1
         debug: 0
         nodeLock: 0
-        variableName: String
+        variableName: My String
     00000003:
       type: {class: TestNode, ns: HLVS.Nodes, asm: HLVS}
       data:

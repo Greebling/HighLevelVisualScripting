@@ -147,6 +147,8 @@ namespace HLVS.Editor.Views
 
 			// ui
 			CreateBlackboardField(entryType, entryName, param);
+
+			EditorUtility.SetDirty(target);
 		}
 
 		private void OnVarRenamed(ExposedParameter param, string newName)
