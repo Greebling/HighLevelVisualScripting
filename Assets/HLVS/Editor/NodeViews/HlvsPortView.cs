@@ -58,24 +58,40 @@ namespace HLVS.Editor.NodeViews
 
 					menu.AddItem(new GUIContent("Reset"), false, () =>
 					{
+						((HlvsNode) targetNode).UnsetFieldReference(field.name);
+						
 						field.SetEnabled(true);
-						targetNode.GetType().InvokeMember(fieldInfo.Name,
-							BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetField, null, targetNode,
-							new[] { (object)null });
+						field.BindProperty(serializedProp);
+						field.Bind(owner.serializedGraph);
+						field.tooltip = "";
 					});
 					menu.AddSeparator("");
 
-					foreach (var parameter in graph.GetBlackboardFields()
-						.Where(parameter => parameter.GetValueType() == fieldInfo.FieldType))
+					foreach (HlvsBlackboard blackboard in graph.blackboards)
 					{
-						menu.AddItem(new GUIContent(parameter.name), false, () =>
+						var serializedBlackboard = new SerializedObject(blackboard);
+						var fields = blackboard.fields;
+						
+						for (int i = 0; i < fields.Count; i++)
 						{
-							field.SetEnabled(false);
-							targetNode.GetType().InvokeMember(fieldInfo.Name,
-								BindingFlags.Public | BindingFlags.Instance | BindingFlags.SetField, null, targetNode,
-								new[] { parameter.value });
-							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid);
-						});
+							ExposedParameter blackboardParam = fields[i];
+							
+							if(blackboardParam.GetValueType() != fieldInfo.FieldType)
+								continue;
+
+							int blackboardIndex = i;
+							menu.AddItem(new GUIContent(blackboardParam.name), false, () =>
+							{
+								OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, blackboardParam.guid);
+								field.SetEnabled(false);
+							
+								var paramProp = serializedBlackboard.FindProperty("fields").GetArrayElementAtIndex(blackboardIndex)
+								                                  .FindPropertyRelative("val");
+								field.Bind(serializedBlackboard);
+								field.BindProperty(paramProp);
+								field.tooltip = "From " + blackboardParam.name;
+							});
+						}
 					}
 
 					menu.AddSeparator("");
@@ -86,6 +102,8 @@ namespace HLVS.Editor.NodeViews
 						{
 							field.SetEnabled(false);
 							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid);
+							
+							field.tooltip = "From " + parameter.name;
 						});
 					}
 
@@ -118,14 +136,7 @@ namespace HLVS.Editor.NodeViews
 		{
 			Debug.Assert(node != null);
 
-			if (node.fieldToParamGuid.ContainsKey(nameOfField))
-			{
-				node.fieldToParamGuid[nameOfField] = parameterGuid;
-			}
-			else
-			{
-				node.fieldToParamGuid.Add(nameOfField, parameterGuid);
-			}
+			node.SetFieldToReference(nameOfField, parameterGuid);
 		}
 
 		private static void AddDefaultPortElements(PortData portData, HlvsPortView pv)

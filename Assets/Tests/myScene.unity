@@ -238,39 +238,9 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: 40f4b5c40d19fb849afd3f6e2be84b06, type: 2}
   graphParameters:
   - id: 0
-  - id: 1
-  - id: 2
   references:
     version: 1
     00000000:
-      type: {class: Vector2Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 62237137-40c8-4203-9072-ccc9859fc987
-        name: Cat/thing
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 3
-        val: {x: 0, y: 0}
-    00000001:
-      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 39aea48c-f0ce-4c63-8fd3-56755638f968
-        name: Cat/float
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 4
-        val: 0
-    00000002:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
@@ -282,27 +252,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 5
-        val: 
-    00000003:
-      type: {class: Vector2Parameter/Vector2Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 62237137-40c8-4203-9072-ccc9859fc987
-        mode: 0
-        min: 0
-        max: 1
-    00000004:
-      type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: 39aea48c-f0ce-4c63-8fd3-56755638f968
-        mode: 0
-        min: 0
-        max: 1
-    00000005:
+          id: 1
+        val: From param
+    00000001:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0

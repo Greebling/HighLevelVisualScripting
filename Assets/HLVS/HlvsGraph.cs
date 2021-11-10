@@ -26,6 +26,7 @@ namespace HLVS
 		public Action<HlvsBlackboard> onBlackboardRemoved      = (HlvsBlackboard) => { };
 
 		private readonly Dictionary<string, ExposedParameter> _nameToVar = new Dictionary<string, ExposedParameter>();
+		private readonly Dictionary<string, ExposedParameter> _guidToVar = new Dictionary<string, ExposedParameter>();
 
 		protected override void OnEnable()
 		{
@@ -58,9 +59,14 @@ namespace HLVS
 			onBlackboardRemoved(board);
 		}
 
-		public ExposedParameter GetVariable(string variableName)
+		public ExposedParameter GetVariableByName(string variableName)
 		{
 			return _nameToVar.ContainsKey(variableName) ? _nameToVar[variableName] : null;
+		}
+
+		public ExposedParameter GetVariableByGuid(string guid)
+		{
+			return _guidToVar.ContainsKey(guid) ? _guidToVar[guid] : null;
 		}
 
 		private void BuildVariableDict()
@@ -68,16 +74,20 @@ namespace HLVS
 			_nameToVar.Clear();
 			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _nameToVar.Add(parameter.name, parameter)));
 			parametersBlueprint.ForEach(parameter => _nameToVar.Add(parameter.name, parameter));
+			
+			_guidToVar.Clear();
+			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter)));
+			parametersBlueprint.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter));
 		}
 
-		public List<ExposedParameter> GetParameters()
+		public IEnumerable<ExposedParameter> GetParameters()
 		{
-			return parametersBlueprint.OrderBy(parameter => parameter.name).ToList();
+			return parametersBlueprint.OrderBy(parameter => parameter.name);
 		}
 
-		public List<ExposedParameter> GetBlackboardFields()
+		public IEnumerable<ExposedParameter> GetBlackboardFields()
 		{
-			return blackboards.SelectMany(blackboard => blackboard.fields).OrderBy(parameter => parameter.name).ToList();
+			return blackboards.SelectMany(blackboard => blackboard.fields).OrderBy(parameter => parameter.name);
 		}
 
 		public void SetParameterValues(List<ExposedParameter> parameters)

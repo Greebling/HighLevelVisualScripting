@@ -42,12 +42,14 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 181, y: -199, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: 404, y: 8, z: 0}
+  scale: {x: 0.7561437, y: 0.7561437, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
   - id: 4
+  - id: 5
+  - id: 6
   references:
     version: 1
     00000000:
@@ -81,7 +83,7 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         textToLog: Hi
-        amount: 5
+        amount: 120
     00000002:
       type: {class: GetVariableNode, ns: HLVS.Nodes, asm: HLVS}
       data:
@@ -90,8 +92,8 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 160.99995
-          y: 406.87827
+          x: 72
+          y: 452
           width: 176
           height: 75
         expanded: 1
@@ -106,10 +108,10 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 504.80002
-          y: 509.5513
-          width: 283.99997
-          height: 267.19995
+          x: 505
+          y: 486.42484
+          width: 280
+          height: 267
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -122,6 +124,20 @@ MonoBehaviour:
         boolField: 0
         enumField: 0
     00000004:
+      type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
+        name: My Vector 3
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 7
+        val: {x: 0, y: 0, z: 0}
+    00000005:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
@@ -133,11 +149,37 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 5
+          id: 8
         val: String!
-    00000005:
+    00000006:
+      type: {class: Vector4Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 8564e917-5059-415c-b553-a3cee51759e1
+        name: My V/ector 4
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 9
+        val: {x: 0, y: 0, z: 0, w: 0}
+    00000007:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
+    00000008:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+    00000009:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 8564e917-5059-415c-b553-a3cee51759e1

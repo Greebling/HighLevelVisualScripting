@@ -59,7 +59,7 @@ namespace HLVS.Editor.NodeViews
 			if (target.variableName != String.Empty)
 			{
 				_titleLabel.text = target.name;
-				_parameter = graph.GetVariable(target.variableName);
+				_parameter = graph.GetVariableByName(target.variableName);
 				UpdateVisuals();
 			}
 		}
