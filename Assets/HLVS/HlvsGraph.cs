@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
 using HLVS.Nodes;
+using IkTools.FormulaParser;
 using UnityEngine;
 
 namespace HLVS
 {
-	public class HlvsGraph : BaseGraph
+	public class HlvsGraph : BaseGraph, IVariableProvider<HlvsGraph>
 	{
-		protected HlvsGraphProcessor<OnStartNode> startNodeProcessor;
-		protected HlvsGraphProcessor<OnUpdateNode> updateNodeProcessor;
-		protected HlvsGraphProcessor<OnTriggerEnteredNode> triggerNodeProcessor;
+		private HlvsGraphProcessor<OnStartNode> _startNodeProcessor;
+		private HlvsGraphProcessor<OnUpdateNode> _updateNodeProcessor;
+		private HlvsGraphProcessor<OnTriggerEnteredNode> _triggerNodeProcessor;
 
 		public List<HlvsBlackboard> blackboards;
 
@@ -38,9 +39,9 @@ namespace HLVS
 			base.OnEnable();
 			
 
-			startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
-			updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
-			triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
+			_startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
+			_updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
+			_triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
 		}
 
 		public void AddBlackboard(HlvsBlackboard board)
@@ -107,29 +108,34 @@ namespace HLVS
 				((HlvsNode) baseNode).Reset();
 			}
 			
-			startNodeProcessor.UpdateComputeOrder();
-			updateNodeProcessor.UpdateComputeOrder();
-			triggerNodeProcessor.UpdateComputeOrder();
+			_startNodeProcessor.UpdateComputeOrder();
+			_updateNodeProcessor.UpdateComputeOrder();
+			_triggerNodeProcessor.UpdateComputeOrder();
 		}
 
 		public void RunStartNodes()
 		{
-			startNodeProcessor.Run();
+			_startNodeProcessor.Run();
 		}
 
 		public void RunUpdateNodes()
 		{
-			if (startNodeProcessor.status == ProcessingStatus.Unfinished)
+			if (_startNodeProcessor.status == ProcessingStatus.Unfinished)
 			{
-				startNodeProcessor.Run();
+				_startNodeProcessor.Run();
 			}
 			
-			updateNodeProcessor.Run();
+			_updateNodeProcessor.Run();
 		}
 
 		public void RunOnTriggerEnteredNodes()
 		{
-			triggerNodeProcessor.Run();
+			_triggerNodeProcessor.Run();
+		}
+
+		public Func<HlvsGraph, double> Get(string name)
+		{
+			return graph => (double) graph.GetVariableByName(name).value;
 		}
 	}
 }

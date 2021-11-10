@@ -19,20 +19,12 @@ MonoBehaviour:
   - id: 2
   - id: 3
   edges:
-  - GUID: ceb49573-126d-41e3-be05-17829119e794
+  - GUID: 1da0dfa9-1b18-4f04-b683-8bb527724d6f
     owner: {fileID: 11400000}
     inputNodeGUID: 446284c4-9cda-4223-9e73-8fc64378ab85
     outputNodeGUID: 4fcf86a9-c344-4c2c-a123-6cbd073c4fec
     inputFieldName: previousAction
     outputFieldName: followingAction
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: fdcf31f4-e9f7-4e7b-badb-25ccba07cca5
-    owner: {fileID: 11400000}
-    inputNodeGUID: 446284c4-9cda-4223-9e73-8fc64378ab85
-    outputNodeGUID: 53f4ce32-1f57-4082-b07b-1fce6cb564bb
-    inputFieldName: textToLog
-    outputFieldName: data
     inputPortIdentifier: 
     outputPortIdentifier: 
   groups: []
@@ -42,8 +34,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 404, y: 8, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
+  position: {x: -422, y: -442, z: 0}
+  scale: {x: 2, y: 2, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
@@ -67,12 +59,13 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
+        fieldToFormula: []
     00000001:
       type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
         GUID: 446284c4-9cda-4223-9e73-8fc64378ab85
-        computeOrder: 2
+        computeOrder: 1
         position:
           serializedVersion: 2
           x: 504.8015
@@ -82,14 +75,18 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 3 + 2
         textToLog: Hi
-        amount: 120
+        amount: 240
     00000002:
       type: {class: GetVariableNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
         GUID: 53f4ce32-1f57-4082-b07b-1fce6cb564bb
-        computeOrder: 1
+        computeOrder: 2147483647
         position:
           serializedVersion: 2
           x: 72
@@ -99,13 +96,14 @@ MonoBehaviour:
         expanded: 1
         debug: 0
         nodeLock: 0
+        fieldToFormula: []
         variableName: My String
     00000003:
       type: {class: TestNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
         GUID: fa495e3a-87fa-4cc8-a7d3-21cea98bdda7
-        computeOrder: 3
+        computeOrder: 2147483647
         position:
           serializedVersion: 2
           x: 505
@@ -115,6 +113,13 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
+        fieldToFormula:
+        - fieldName: intValue
+          formula:
+            Expression: 
+        - fieldName: floatVal
+          formula:
+            Expression: 
         gobj: {fileID: 0}
         string1Field: 
         floatVal: 0

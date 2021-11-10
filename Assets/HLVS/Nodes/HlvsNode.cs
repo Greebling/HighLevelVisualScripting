@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphProcessor;
+using IkTools.FormulaParser;
 using UnityEngine;
 
 namespace HLVS.Nodes
 {
 	public enum ProcessingStatus
 	{
-		Finished, Unfinished
+		Finished,
+		Unfinished
 	}
-	
+
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
@@ -27,23 +30,27 @@ namespace HLVS.Nodes
 		/// <summary>
 		/// Called when node shall be evaluated and execute its actions
 		/// </summary>
-		public virtual void Evaluate(){}
-		
+		public virtual void Evaluate()
+		{
+		}
+
 		/// <summary>
 		/// Useful for coroutine like nodes to reset their status
 		/// </summary>
-		public virtual void Reset(){}
-		
-		/// <summary>
-		/// Maps the name of a node field to the text it has as formula
-		/// </summary>
-		internal Dictionary<string, string> fieldToFieldText = new Dictionary<string, string>();
+		public virtual void Reset()
+		{
+		}
 
-		/// <summary>
-		/// Used for serialization of fieldToFieldText
-		/// </summary>
-		[SerializeField] private List<(string, string)> fieldToFieldTextSerialization;
-		
+		[Serializable]
+		public class FormulaPair
+		{
+			public string fieldName;
+			public RawFormula formula;
+		}
+
+
+		[SerializeField, NoNodeField] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
+
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
 		/// </summary>
@@ -56,7 +63,6 @@ namespace HLVS.Nodes
 
 		internal void ParseExpressions()
 		{
-			
 		}
 
 		/// <summary>
@@ -70,19 +76,65 @@ namespace HLVS.Nodes
 				var parameter = graph.GetVariableByGuid(fieldToParam.Value);
 				GetType().GetField(fieldToParam.Key).SetValue(this, parameter.value);
 			}
+
+
+			foreach (var formulaPair in fieldToFormula)
+			{
+				try
+				{
+					var targetField = GetType().GetField(formulaPair.fieldName);
+					
+					var template = formulaPair.formula.Template();
+					var function = template.Resolve(graph);
+					var value = Convert.ChangeType(function(graph), targetField.FieldType);
+					
+					targetField.SetValue(this, value);
+				}
+				catch (Exception e)
+				{
+					Debug.Log($"Formula error in {formulaPair.fieldName}: {e.Message}");
+				}
+			}
 		}
 
-		public void SetFieldToReference(string field, string parameterGuid)
+		public bool HasExpressionField(string fieldName)
 		{
-			if (fieldToParamGuid.ContainsKey(field))
-				fieldToParamGuid[field] = parameterGuid;
+			return fieldToFormula.Any(pair => pair.fieldName == fieldName);
+		}
+
+		public int IndexOfExpression(string fieldName)
+		{
+			if (HasExpressionField(fieldName))
+				return fieldToFormula.FindIndex(pair => pair.fieldName == fieldName);
+
+			var addedFormula = new RawFormula();
+			var pair = new FormulaPair { formula = addedFormula, fieldName = fieldName };
+			fieldToFormula.Add(pair);
+			return fieldToFormula.Count - 1;
+		}
+
+		public RawFormula GetFieldExpression(string fieldName)
+		{
+			if (HasExpressionField(fieldName))
+				return fieldToFormula.Find(pair => pair.fieldName == fieldName).formula;
+
+			var addedFormula = new RawFormula();
+			var pair = new FormulaPair { formula = addedFormula, fieldName = fieldName };
+			fieldToFormula.Add(pair);
+			return addedFormula;
+		}
+
+		public void SetFieldToReference(string fieldName, string parameterGuid)
+		{
+			if (fieldToParamGuid.ContainsKey(fieldName))
+				fieldToParamGuid[fieldName] = parameterGuid;
 			else
-				fieldToParamGuid.Add(field, parameterGuid);
+				fieldToParamGuid.Add(fieldName, parameterGuid);
 		}
 
-		public void UnsetFieldReference(string field)
+		public void UnsetFieldReference(string fieldName)
 		{
-			fieldToParamGuid.Remove(field);
+			fieldToParamGuid.Remove(fieldName);
 		}
 
 		public void OnBeforeSerialize()
@@ -96,15 +148,6 @@ namespace HLVS.Nodes
 					varToGuidSerialization.Add((keyValuePair.Key, keyValuePair.Value));
 				}
 			}
-			
-			fieldToFieldTextSerialization = new List<(string, string)>();
-			if (fieldToFieldText != null)
-			{
-				foreach (var keyValuePair in fieldToFieldText)
-				{
-					fieldToFieldTextSerialization.Add((keyValuePair.Key, keyValuePair.Value));
-				}
-			}
 		}
 
 		public void OnAfterDeserialize()
@@ -116,15 +159,6 @@ namespace HLVS.Nodes
 				foreach (var serializedValues in varToGuidSerialization)
 				{
 					fieldToParamGuid.Add(serializedValues.Item1, serializedValues.Item2);
-				}
-			}
-			
-			if (fieldToFieldTextSerialization != null)
-			{
-				fieldToFieldText = new Dictionary<string, string>();
-				foreach (var serializedValues in fieldToFieldTextSerialization)
-				{
-					fieldToFieldText.Add(serializedValues.Item1, serializedValues.Item2);
 				}
 			}
 		}

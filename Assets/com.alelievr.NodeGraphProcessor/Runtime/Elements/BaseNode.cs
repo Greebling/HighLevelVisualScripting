@@ -526,7 +526,7 @@ namespace GraphProcessor
 		public virtual void	OnNodeCreated() => GUID = Guid.NewGuid().ToString();
 
 		public virtual FieldInfo[] GetNodeFields()
-			=> GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+			=> GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
 		void InitializeInOutDatas()
 		{
@@ -535,6 +535,10 @@ namespace GraphProcessor
 
 			foreach (var field in fields)
 			{
+				var nonShowingAttribute = field.GetCustomAttribute<NoNodeFieldAttribute>();
+				if(nonShowingAttribute != null)
+					continue;
+				
 				var inputAttribute = field.GetCustomAttribute< InputAttribute >();
 				var outputAttribute = field.GetCustomAttribute< OutputAttribute >();
 				var tooltipAttribute = field.GetCustomAttribute< TooltipAttribute >();
@@ -549,7 +553,7 @@ namespace GraphProcessor
 					_needsInspector = true;
 
 				if (inputAttribute == null && outputAttribute == null)
-					continue ;
+					continue;
 
 				//check if field is a collection type
 				isMultiple = (inputAttribute != null) ? inputAttribute.allowMultiple : (outputAttribute.allowMultiple);

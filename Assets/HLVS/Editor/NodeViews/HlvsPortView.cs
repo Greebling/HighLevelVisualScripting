@@ -6,6 +6,7 @@ using HLVS.Editor.Views;
 using HLVS.Nodes;
 using HLVS.Runtime;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -37,8 +38,21 @@ namespace HLVS.Editor.NodeViews
 			if (direction == Direction.Input && fieldInfo.FieldType != typeof(ExecutionLink))
 			{
 				var nodeIndex = graph.nodes.FindIndex(n => n == targetNode);
-				var serializedProp = owner.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex)
-					.FindPropertyRelative(fieldInfo.Name);
+				SerializedProperty serializedProp = owner.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex);
+				bool isExpressionField = fieldInfo.FieldType == typeof(float) || fieldInfo.FieldType == typeof(int);
+				
+				if (isExpressionField)
+				{
+					int formulaIndex = ((HlvsNode)targetNode).IndexOfExpression(fieldInfo.Name);
+					serializedProp = serializedProp
+						.FindPropertyRelative("fieldToFormula").GetArrayElementAtIndex(formulaIndex)
+						.FindPropertyRelative("formula").FindPropertyRelative("Expression");
+				}
+				else
+				{
+					serializedProp = serializedProp.FindPropertyRelative(fieldInfo.Name);
+				}
+
 				var field = new PropertyField(serializedProp);
 				field.Bind(owner.serializedGraph);
 
@@ -58,8 +72,8 @@ namespace HLVS.Editor.NodeViews
 
 					menu.AddItem(new GUIContent("Reset"), false, () =>
 					{
-						((HlvsNode) targetNode).UnsetFieldReference(field.name);
-						
+						((HlvsNode)targetNode).UnsetFieldReference(field.name);
+
 						field.SetEnabled(true);
 						field.BindProperty(serializedProp);
 						field.Bind(owner.serializedGraph);
@@ -71,12 +85,12 @@ namespace HLVS.Editor.NodeViews
 					{
 						var serializedBlackboard = new SerializedObject(blackboard);
 						var fields = blackboard.fields;
-						
+
 						for (int i = 0; i < fields.Count; i++)
 						{
 							ExposedParameter blackboardParam = fields[i];
-							
-							if(blackboardParam.GetValueType() != fieldInfo.FieldType)
+
+							if (blackboardParam.GetValueType() != fieldInfo.FieldType)
 								continue;
 
 							int blackboardIndex = i;
@@ -84,9 +98,10 @@ namespace HLVS.Editor.NodeViews
 							{
 								OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, blackboardParam.guid);
 								field.SetEnabled(false);
-							
-								var paramProp = serializedBlackboard.FindProperty("fields").GetArrayElementAtIndex(blackboardIndex)
-								                                  .FindPropertyRelative("val");
+
+								var paramProp = serializedBlackboard.FindProperty("fields")
+									.GetArrayElementAtIndex(blackboardIndex)
+									.FindPropertyRelative("val");
 								field.Bind(serializedBlackboard);
 								field.BindProperty(paramProp);
 								field.tooltip = "From " + blackboardParam.name;
@@ -102,7 +117,7 @@ namespace HLVS.Editor.NodeViews
 						{
 							field.SetEnabled(false);
 							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid);
-							
+
 							field.tooltip = "From " + parameter.name;
 						});
 					}

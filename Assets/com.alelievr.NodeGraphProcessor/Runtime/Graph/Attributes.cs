@@ -230,6 +230,14 @@ namespace GraphProcessor
 	{
 	}
 	
+	/// <summary>
+	/// Tell that this field will not be shown in a node
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Field)]
+	public class NoNodeFieldAttribute: Attribute
+	{
+	}
+	
 	[AttributeUsage(AttributeTargets.Field)]
 	public class SettingAttribute : Attribute
 	{
