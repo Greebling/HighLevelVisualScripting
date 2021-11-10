@@ -137,7 +137,7 @@ namespace HLVS.Editor
 			container.Clear();
 			var paramsContainer = new VisualElement();
 
-			var titleLabel = new Label("Parameters:");
+			var titleLabel = new Label("Parameters");
 			titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
 			titleLabel.style.fontSize = 13;
 			titleLabel.style.marginTop = 6;
@@ -162,7 +162,7 @@ namespace HLVS.Editor
 				var slashIndex = parameter.name.LastIndexOf('/');
 				if (slashIndex == -1)
 				{
-					return "zzzzzzzzz"; // TODO: There must be a more elegant solution to this
+					return "a"; // this should be at the top
 				}
 				else
 				{
