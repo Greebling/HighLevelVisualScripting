@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8c2d94c4aba4c89804e1320d246dd3e, type: 3}
+  m_Name: My Blackboard
+  m_EditorClassIdentifier: 
+  fields:
+  - id: 0
+  - id: 1
+  references:
+    version: 1
+    00000000:
+      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 0de5f89e-8c96-43dc-a8b9-970ad896d012
+        name: Float
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 2
+        val: 0
+    00000001:
+      type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 26c72acf-2a88-4ac0-9d21-37a43747c9fa
+        name: Values/Vector 3
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 3
+        val: {x: 0, y: 0, z: 0}
+    00000002:
+      type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 7489b793-9ca4-44a2-9f61-d8cb8ddfb198
+        mode: 0
+        min: 0
+        max: 1
+    00000003:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: dacdd456-544e-41d3-9926-99e8f9379013
