@@ -5,6 +5,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /Assets/AssetStoreTools*
+/Assets/Ikt.FormulaParser/
 
 # Visual Studio 2015 cache directory
 /.vs/
