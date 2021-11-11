@@ -9,7 +9,7 @@ namespace HLVS.Editor
 {
 	public class HlvsWindow : BaseGraphWindow
 	{
-		private HlvsGraph  _tmpGraph;
+		private HlvsGraph _tmpGraph;
 		private StyleSheet _customStyling;
 
 		[MenuItem("HLVS/Graph Editor")]
@@ -40,22 +40,21 @@ namespace HLVS.Editor
 			_customStyling = Resources.Load<StyleSheet>("HlvsGraphStyle");
 			rootView.styleSheets.Add(_customStyling);
 
-			if (graphView == null)
-			{
-				var graphView = new HlvsGraphView(this, startingGraph as HlvsGraph);
-				this.graphView = graphView;
+
+			var graphView = new HlvsGraphView(this, startingGraph as HlvsGraph);
+			this.graphView = graphView;
 
 
-				// blackboard and parameter-board registration
-				graphView.blackboardViews.ForEach(view => view.blackboard.graphView = graphView);
-				graphView.paramView.blackboard.graphView = graphView;
+			// blackboard and parameter-board registration
+			graphView.blackboardViews.ForEach(view => view.blackboard.graphView = graphView);
+			graphView.paramView.blackboard.graphView = graphView;
 
 
-				// background
-				var bg = new GridBackground();
-				bg.AddToClassList("my-grid");
-				graphView.Insert(0, bg);
-			}
+			// background
+			var bg = new GridBackground();
+			bg.AddToClassList("my-grid");
+			graphView.Insert(0, bg);
+
 
 			rootView.Add(graphView);
 		}
