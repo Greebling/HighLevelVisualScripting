@@ -25,7 +25,7 @@ namespace HLVS.Nodes
 			}
 		}
 
-		public override void Evaluate()
+		public override ProcessingStatus Evaluate()
 		{
 			Debug.Assert(!(variableName is ""), "A variable name must be given");
 			var field = (graph as HlvsGraph).GetVariableByName(variableName);
@@ -38,6 +38,7 @@ namespace HLVS.Nodes
 			{
 				throw new Exception($"No variable called '{variableName}' found");
 			}
+			return ProcessingStatus.Finished;
 		}
 	}
 }

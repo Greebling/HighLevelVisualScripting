@@ -29,9 +29,10 @@ namespace HLVS.Nodes
 
 		[Output("Value")] public Direction output;
 
-		public override void Evaluate()
+		public override ProcessingStatus Evaluate()
 		{
 			output = new Direction(direction);
+			return ProcessingStatus.Finished;
 		}
 	}
 }

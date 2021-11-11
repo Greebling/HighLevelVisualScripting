@@ -16,22 +16,19 @@ namespace HLVS.Nodes
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
-		/// <summary>
-		/// Used for communicating when a node has not finished its processing in one frame. Useful for coroutine like nodes
-		/// </summary>
-		public ProcessingStatus status { get; protected set; } = ProcessingStatus.Finished;
-
 		protected sealed override void Process()
 		{
 			UpdateParameterValues();
-			Evaluate();
+			ParseExpressions();
 		}
 
 		/// <summary>
 		/// Called when node shall be evaluated and execute its actions
 		/// </summary>
-		public virtual void Evaluate()
+		/// <returns>Whether the node finished all of its evaluation in this frame</returns>
+		public virtual ProcessingStatus Evaluate()
 		{
+			return ProcessingStatus.Finished;
 		}
 
 		/// <summary>
@@ -45,11 +42,11 @@ namespace HLVS.Nodes
 		public class FormulaPair
 		{
 			public string fieldName;
-			public RawFormula formula;
+			[SerializeField] public RawFormula formula;
 		}
 
 
-		[SerializeField, NoNodeField] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
+		[SerializeField] public List<FormulaPair> fieldToFormula = new List<FormulaPair>();
 
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
@@ -63,6 +60,25 @@ namespace HLVS.Nodes
 
 		internal void ParseExpressions()
 		{
+			var graph = this.graph as HlvsGraph;
+			foreach (var formulaPair in fieldToFormula)
+			{
+				try
+				{
+					var targetField = GetType().GetField(formulaPair.fieldName);
+
+					var template = formulaPair.formula.Template();
+					var function = template.Resolve(graph);
+					var trueValue = function(graph);
+					
+					var value = Convert.ChangeType(trueValue, targetField.FieldType);
+					targetField.SetValue(this, value);
+				}
+				catch (Exception e)
+				{
+					Debug.Log($"Formula error in {formulaPair.fieldName}: {e.Message}");
+				}
+			}
 		}
 
 		/// <summary>
@@ -76,25 +92,6 @@ namespace HLVS.Nodes
 				var parameter = graph.GetVariableByGuid(fieldToParam.Value);
 				GetType().GetField(fieldToParam.Key).SetValue(this, parameter.value);
 			}
-
-
-			foreach (var formulaPair in fieldToFormula)
-			{
-				try
-				{
-					var targetField = GetType().GetField(formulaPair.fieldName);
-					
-					var template = formulaPair.formula.Template();
-					var function = template.Resolve(graph);
-					var value = Convert.ChangeType(function(graph), targetField.FieldType);
-					
-					targetField.SetValue(this, value);
-				}
-				catch (Exception e)
-				{
-					Debug.Log($"Formula error in {formulaPair.fieldName}: {e.Message}");
-				}
-			}
 		}
 
 		public bool HasExpressionField(string fieldName)
@@ -102,15 +99,21 @@ namespace HLVS.Nodes
 			return fieldToFormula.Any(pair => pair.fieldName == fieldName);
 		}
 
+		public int AddExpressionField(string fieldName)
+		{
+			var addedFormula = new RawFormula();
+			addedFormula.Expression = String.Empty;
+			var pair = new FormulaPair { formula = addedFormula, fieldName = fieldName };
+			fieldToFormula.Add(pair);
+			return fieldToFormula.Count - 1;
+		}
+
 		public int IndexOfExpression(string fieldName)
 		{
 			if (HasExpressionField(fieldName))
 				return fieldToFormula.FindIndex(pair => pair.fieldName == fieldName);
 
-			var addedFormula = new RawFormula();
-			var pair = new FormulaPair { formula = addedFormula, fieldName = fieldName };
-			fieldToFormula.Add(pair);
-			return fieldToFormula.Count - 1;
+			return AddExpressionField(fieldName);
 		}
 
 		public RawFormula GetFieldExpression(string fieldName)

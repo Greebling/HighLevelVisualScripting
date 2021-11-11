@@ -21,9 +21,10 @@ namespace HLVS.Nodes
 			FirstOption, SecondOption, AnotherOption,
 		}
 
-		public override void Evaluate()
+		public override ProcessingStatus Evaluate()
 		{
 			Debug.Log(colorVal);
+			return ProcessingStatus.Finished;
 		}
 	}
 }

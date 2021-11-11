@@ -75,12 +75,7 @@ namespace HLVS
 			List<HlvsNode> nextStartNode = new List<HlvsNode>();
 			foreach (var startNode in _startNodes)
 			{
-				var node = WalkGraph(startNode, hlvsNode =>
-				{
-					GetNodeDataDependencies(hlvsNode);
-
-					hlvsNode.OnProcess();
-				});
+				var node = ProcessGraph(startNode);
 
 				if (!(node is TExecutionStartNode))
 				{
@@ -110,15 +105,17 @@ namespace HLVS
 		/// Applies a given function to all nodes, beginning AFTER startNode
 		/// </summary>
 		/// <param name="beginNode"></param>
-		/// <param name="func">To apply to following nodes</param>
-		protected HlvsNode WalkGraph(HlvsNode beginNode, ApplyFunction func)
+		private HlvsNode ProcessGraph(HlvsNode beginNode)
 		{
-			HlvsNode currNode = beginNode.status == ProcessingStatus.Finished ? GetNextNode(beginNode) : beginNode;
+			HlvsNode currNode = beginNode;
 			while (currNode != null)
 			{
-				func(currNode);
+				GetNodeDataDependencies(currNode);
 
-				if (currNode.status == ProcessingStatus.Unfinished)
+				currNode.OnProcess();
+				var result = currNode.Evaluate();
+
+				if (result == ProcessingStatus.Unfinished)
 				{
 					return currNode;
 				}

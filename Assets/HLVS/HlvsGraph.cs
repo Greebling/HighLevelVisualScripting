@@ -27,6 +27,7 @@ namespace HLVS
 		public Action<HlvsBlackboard> onBlackboardRemoved      = (HlvsBlackboard) => { };
 
 		private readonly Dictionary<string, ExposedParameter> _nameToVar = new Dictionary<string, ExposedParameter>();
+		private readonly Dictionary<string, ExposedParameter> _upperCaseNameToVar = new Dictionary<string, ExposedParameter>();
 		private readonly Dictionary<string, ExposedParameter> _guidToVar = new Dictionary<string, ExposedParameter>();
 
 		protected override void OnEnable()
@@ -65,6 +66,11 @@ namespace HLVS
 			return _nameToVar.ContainsKey(variableName) ? _nameToVar[variableName] : null;
 		}
 
+		public ExposedParameter GetVariableByUppercaseName(string variableName)
+		{
+			return _upperCaseNameToVar.ContainsKey(variableName) ? _upperCaseNameToVar[variableName] : null;
+		}
+		
 		public ExposedParameter GetVariableByGuid(string guid)
 		{
 			return _guidToVar.ContainsKey(guid) ? _guidToVar[guid] : null;
@@ -75,6 +81,10 @@ namespace HLVS
 			_nameToVar.Clear();
 			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _nameToVar.Add(parameter.name, parameter)));
 			parametersBlueprint.ForEach(parameter => _nameToVar.Add(parameter.name, parameter));
+			
+			_upperCaseNameToVar.Clear();
+			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter)));
+			parametersBlueprint.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter));
 			
 			_guidToVar.Clear();
 			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter)));
@@ -135,7 +145,7 @@ namespace HLVS
 
 		public Func<HlvsGraph, double> Get(string name)
 		{
-			return graph => (double) graph.GetVariableByName(name).value;
+			return graph => Convert.ToDouble(graph.GetVariableByUppercaseName(name).value);
 		}
 	}
 }

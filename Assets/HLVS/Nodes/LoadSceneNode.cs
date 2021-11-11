@@ -14,9 +14,10 @@ namespace HLVS.Nodes
 		
 		public override string name => "Load Scene";
 		
-		public override void Evaluate()
+		public override ProcessingStatus Evaluate()
 		{
 			SceneManager.LoadScene(scene.buildIndex, loadAdditive ? LoadSceneMode.Additive : LoadSceneMode.Single);
+			return ProcessingStatus.Finished;
 		}
 	}
 }

@@ -16,8 +16,6 @@ MonoBehaviour:
   nodes:
   - id: 0
   - id: 1
-  - id: 2
-  - id: 3
   edges:
   - GUID: 1da0dfa9-1b18-4f04-b683-8bb527724d6f
     owner: {fileID: 11400000}
@@ -34,14 +32,14 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -422, y: -442, z: 0}
-  scale: {x: 2, y: 2, z: 1}
+  position: {x: 254, y: -83, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
+  - id: 2
+  - id: 3
   - id: 4
-  - id: 5
-  - id: 6
   references:
     version: 1
     00000000:
@@ -68,67 +66,20 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 504.8015
-          y: 285.75424
-          width: 223
-          height: 99
+          x: 517.5
+          y: 287.5
+          width: 240
+          height: 144
         expanded: 0
         debug: 0
         nodeLock: 0
         fieldToFormula:
         - fieldName: amount
           formula:
-            Expression: 3 + 2
+            Expression: myfloatAmount
         textToLog: Hi
-        amount: 240
+        amount: 3
     00000002:
-      type: {class: GetVariableNode, ns: HLVS.Nodes, asm: HLVS}
-      data:
-        nodeCustomName: 
-        GUID: 53f4ce32-1f57-4082-b07b-1fce6cb564bb
-        computeOrder: 2147483647
-        position:
-          serializedVersion: 2
-          x: 72
-          y: 452
-          width: 176
-          height: 75
-        expanded: 1
-        debug: 0
-        nodeLock: 0
-        fieldToFormula: []
-        variableName: My String
-    00000003:
-      type: {class: TestNode, ns: HLVS.Nodes, asm: HLVS}
-      data:
-        nodeCustomName: 
-        GUID: fa495e3a-87fa-4cc8-a7d3-21cea98bdda7
-        computeOrder: 2147483647
-        position:
-          serializedVersion: 2
-          x: 505
-          y: 486.42484
-          width: 280
-          height: 267
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        fieldToFormula:
-        - fieldName: intValue
-          formula:
-            Expression: 
-        - fieldName: floatVal
-          formula:
-            Expression: 
-        gobj: {fileID: 0}
-        string1Field: 
-        floatVal: 0
-        intValue: 0
-        vecValue: {x: 0, y: 0, z: 0}
-        colorVal: {r: 0, g: 0, b: 0, a: 0}
-        boolField: 0
-        enumField: 0
-    00000004:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
@@ -140,9 +91,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 7
+          id: 5
         val: {x: 0, y: 0, z: 0}
-    00000005:
+    00000003:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
@@ -154,9 +105,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 8
+          id: 6
         val: String!
-    00000006:
+    00000004:
       type: {class: Vector4Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 8564e917-5059-415c-b553-a3cee51759e1
@@ -168,21 +119,21 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 9
+          id: 7
         val: {x: 0, y: 0, z: 0, w: 0}
-    00000007:
+    00000005:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
-    00000008:
+    00000006:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
-    00000009:
+    00000007:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0

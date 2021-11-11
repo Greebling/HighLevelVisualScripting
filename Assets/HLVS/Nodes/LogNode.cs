@@ -22,23 +22,21 @@ namespace HLVS.Nodes
 		public override void Reset()
 		{
 			_currAmount = -1;
-			status = ProcessingStatus.Unfinished;
 		}
 
-		public override void Evaluate()
+		public override ProcessingStatus Evaluate()
 		{
 			_currAmount++;
 			if (_currAmount >= amount)
 			{
 				_currAmount = -1;
-				status = ProcessingStatus.Finished;
-				return;
+				return ProcessingStatus.Finished;
 			}
-
-			status = ProcessingStatus.Unfinished;
 
 			if (!string.IsNullOrEmpty(textToLog))
 				Debug.Log(textToLog);
+			
+			return ProcessingStatus.Unfinished;
 		}
 	}
 }

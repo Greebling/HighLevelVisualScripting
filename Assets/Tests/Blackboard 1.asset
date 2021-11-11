@@ -16,28 +16,12 @@ MonoBehaviour:
   - id: 0
   - id: 1
   - id: 2
-  - id: 3
-  - id: 4
   references:
     version: 1
     00000000:
-      type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 58ac7db6-fbb0-49e7-bcb4-2d73435cb06c
-        name: My String
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 5
-        val: Hi
-    00000001:
       type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
-        guid: 6c33c2e1-2fb1-432b-8e1c-a68f5aa096fd
+        guid: 51688314-5f06-499e-b7f3-042b4a019229
         name: My Float
         type: 
         serializedValue:
@@ -46,12 +30,12 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 6
-        val: 2
-    00000002:
+          id: 3
+        val: 0
+    00000001:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
-        guid: 70a9c25d-43af-4c92-ba5c-4c72baf77255
+        guid: c9a7dfd7-0661-4288-8775-1e9f1de452bf
         name: My Int
         type: 
         serializedValue:
@@ -60,72 +44,46 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 7
-        val: 240
+          id: 4
+        val: 0
+    00000002:
+      type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 7125880e-b2aa-4fe0-8c4f-8c564d1a5117
+        name: My Int (1)
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 5
+        val: 0
     00000003:
-      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: e378169f-6383-45bc-bc6f-482f3a5c330f
-        name: My Game Object
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 8
-        val: {fileID: 1636575971871760, guid: f78111bdbdeaf6644806fc49fcaf1d30, type: 3}
-    00000004:
-      type: {class: Vector2Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 24865121-bfbd-42a3-b3ea-48272e1dc690
-        name: Lol/Lol
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          id: 9
-        val: {x: 3214, y: 0}
-    00000005:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: d707899b-d3ed-44a9-a68b-24c9ee0ae9d8
-    00000006:
       type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
-        guid: 07632d4e-9e94-4eae-8cf3-7855640e597e
+        guid: f760e19a-9417-49a0-ac86-fe8c52fb98b5
         mode: 0
         min: 0
         max: 1
-    00000007:
+    00000004:
       type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
-        guid: 372f8090-bb9d-46b9-9f05-3e7ad844aa29
+        guid: 70eb8ecf-64bd-4b86-b61e-f23a41792d85
         mode: 0
         min: 0
         max: 10
-    00000008:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+    00000005:
+      type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
-        guid: f31010b3-9cf7-455d-b862-7ca3856e479b
-    00000009:
-      type: {class: Vector2Parameter/Vector2Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: fef9dea8-889d-4a76-bd10-e93545558324
+        guid: 99a18b33-1ee8-424a-b2bc-3d25481df282
         mode: 0
         min: 0
-        max: 1
+        max: 10

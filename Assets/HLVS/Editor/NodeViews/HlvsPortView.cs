@@ -34,6 +34,7 @@ namespace HLVS.Editor.NodeViews
 			pv.AddManipulator(pv.m_EdgeConnector);
 			AddDefaultPortElements(portData, pv);
 
+			var node = (HlvsNode)targetNode;
 
 			if (direction == Direction.Input && fieldInfo.FieldType != typeof(ExecutionLink))
 			{
@@ -43,7 +44,15 @@ namespace HLVS.Editor.NodeViews
 				
 				if (isExpressionField)
 				{
-					int formulaIndex = ((HlvsNode)targetNode).IndexOfExpression(fieldInfo.Name);
+					int formulaIndex;
+					if (node.HasExpressionField(fieldInfo.Name))
+						formulaIndex= node.IndexOfExpression(fieldInfo.Name);
+					else
+					{
+						formulaIndex = node.AddExpressionField(fieldInfo.Name);
+						serializedProp.serializedObject.Update(); // mark changes of serialized object (addition to the list of epxressions)
+					}
+					
 					serializedProp = serializedProp
 						.FindPropertyRelative("fieldToFormula").GetArrayElementAtIndex(formulaIndex)
 						.FindPropertyRelative("formula").FindPropertyRelative("Expression");
