@@ -43,6 +43,12 @@ namespace HLVS
 			_startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
 			_updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
 			_triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
+
+			foreach (var baseNode in nodes)
+			{
+				var node = (HlvsNode)baseNode;
+				node.Graph = this;
+			}
 		}
 
 		public void AddBlackboard(HlvsBlackboard board)
@@ -104,11 +110,13 @@ namespace HLVS
 		public void SetParameterValues(List<ExposedParameter> parameters)
 		{
 			Debug.Assert(parameters.Count == parametersBlueprint.Count, "Parameter lists don't match");
-			foreach (var valueTuple in 
-				parametersBlueprint.Zip(parameters, (graphParam, instanceParam) => (graphParam, instanceParam)))
+			
+			for (int i = 0; i < parametersBlueprint.Count; i++)
 			{
-				valueTuple.graphParam.value = valueTuple.instanceParam.value;
+				parametersBlueprint[i].value = parameters[i].value;
 			}
+
+			parametersBlueprint = parameters;
 		}
 
 		public void Init()

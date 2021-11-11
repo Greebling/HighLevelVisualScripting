@@ -16,6 +16,7 @@ MonoBehaviour:
   nodes:
   - id: 0
   - id: 1
+  - id: 2
   edges:
   - GUID: 1da0dfa9-1b18-4f04-b683-8bb527724d6f
     owner: {fileID: 11400000}
@@ -32,14 +33,15 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 254, y: -83, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: -149, y: -278, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
-  - id: 2
   - id: 3
   - id: 4
+  - id: 5
+  - id: 6
   references:
     version: 1
     00000000:
@@ -58,6 +60,7 @@ MonoBehaviour:
         debug: 0
         nodeLock: 0
         fieldToFormula: []
+        varToGuidSerialization: []
     00000001:
       type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
       data:
@@ -76,10 +79,47 @@ MonoBehaviour:
         fieldToFormula:
         - fieldName: amount
           formula:
-            Expression: myfloatAmount
-        textToLog: Hi
-        amount: 3
+            Expression: printAmount
+        varToGuidSerialization:
+        - Item1: textToLog
+          Item2: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+        - Item1: amount
+          Item2: df1c53d3-925b-4359-8197-1e249a1a5344
+        textToLog: String!
+        amount: 2
     00000002:
+      type: {class: TestNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 51695fcb-4d96-4a57-aeae-f58cb9b96d3c
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 510.95468
+          y: 464.1985
+          width: 280
+          height: 267
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: intValue
+          formula:
+            Expression: 
+        - fieldName: floatVal
+          formula:
+            Expression: 
+        varToGuidSerialization: []
+        gobj: {fileID: 0}
+        string1Field: 
+        floatVal: 0
+        intValue: 0
+        vecValue: {x: 0, y: 0, z: 0}
+        vec4Field: {x: 0, y: 0, z: 0, w: 0}
+        colorVal: {r: 0, g: 0, b: 0, a: 0}
+        boolField: 0
+        enumField: 0
+    00000003:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
@@ -91,9 +131,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 5
+          id: 7
         val: {x: 0, y: 0, z: 0}
-    00000003:
+    00000004:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
@@ -105,13 +145,13 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 6
-        val: String!
-    00000004:
-      type: {class: Vector4Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+          id: 8
+        val: ASd
+    00000005:
+      type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
-        guid: 8564e917-5059-415c-b553-a3cee51759e1
-        name: My V/ector 4
+        guid: df1c53d3-925b-4359-8197-1e249a1a5344
+        name: printAmount
         type: 
         serializedValue:
           serializedType: 
@@ -119,23 +159,46 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 7
-        val: {x: 0, y: 0, z: 0, w: 0}
-    00000005:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
+          id: 9
+        val: 2
     00000006:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
-        isHidden: 0
-        expanded: 0
-        guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+        guid: 2a4c7df4-254b-4a0b-a546-0ab9e40c4583
+        name: My Boolean
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 10
+        val: 0
     00000007:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
-        guid: 8564e917-5059-415c-b553-a3cee51759e1
+        guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
+    00000008:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+    00000009:
+      type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: df1c53d3-925b-4359-8197-1e249a1a5344
+        mode: 0
+        min: 0
+        max: 10
+    0000000A:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 2a4c7df4-254b-4a0b-a546-0ab9e40c4583

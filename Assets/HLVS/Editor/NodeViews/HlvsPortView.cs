@@ -50,7 +50,7 @@ namespace HLVS.Editor.NodeViews
 					else
 					{
 						formulaIndex = node.AddExpressionField(fieldInfo.Name);
-						serializedProp.serializedObject.Update(); // mark changes of serialized object (addition to the list of epxressions)
+						owner.serializedGraph.Update(); // mark changes of serialized object (addition to the list of expressions)
 					}
 					
 					serializedProp = serializedProp
@@ -64,6 +64,12 @@ namespace HLVS.Editor.NodeViews
 
 				var field = new PropertyField(serializedProp);
 				field.Bind(owner.serializedGraph);
+
+				if (node.fieldToParamGuid.ContainsKey(fieldInfo.Name))
+				{
+					field.SetEnabled(false);
+					// TODO: Reference blackboard property in field, if referenced variables stems from a blackboard
+				}
 
 
 				// add value field
@@ -118,6 +124,7 @@ namespace HLVS.Editor.NodeViews
 						}
 					}
 
+					// graph parameters
 					menu.AddSeparator("");
 					foreach (var parameter in graph.GetParameters()
 						.Where(parameter => parameter.GetValueType() == fieldInfo.FieldType))

@@ -16,6 +16,12 @@ namespace HLVS.Nodes
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
+		internal BaseGraph Graph
+		{
+			get => graph;
+			set => graph = value;
+		}
+		
 		protected sealed override void Process()
 		{
 			UpdateParameterValues();
@@ -46,8 +52,21 @@ namespace HLVS.Nodes
 		}
 
 
-		[SerializeField] public List<FormulaPair> fieldToFormula = new List<FormulaPair>();
+		[SerializeField, HideInInspector] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
 
+		[Serializable]
+		internal struct StringStringPair
+		{
+			public string Item1;
+			public string Item2;
+
+			public StringStringPair(string item1, string item2)
+			{
+				Item1 = item1;
+				Item2 = item2;
+			}
+		}
+		
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
 		/// </summary>
@@ -56,7 +75,7 @@ namespace HLVS.Nodes
 		/// <summary>
 		/// Used for serialization of fieldToParamGuid
 		/// </summary>
-		[SerializeField] private List<(string, string)> varToGuidSerialization;
+		[SerializeField] private List<StringStringPair> varToGuidSerialization;
 
 		internal void ParseExpressions()
 		{
@@ -143,12 +162,12 @@ namespace HLVS.Nodes
 		public void OnBeforeSerialize()
 		{
 			// save dictionary as list
-			varToGuidSerialization = new List<(string, string)>();
+			varToGuidSerialization = new List<StringStringPair>();
 			if (fieldToParamGuid != null)
 			{
 				foreach (var keyValuePair in fieldToParamGuid)
 				{
-					varToGuidSerialization.Add((keyValuePair.Key, keyValuePair.Value));
+					varToGuidSerialization.Add(new StringStringPair(keyValuePair.Key, keyValuePair.Value));
 				}
 			}
 		}

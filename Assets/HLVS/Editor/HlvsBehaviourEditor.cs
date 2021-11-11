@@ -12,12 +12,12 @@ using UnityEngine.UIElements;
 
 namespace HLVS.Editor
 {
-	[CustomEditor(typeof(HLVSBehaviour))]
+	[CustomEditor(typeof(HlvsBehaviour))]
 	public class HlvsBehaviourEditor : UnityEditor.Editor
 	{
 		private HlvsGraph _graph;
 
-		private HLVSBehaviour _behaviour => target as HLVSBehaviour;
+		private HlvsBehaviour _behaviour => target as HlvsBehaviour;
 
 		protected VisualElement root;
 
@@ -26,6 +26,9 @@ namespace HLVS.Editor
 
 		private void OnEnable()
 		{
+			if (!target)
+				return;
+
 			Reinitialize();
 			_behaviour.OnParamListChanged();
 		}
@@ -42,7 +45,10 @@ namespace HLVS.Editor
 
 		private void Reinitialize()
 		{
-			_graph = (target as HLVSBehaviour).graph;
+			if (!target)
+				return;
+
+			_graph = (target as HlvsBehaviour).graph;
 			if (_graph)
 			{
 				_graph.onParameterListChanged += OnParamsChanged;
@@ -220,22 +226,16 @@ namespace HLVS.Editor
 				var fieldContainer = new VisualElement();
 				fieldContainer.style.flexDirection = FlexDirection.Row;
 
-				// labeling
-				var nameLabel = new Label(fieldName.PadLeft(prevCategoriesHash.Count + fieldName.Length + 1));
-				nameLabel.style.overflow = new StyleEnum<Overflow>(Overflow.Hidden);
-				nameLabel.style.width = 150;
-				fieldContainer.Add(nameLabel);
+				// create value field
+				int paramIndex =
+					_behaviour.graphParameters.FindIndex(parameter => parameter.guid == graphParameter.guid);
+				var prop = serializedObject.FindProperty("graphParameters").GetArrayElementAtIndex(paramIndex)
+					.FindPropertyRelative("val");
+				var field = new PropertyField(prop);
+				field.Bind(serializedObject);
+				field.label = fieldName.PadLeft(prevCategoriesHash.Count + fieldName.Length + 1);
+				field.style.width = 1000;
 
-				// value field
-				var field = graphParameter.GetPropertyDrawer(o =>
-				{
-					EditorUtility.SetDirty(_behaviour);
-					EditorSceneManager.MarkSceneDirty(_behaviour.gameObject.scene);
-				});
-				field.RegisterCallback<FocusInEvent>(evt =>
-				{
-					Undo.RecordObject(_behaviour, $"Changed {graphParameter.name}");
-				});
 				fieldContainer.Add(field);
 
 				// fix alignment for buttons

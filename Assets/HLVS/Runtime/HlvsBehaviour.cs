@@ -6,10 +6,12 @@ using UnityEngine;
 
 namespace HLVS.Runtime
 {
-	public class HLVSBehaviour : MonoBehaviour
+	public class HlvsBehaviour : MonoBehaviour
 	{
 		[HideInInspector] 
 		public HlvsGraph graph;
+
+		private HlvsGraph runtimeGraph;
 
 		[SerializeReference] [HideInInspector] public List<ExposedParameter> graphParameters = new List<ExposedParameter>();
 
@@ -114,40 +116,47 @@ namespace HLVS.Runtime
 			}
 		}
 
-		private void OnEnable()
+		private void Awake()
 		{
 			if (graph)
 			{
-				graph = Instantiate(graph);
-				graph.Init();
-				graph.LinkToScene(gameObject.scene);
+				runtimeGraph = Instantiate(graph);
+				runtimeGraph.name = graph.name + " (Instance)";
+				runtimeGraph.Init();
+				runtimeGraph.LinkToScene(gameObject.scene);
 			}
+		}
+
+		private void OnDestroy()
+		{
+			Destroy(runtimeGraph);
+			runtimeGraph = null;
 		}
 
 		private void Start()
 		{
-			if (graph)
+			if (runtimeGraph)
 			{
-				graph.SetParameterValues(graphParameters);
-				graph.RunStartNodes();
+				runtimeGraph.SetParameterValues(graphParameters);
+				runtimeGraph.RunStartNodes();
 			}
 		}
 
 		private void Update()
 		{
-			if (graph)
+			if (runtimeGraph)
 			{
-				graph.SetParameterValues(graphParameters);
-				graph.RunUpdateNodes();
+				runtimeGraph.SetParameterValues(graphParameters);
+				runtimeGraph.RunUpdateNodes();
 			}
 		}
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (graph)
+			if (runtimeGraph)
 			{
-				graph.SetParameterValues(graphParameters);
-				graph.RunOnTriggerEnteredNodes();
+				runtimeGraph.SetParameterValues(graphParameters);
+				runtimeGraph.RunOnTriggerEnteredNodes();
 			}
 		}
 	}
