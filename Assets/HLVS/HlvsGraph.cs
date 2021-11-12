@@ -67,6 +67,10 @@ namespace HLVS
 				{
 					currentVariableNames.Add(param.name.ToUpperInvariant());
 				}
+				foreach (var param in parametersBlueprint)
+				{
+					currentVariableNames.Add(param.name.ToUpperInvariant());
+				}
 
 				bool canAddBoard = true;
 				foreach (ExposedParameter exposedParameter in board.fields)
@@ -74,7 +78,7 @@ namespace HLVS
 					var currVar = exposedParameter.name.ToUpperInvariant();
 					if (currentVariableNames.Contains(currVar))
 					{
-						Debug.LogError($"This graph already contains a blackboard with a variable similar to '{exposedParameter.name}'");
+						Debug.LogError($"This graph already contains a parameter or a blackboard with a variable similar to '{exposedParameter.name}'");
 						canAddBoard = false;
 					}
 				}
