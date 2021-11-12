@@ -18,9 +18,9 @@ MonoBehaviour:
   - id: 1
   - id: 2
   edges:
-  - GUID: 1da0dfa9-1b18-4f04-b683-8bb527724d6f
+  - GUID: b0275544-af78-43a5-8f83-8307a4cc594f
     owner: {fileID: 11400000}
-    inputNodeGUID: 446284c4-9cda-4223-9e73-8fc64378ab85
+    inputNodeGUID: e07617a8-3c06-44ec-ab62-d558cc76c958
     outputNodeGUID: 4fcf86a9-c344-4c2c-a123-6cbd073c4fec
     inputFieldName: previousAction
     outputFieldName: followingAction
@@ -33,8 +33,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -88, y: -275, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: -48, y: -221, z: 0}
+  scale: {x: 1.520875, y: 1.520875, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
@@ -62,35 +62,11 @@ MonoBehaviour:
         fieldToFormula: []
         varToGuidSerialization: []
     00000001:
-      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
-      data:
-        nodeCustomName: 
-        GUID: 446284c4-9cda-4223-9e73-8fc64378ab85
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 517.5
-          y: 287.5
-          width: 240
-          height: 144
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        fieldToFormula:
-        - fieldName: amount
-          formula:
-            Expression: 3
-        varToGuidSerialization:
-        - Item1: textToLog
-          Item2: b8be52ad-3b45-42dc-a6b0-70becb4e5795
-        textToLog: A-Param
-        amount: 3
-    00000002:
       type: {class: TestNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
         GUID: 51695fcb-4d96-4a57-aeae-f58cb9b96d3c
-        computeOrder: 2
+        computeOrder: 1
         position:
           serializedVersion: 2
           x: 510.95468
@@ -117,6 +93,29 @@ MonoBehaviour:
         colorVal: {r: 0, g: 0, b: 0, a: 0}
         boolField: 0
         enumField: 0
+    00000002:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: e07617a8-3c06-44ec-ab62-d558cc76c958
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 580.3295
+          y: 285.87662
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization:
+        - Item1: textToLog
+          Item2: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+        - Item1: amount
+          Item2: df1c53d3-925b-4359-8197-1e249a1a5344
+        textToLog: 
+        amount: 0
     00000003:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:

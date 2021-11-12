@@ -16,6 +16,19 @@ namespace HLVS.Nodes
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
+
+		[SerializeField, HideInInspector] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
+		
+		/// <summary>
+		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
+		/// </summary>
+		internal Dictionary<string, string> fieldToParamGuid = new Dictionary<string, string>();
+
+		/// <summary>
+		/// Used for serialization of fieldToParamGuid
+		/// </summary>
+		[SerializeField] private List<StringStringPair> varToGuidSerialization;
+		
 		internal BaseGraph Graph
 		{
 			get => graph;
@@ -24,8 +37,8 @@ namespace HLVS.Nodes
 		
 		protected sealed override void Process()
 		{
-			UpdateParameterValues();
 			ParseExpressions();
+			UpdateParameterValues();
 		}
 
 		/// <summary>
@@ -43,39 +56,6 @@ namespace HLVS.Nodes
 		public virtual void Reset()
 		{
 		}
-
-		[Serializable]
-		public class FormulaPair
-		{
-			public string fieldName;
-			[SerializeField] public RawFormula formula;
-		}
-
-
-		[SerializeField, HideInInspector] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
-
-		[Serializable]
-		internal struct StringStringPair
-		{
-			public string Item1;
-			public string Item2;
-
-			public StringStringPair(string item1, string item2)
-			{
-				Item1 = item1;
-				Item2 = item2;
-			}
-		}
-		
-		/// <summary>
-		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
-		/// </summary>
-		internal Dictionary<string, string> fieldToParamGuid = new Dictionary<string, string>();
-
-		/// <summary>
-		/// Used for serialization of fieldToParamGuid
-		/// </summary>
-		[SerializeField] private List<StringStringPair> varToGuidSerialization;
 
 		internal void ParseExpressions()
 		{
@@ -98,6 +78,11 @@ namespace HLVS.Nodes
 					Debug.Log($"Formula error in {formulaPair.fieldName}: {e.Message}");
 				}
 			}
+		}
+
+		public static bool CanBeExpression(Type type)
+		{
+			return  type == typeof(float) || type == typeof(int);
 		}
 
 		/// <summary>
@@ -151,7 +136,20 @@ namespace HLVS.Nodes
 			if (fieldToParamGuid.ContainsKey(fieldName))
 				fieldToParamGuid[fieldName] = parameterGuid;
 			else
+			{
+				for (int i = 0; i < fieldToFormula.Count; i++)
+				{
+					var formulaPair = fieldToFormula[i];
+					if (formulaPair.fieldName == fieldName)
+					{
+						fieldToFormula.RemoveAt(i);
+						break;
+					}
+				}
+				
+				fieldToFormula.RemoveAll(pair => pair.fieldName == fieldName);
 				fieldToParamGuid.Add(fieldName, parameterGuid);
+			}
 		}
 
 		public void UnsetFieldReference(string fieldName)
@@ -182,6 +180,27 @@ namespace HLVS.Nodes
 				{
 					fieldToParamGuid.Add(serializedValues.Item1, serializedValues.Item2);
 				}
+			}
+		}
+
+		[Serializable]
+		public class FormulaPair
+		{
+			public string fieldName;
+			[SerializeField] public RawFormula formula;
+		}
+
+
+		[Serializable]
+		internal struct StringStringPair
+		{
+			public string Item1;
+			public string Item2;
+
+			public StringStringPair(string item1, string item2)
+			{
+				Item1 = item1;
+				Item2 = item2;
 			}
 		}
 	}

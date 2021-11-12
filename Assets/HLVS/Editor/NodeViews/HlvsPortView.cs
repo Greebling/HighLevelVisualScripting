@@ -38,126 +38,139 @@ namespace HLVS.Editor.NodeViews
 
 			if (direction == Direction.Input && fieldInfo.FieldType != typeof(ExecutionLink))
 			{
-				var nodeIndex = graph.nodes.FindIndex(n => n == targetNode);
-				SerializedProperty serializedProp = owner.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex);
-				bool isExpressionField = fieldInfo.FieldType == typeof(float) || fieldInfo.FieldType == typeof(int);
-				
-				if (isExpressionField)
-				{
-					int formulaIndex;
-					if (node.HasExpressionField(fieldInfo.Name))
-						formulaIndex= node.IndexOfExpression(fieldInfo.Name);
-					else
-					{
-						formulaIndex = node.AddExpressionField(fieldInfo.Name);
-						owner.serializedGraph.Update(); // mark changes of serialized object (addition to the list of expressions)
-					}
-					
-					serializedProp = serializedProp
-						.FindPropertyRelative("fieldToFormula").GetArrayElementAtIndex(formulaIndex)
-						.FindPropertyRelative("formula").FindPropertyRelative("Expression");
-				}
-				else
-				{
-					serializedProp = serializedProp.FindPropertyRelative(fieldInfo.Name);
-				}
-
-				var valueField = new PropertyField(serializedProp);
-				valueField.Bind(owner.serializedGraph);
-
-				if (node.fieldToParamGuid.ContainsKey(fieldInfo.Name))
-				{
-					valueField.SetEnabled(false);
-					// TODO: Reference blackboard property in field, if referenced variables stems from a blackboard
-				}
-
-
-				// add value field
-				valueField.style.width = 100f;
-				valueField.style.height = 18f;
-				valueField.style.marginRight = 0;
-				valueField.style.flexGrow = 0;
-				valueField.AddToClassList("variable-selectable-field");
+				var valueField = CreateValueField(graph, owner, fieldInfo, node, out var serializedProp);
 				pv.Add(valueField);
 
-				// add button to link to blackboard variables and graph parameters
-				var varButton = new Button(() =>
-				{
-					var menu = new GenericMenu();
-
-					menu.AddItem(new GUIContent("Reset"), false, () =>
-					{
-						((HlvsNode)targetNode).UnsetFieldReference(fieldInfo.Name);
-						owner.serializedGraph.Update();
-
-						valueField.SetEnabled(true);
-						valueField.BindProperty(serializedProp);
-						valueField.Bind(owner.serializedGraph);
-						valueField.tooltip = "";
-					});
-					menu.AddSeparator("");
-
-					foreach (HlvsBlackboard blackboard in graph.blackboards)
-					{
-						var serializedBlackboard = new SerializedObject(blackboard);
-						var fields = blackboard.fields;
-
-						for (int i = 0; i < fields.Count; i++)
-						{
-							ExposedParameter blackboardParam = fields[i];
-
-							if (blackboardParam.GetValueType() != fieldInfo.FieldType)
-								continue;
-
-							int blackboardIndex = i;
-							menu.AddItem(new GUIContent(blackboardParam.name), false, () =>
-							{
-								OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, blackboardParam.guid);
-								valueField.SetEnabled(false);
-
-								var paramProp = serializedBlackboard.FindProperty("fields")
-									.GetArrayElementAtIndex(blackboardIndex)
-									.FindPropertyRelative("val");
-								valueField.Bind(serializedBlackboard);
-								valueField.BindProperty(paramProp);
-								valueField.tooltip = "From " + blackboardParam.name;
-							});
-							owner.serializedGraph.Update();
-						}
-					}
-
-					// graph parameters
-					menu.AddSeparator("");
-					foreach (var parameter in graph.GetParameters()
-						.Where(parameter => parameter.GetValueType() == fieldInfo.FieldType))
-					{
-						menu.AddItem(new GUIContent(parameter.name), false, () =>
-						{
-							valueField.SetEnabled(false);
-							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid);
-
-							valueField.tooltip = "From " + parameter.name;
-						});;
-						owner.serializedGraph.Update();
-					}
-
-
-					if (menu.GetItemCount() > 1)
-					{
-						menu.ShowAsContext();
-					}
-				});
-				varButton.AddToClassList("variable-selector");
-				var imageHolder = new VisualElement();
-				imageHolder.AddToClassList("selector-image");
-				varButton.Add(imageHolder);
-
-
+				var varButton = AddSetVariableButton(graph, owner, fieldInfo, node, valueField, serializedProp);
 				pv.Add(varButton);
 			}
 
 			return pv;
 		}
+
+		private static PropertyField CreateValueField(HlvsGraph graph, BaseGraphView owner,
+			FieldInfo fieldInfo, HlvsNode node, out SerializedProperty serializedProp)
+		{
+			var nodeIndex = graph.nodes.FindIndex(n => n == node);
+			serializedProp = owner.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex);
+			bool isExpressionField = HlvsNode.CanBeExpression(fieldInfo.FieldType) &&
+				!node.fieldToParamGuid.ContainsKey(fieldInfo.Name);
+
+			if (isExpressionField)
+			{
+				int formulaIndex;
+				if (node.HasExpressionField(fieldInfo.Name))
+					formulaIndex = node.IndexOfExpression(fieldInfo.Name);
+				else
+				{
+					formulaIndex = node.AddExpressionField(fieldInfo.Name);
+					owner.serializedGraph.Update(); // mark addition to the list of expression at serialized object
+				}
+
+				serializedProp = serializedProp
+					.FindPropertyRelative("fieldToFormula").GetArrayElementAtIndex(formulaIndex)
+					.FindPropertyRelative("formula").FindPropertyRelative("Expression");
+			}
+			else
+			{
+				serializedProp = serializedProp.FindPropertyRelative(fieldInfo.Name);
+			}
+
+			var valueField = new PropertyField(serializedProp);
+			valueField.Bind(owner.serializedGraph);
+
+			if (node.fieldToParamGuid.ContainsKey(fieldInfo.Name))
+			{
+				valueField.SetEnabled(false);
+				// TODO: Reference blackboard property in field, if referenced variables stems from a blackboard
+			}
+
+			valueField.Bind(owner.serializedGraph);
+			valueField.style.width = 100f;
+			valueField.style.height = 18f;
+			valueField.style.marginRight = 0;
+			valueField.style.flexGrow = 0;
+			valueField.AddToClassList("variable-selectable-field");
+
+			return valueField;
+		}
+
+		private static Button AddSetVariableButton(HlvsGraph graph, BaseGraphView owner,
+			FieldInfo fieldInfo, HlvsNode node, PropertyField valueField, SerializedProperty serializedProp)
+		{
+			var varButton = new Button(() =>
+			{
+				var menu = new GenericMenu();
+
+				menu.AddItem(new GUIContent("Reset"), false, () =>
+				{
+					node.UnsetFieldReference(fieldInfo.Name);
+					owner.serializedGraph.Update();
+					valueField.SetEnabled(true);
+					valueField.BindProperty(serializedProp);
+					valueField.Bind(owner.serializedGraph);
+					valueField.tooltip = "";
+				});
+				menu.AddSeparator("");
+
+				foreach (HlvsBlackboard blackboard in graph.blackboards)
+				{
+					var serializedBlackboard = new SerializedObject(blackboard);
+					var fields = blackboard.fields;
+
+					for (int i = 0; i < fields.Count; i++)
+					{
+						ExposedParameter blackboardParam = fields[i];
+
+						if (blackboardParam.GetValueType() != fieldInfo.FieldType)
+							continue;
+
+						int blackboardIndex = i;
+						menu.AddItem(new GUIContent(blackboardParam.name), false, () =>
+						{
+							OnReferenceVariable(node, fieldInfo.Name, blackboardParam.guid);
+
+
+							var paramProp = serializedBlackboard.FindProperty("fields")
+								.GetArrayElementAtIndex(blackboardIndex)
+								.FindPropertyRelative("val");
+							valueField.Bind(serializedBlackboard);
+							valueField.BindProperty(paramProp);
+							valueField.SetEnabled(false);
+							valueField.tooltip = "From " + blackboardParam.name;
+						});
+						owner.serializedGraph.Update();
+					}
+				}
+
+				// graph parameters
+				menu.AddSeparator("");
+				foreach (var parameter in graph.GetParameters()
+					.Where(parameter => parameter.GetValueType() == fieldInfo.FieldType))
+				{
+					menu.AddItem(new GUIContent(parameter.name), false, () =>
+					{
+						OnReferenceVariable(node, fieldInfo.Name, parameter.guid);
+
+						valueField.SetEnabled(false);
+						valueField.tooltip = "From " + parameter.name;
+					});
+					owner.serializedGraph.Update();
+				}
+
+
+				if (menu.GetItemCount() > 1)
+				{
+					menu.ShowAsContext();
+				}
+			});
+			varButton.AddToClassList("variable-selector");
+			var imageHolder = new VisualElement();
+			imageHolder.AddToClassList("selector-image");
+			varButton.Add(imageHolder);
+			return varButton;
+		}
+
 
 		public void SetPortType(Type type)
 		{
