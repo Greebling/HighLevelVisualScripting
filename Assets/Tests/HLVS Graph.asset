@@ -33,7 +33,7 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -149, y: -278, z: 0}
+  position: {x: -88, y: -275, z: 0}
   scale: {x: 1.3225, y: 1.3225, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
@@ -79,14 +79,12 @@ MonoBehaviour:
         fieldToFormula:
         - fieldName: amount
           formula:
-            Expression: printAmount
+            Expression: 3
         varToGuidSerialization:
         - Item1: textToLog
           Item2: b8be52ad-3b45-42dc-a6b0-70becb4e5795
-        - Item1: amount
-          Item2: df1c53d3-925b-4359-8197-1e249a1a5344
-        textToLog: String!
-        amount: 2
+        textToLog: A-Param
+        amount: 3
     00000002:
       type: {class: TestNode, ns: HLVS.Nodes, asm: HLVS}
       data:
@@ -132,7 +130,7 @@ MonoBehaviour:
         input: 1
         settings:
           id: 7
-        val: {x: 0, y: 0, z: 0}
+        val: {x: 1, y: 2, z: 3}
     00000004:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
@@ -146,7 +144,7 @@ MonoBehaviour:
         input: 1
         settings:
           id: 8
-        val: ASd
+        val: A-Param
     00000005:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:

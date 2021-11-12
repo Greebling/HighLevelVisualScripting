@@ -7,7 +7,7 @@ namespace HLVS.Nodes
 	[Serializable, NodeMenuItem("HLVS/Data/Get Variable")]
 	public class GetVariableNode : HlvsDataNode
 	{
-		public string variableName;
+		public string variableName = string.Empty;
 
 		[Output("out")] public object data;
 

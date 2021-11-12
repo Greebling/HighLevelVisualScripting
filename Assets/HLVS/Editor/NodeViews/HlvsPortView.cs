@@ -62,23 +62,23 @@ namespace HLVS.Editor.NodeViews
 					serializedProp = serializedProp.FindPropertyRelative(fieldInfo.Name);
 				}
 
-				var field = new PropertyField(serializedProp);
-				field.Bind(owner.serializedGraph);
+				var valueField = new PropertyField(serializedProp);
+				valueField.Bind(owner.serializedGraph);
 
 				if (node.fieldToParamGuid.ContainsKey(fieldInfo.Name))
 				{
-					field.SetEnabled(false);
+					valueField.SetEnabled(false);
 					// TODO: Reference blackboard property in field, if referenced variables stems from a blackboard
 				}
 
 
 				// add value field
-				field.style.width = 100f;
-				field.style.height = 18f;
-				field.style.marginRight = 0;
-				field.style.flexGrow = 0;
-				field.AddToClassList("variable-selectable-field");
-				pv.Add(field);
+				valueField.style.width = 100f;
+				valueField.style.height = 18f;
+				valueField.style.marginRight = 0;
+				valueField.style.flexGrow = 0;
+				valueField.AddToClassList("variable-selectable-field");
+				pv.Add(valueField);
 
 				// add button to link to blackboard variables and graph parameters
 				var varButton = new Button(() =>
@@ -87,12 +87,13 @@ namespace HLVS.Editor.NodeViews
 
 					menu.AddItem(new GUIContent("Reset"), false, () =>
 					{
-						((HlvsNode)targetNode).UnsetFieldReference(field.name);
+						((HlvsNode)targetNode).UnsetFieldReference(fieldInfo.Name);
+						owner.serializedGraph.Update();
 
-						field.SetEnabled(true);
-						field.BindProperty(serializedProp);
-						field.Bind(owner.serializedGraph);
-						field.tooltip = "";
+						valueField.SetEnabled(true);
+						valueField.BindProperty(serializedProp);
+						valueField.Bind(owner.serializedGraph);
+						valueField.tooltip = "";
 					});
 					menu.AddSeparator("");
 
@@ -112,15 +113,16 @@ namespace HLVS.Editor.NodeViews
 							menu.AddItem(new GUIContent(blackboardParam.name), false, () =>
 							{
 								OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, blackboardParam.guid);
-								field.SetEnabled(false);
+								valueField.SetEnabled(false);
 
 								var paramProp = serializedBlackboard.FindProperty("fields")
 									.GetArrayElementAtIndex(blackboardIndex)
 									.FindPropertyRelative("val");
-								field.Bind(serializedBlackboard);
-								field.BindProperty(paramProp);
-								field.tooltip = "From " + blackboardParam.name;
+								valueField.Bind(serializedBlackboard);
+								valueField.BindProperty(paramProp);
+								valueField.tooltip = "From " + blackboardParam.name;
 							});
+							owner.serializedGraph.Update();
 						}
 					}
 
@@ -131,11 +133,12 @@ namespace HLVS.Editor.NodeViews
 					{
 						menu.AddItem(new GUIContent(parameter.name), false, () =>
 						{
-							field.SetEnabled(false);
+							valueField.SetEnabled(false);
 							OnReferenceVariable(targetNode as HlvsNode, fieldInfo.Name, parameter.guid);
 
-							field.tooltip = "From " + parameter.name;
-						});
+							valueField.tooltip = "From " + parameter.name;
+						});;
+						owner.serializedGraph.Update();
 					}
 
 
