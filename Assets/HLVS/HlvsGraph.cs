@@ -54,8 +54,35 @@ namespace HLVS
 		public void AddBlackboard(HlvsBlackboard board)
 		{
 			if (blackboards.Contains(board))
+			{
+				Debug.LogError("This graph already contains this blackboard");
 				return;
+			}
+
 			
+			// check for duplicate variables
+			{
+				HashSet<string> currentVariableNames = new HashSet<string>();
+				foreach (var param in blackboards.SelectMany(blackboard => blackboard.fields))
+				{
+					currentVariableNames.Add(param.name.ToUpperInvariant());
+				}
+
+				bool canAddBoard = true;
+				foreach (ExposedParameter exposedParameter in board.fields)
+				{
+					var currVar = exposedParameter.name.ToUpperInvariant();
+					if (currentVariableNames.Contains(currVar))
+					{
+						Debug.LogError($"This graph already contains a blackboard with a variable similar to '{exposedParameter.name}'");
+						canAddBoard = false;
+					}
+				}
+
+				if (!canAddBoard)
+					return;
+			}
+
 			blackboards.Add(board);
 			onBlackboardAdded(board);
 		}
