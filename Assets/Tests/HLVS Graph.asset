@@ -33,8 +33,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -48, y: -221, z: 0}
-  scale: {x: 1.520875, y: 1.520875, z: 1}
+  position: {x: -684, y: -554, z: 0}
+  scale: {x: 2, y: 2, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
@@ -69,10 +69,10 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 510.95468
-          y: 464.1985
+          x: 580.00006
+          y: 419.15
           width: 280
-          height: 267
+          height: 291
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -108,14 +108,15 @@ MonoBehaviour:
         expanded: 0
         debug: 0
         nodeLock: 0
-        fieldToFormula: []
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 2
         varToGuidSerialization:
         - Item1: textToLog
           Item2: b8be52ad-3b45-42dc-a6b0-70becb4e5795
-        - Item1: amount
-          Item2: df1c53d3-925b-4359-8197-1e249a1a5344
-        textToLog: 
-        amount: 0
+        textToLog: A-Param
+        amount: 46
     00000003:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:

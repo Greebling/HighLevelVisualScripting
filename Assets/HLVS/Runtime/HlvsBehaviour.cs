@@ -137,7 +137,7 @@ namespace HLVS.Runtime
 		{
 			if (runtimeGraph)
 			{
-				runtimeGraph.SetParameterValues(graphParameters);
+				runtimeGraph.SetParameterValues(gameObject, graphParameters);
 				runtimeGraph.RunStartNodes();
 			}
 		}
@@ -146,7 +146,7 @@ namespace HLVS.Runtime
 		{
 			if (runtimeGraph)
 			{
-				runtimeGraph.SetParameterValues(graphParameters);
+				runtimeGraph.SetParameterValues(gameObject, graphParameters);
 				runtimeGraph.RunUpdateNodes();
 			}
 		}
@@ -155,7 +155,7 @@ namespace HLVS.Runtime
 		{
 			if (runtimeGraph)
 			{
-				runtimeGraph.SetParameterValues(graphParameters);
+				runtimeGraph.SetParameterValues(gameObject, graphParameters);
 				runtimeGraph.RunOnTriggerEnteredNodes();
 			}
 		}

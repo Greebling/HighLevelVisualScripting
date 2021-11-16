@@ -53,8 +53,7 @@ namespace HLVS.Editor.NodeViews
 		{
 			var nodeIndex = graph.nodes.FindIndex(n => n == node);
 			serializedProp = owner.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex);
-			bool isExpressionField = HlvsNode.CanBeExpression(fieldInfo.FieldType) &&
-				!node.fieldToParamGuid.ContainsKey(fieldInfo.Name);
+			bool isExpressionField = HlvsNode.CanBeExpression(fieldInfo.FieldType);
 
 			if (isExpressionField)
 			{
