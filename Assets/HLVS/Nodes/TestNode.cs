@@ -16,6 +16,16 @@ namespace HLVS.Nodes
 		[Input("A Color")] public Color colorVal;
 		[Input("A Truth Value")] public bool boolField;
 		[Input("An enumeration")] public MyEnum enumField;
+		
+		[Output("Out: Gobj")]           public GameObject outGobj;
+		[Output("Out: Text")]           public string     outString1Field;
+		[Output("Out: Float Val")]      public float      outFloatVal;
+		[Output("Out: Integer")]        public int        outIntValue;
+		[Output("Out: Vector")]         public Vector3    outVecValue;
+		[Output("Out: Vec4")]           public Vector4    outVec4Field;
+		[Output("Out: A Color")]        public Color      outColorVal;
+		[Output("Out: A Truth Value")]  public bool       outBoolField;
+		[Output("Out: An enumeration")] public MyEnum     outEnumField;
 
 		public enum MyEnum
 		{
