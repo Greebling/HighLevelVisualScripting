@@ -62,6 +62,9 @@ namespace HLVS.Nodes
 			var graph = this.graph as HlvsGraph;
 			foreach (var formulaPair in fieldToFormula)
 			{
+				if(formulaPair.formula.Expression == string.Empty)
+					continue;
+				
 				try
 				{
 					var targetField = GetType().GetField(formulaPair.fieldName);
