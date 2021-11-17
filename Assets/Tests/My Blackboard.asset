@@ -15,6 +15,7 @@ MonoBehaviour:
   fields:
   - id: 0
   - id: 1
+  - id: 2
   references:
     version: 1
     00000000:
@@ -29,7 +30,7 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 2
+          id: 3
         val: 0
     00000001:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
@@ -43,9 +44,23 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 3
+          id: 4
         val: {x: 0, y: 0, z: 0}
     00000002:
+      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: f640ce89-2291-4033-aafc-a0eee8e5de90
+        name: My Float
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 5
+        val: 0
+    00000003:
       type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
@@ -54,9 +69,18 @@ MonoBehaviour:
         mode: 0
         min: 0
         max: 1
-    00000003:
+    00000004:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: dacdd456-544e-41d3-9926-99e8f9379013
+    00000005:
+      type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: b5e984b0-2c04-4cb2-ac87-2b72bfe82fb2
+        mode: 0
+        min: 0
+        max: 1
