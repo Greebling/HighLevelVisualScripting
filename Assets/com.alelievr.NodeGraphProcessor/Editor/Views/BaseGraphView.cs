@@ -1223,7 +1223,7 @@ namespace GraphProcessor
 				var converterView = AddNode(converterNode);
 				
 				// set nodes center position to be in the middle of the input/output ports
-				converterNode.position.center = nodePosition - new Vector2(converterNode.position.width / 2.0f,0);
+				converterNode.position.center = nodePosition - new Vector2(converterNode.position.width / 2.0f,converterNode.position.height / 2.0f);
 				converterView.SetPosition(converterNode.position);
 
 				
