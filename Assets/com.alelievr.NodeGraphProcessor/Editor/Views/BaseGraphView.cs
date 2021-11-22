@@ -1313,6 +1313,11 @@ namespace GraphProcessor
 			computeOrderUpdated?.Invoke();
 		}
 
+		public void InvokeUpdateComputeOrderEvent()
+		{
+			computeOrderUpdated?.Invoke();
+		}
+
 		public void RegisterCompleteObjectUndo(string name)
 		{
 			Undo.RegisterCompleteObjectUndo(graph, name);

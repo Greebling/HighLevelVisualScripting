@@ -1,6 +1,6 @@
 ﻿namespace HLVS.Runtime
 {
-	public struct ExecutionLink
+	public class ExecutionLink
 	{
 	}
 }

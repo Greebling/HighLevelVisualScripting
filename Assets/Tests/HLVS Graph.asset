@@ -21,15 +21,15 @@ MonoBehaviour:
   - id: 4
   - id: 5
   - id: 6
+  - id: 7
+  - id: 8
+  - id: 9
+  - id: 10
+  - id: 11
+  - id: 12
+  - id: 13
+  - id: 14
   edges:
-  - GUID: be48f416-d0de-471e-a292-ae88a544d273
-    owner: {fileID: 11400000}
-    inputNodeGUID: 87732a06-8928-4509-882e-9746089181f6
-    outputNodeGUID: bcf50290-58d1-451c-81b2-ecee12aa1bef
-    inputFieldName: previousAction
-    outputFieldName: followingAction
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: a0381a35-4853-4d54-bf90-021623e4e3b3
     owner: {fileID: 11400000}
     inputNodeGUID: dc45c161-bed5-4553-8ba2-4e30bd7f0327
@@ -70,6 +70,86 @@ MonoBehaviour:
     outputFieldName: outString1Field
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: 4d8c9756-7957-4466-be3b-aab4f8a615ce
+    owner: {fileID: 11400000}
+    inputNodeGUID: 8f617195-2393-49db-a40c-3457d1efef8a
+    outputNodeGUID: dc45c161-bed5-4553-8ba2-4e30bd7f0327
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 7bfb2617-4f62-425a-8ba5-d7ed3883bd1b
+    owner: {fileID: 11400000}
+    inputNodeGUID: 97b2bcc8-1fbc-4748-a811-d67bea549160
+    outputNodeGUID: bcf50290-58d1-451c-81b2-ecee12aa1bef
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: fd3788e6-5509-4fb7-85e3-51465081212e
+    owner: {fileID: 11400000}
+    inputNodeGUID: ef02ce3e-11d2-4ea1-81e3-f9e76b0c1c79
+    outputNodeGUID: 8f617195-2393-49db-a40c-3457d1efef8a
+    inputFieldName: inputLink
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 0bb2cc6b-96ed-4f88-a9e6-dbbbb587a90a
+    owner: {fileID: 11400000}
+    inputNodeGUID: efdec728-808b-4661-9d16-73f797501bff
+    outputNodeGUID: ef02ce3e-11d2-4ea1-81e3-f9e76b0c1c79
+    inputFieldName: previousAction
+    outputFieldName: trueLink
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 57c1d539-2fa6-4076-8c7c-a701165778fa
+    owner: {fileID: 11400000}
+    inputNodeGUID: 10253d35-4df3-4567-872b-8a063927030b
+    outputNodeGUID: ef02ce3e-11d2-4ea1-81e3-f9e76b0c1c79
+    inputFieldName: previousAction
+    outputFieldName: falseLink
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 2c69c5c0-64ad-4395-9680-09ebd4707cce
+    owner: {fileID: 11400000}
+    inputNodeGUID: 10253d35-4df3-4567-872b-8a063927030b
+    outputNodeGUID: 2ebf391f-e314-425a-94d1-c0a3a4d42810
+    inputFieldName: amount
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: e100b1b6-dc10-43f2-a02e-0627d6ece655
+    owner: {fileID: 11400000}
+    inputNodeGUID: a318f562-7c01-43f8-9e43-ce206bfc94a9
+    outputNodeGUID: efdec728-808b-4661-9d16-73f797501bff
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: e9db515a-ddbb-496f-8493-2d41acb046e2
+    owner: {fileID: 11400000}
+    inputNodeGUID: 584d3926-a326-49de-876a-db38abba696d
+    outputNodeGUID: 10253d35-4df3-4567-872b-8a063927030b
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: e9faa4c1-c9ef-4c82-8d84-cea3322c4e2b
+    owner: {fileID: 11400000}
+    inputNodeGUID: 55146627-8437-445e-96ee-7226451aeba5
+    outputNodeGUID: a318f562-7c01-43f8-9e43-ce206bfc94a9
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: c10b9e3a-a52d-420e-b872-64710aa8a6f7
+    owner: {fileID: 11400000}
+    inputNodeGUID: 584d3926-a326-49de-876a-db38abba696d
+    outputNodeGUID: 55146627-8437-445e-96ee-7226451aeba5
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements: []
@@ -77,15 +157,15 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 527, y: -137, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
+  position: {x: 544, y: -217, z: 0}
+  scale: {x: 0.65751624, y: 0.65751624, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
-  - id: 7
-  - id: 8
-  - id: 9
-  - id: 10
+  - id: 15
+  - id: 16
+  - id: 17
+  - id: 18
   references:
     version: 1
     00000000:
@@ -93,7 +173,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 87732a06-8928-4509-882e-9746089181f6
-        computeOrder: 1
+        computeOrder: -1
         position:
           serializedVersion: 2
           x: 476.80005
@@ -101,7 +181,7 @@ MonoBehaviour:
           width: 240
           height: 123
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         fieldToFormula:
         - fieldName: amount
@@ -119,15 +199,15 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 97b2bcc8-1fbc-4748-a811-d67bea549160
-        computeOrder: 2
+        computeOrder: 1
         position:
           serializedVersion: 2
-          x: -428.2544
-          y: 427
+          x: -598.5177
+          y: 587
           width: 381
-          height: 291
+          height: 306
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         fieldToFormula:
         - fieldName: intValue
@@ -163,12 +243,12 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 193.20001
-          y: 263.35
-          width: 100
-          height: 100
+          x: -873.8936
+          y: 351.99997
+          width: 104
+          height: 90
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         fieldToFormula: []
         varToGuidSerialization: []
@@ -177,7 +257,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: dc45c161-bed5-4553-8ba2-4e30bd7f0327
-        computeOrder: 5
+        computeOrder: 4
         position:
           serializedVersion: 2
           x: 359.7451
@@ -185,7 +265,7 @@ MonoBehaviour:
           width: 381
           height: 291
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         fieldToFormula:
         - fieldName: intValue
@@ -218,7 +298,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: e39695a8-d5aa-4eba-aaa6-22f1519f7730
-        computeOrder: 6
+        computeOrder: -1
         position:
           serializedVersion: 2
           x: -6.449997
@@ -226,7 +306,7 @@ MonoBehaviour:
           width: 181
           height: 99
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         fieldToFormula:
         - fieldName: output
@@ -243,7 +323,7 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: a1b26382-e871-4467-8f19-7473ed1f74f4
-        computeOrder: 3
+        computeOrder: 2
         position:
           serializedVersion: 2
           x: -44
@@ -251,7 +331,7 @@ MonoBehaviour:
           width: 224
           height: 75
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         fieldToFormula:
         - fieldName: input
@@ -265,21 +345,204 @@ MonoBehaviour:
       data:
         nodeCustomName: 
         GUID: 4a7caaee-f34e-465d-9f18-27e50db2f033
-        computeOrder: 4
+        computeOrder: 3
         position:
           serializedVersion: 2
-          x: 56.24536
-          y: 595
-          width: 100
-          height: 100
+          x: -65.66997
+          y: 740.47504
+          width: 224
+          height: 90
         expanded: 0
-        debug: 0
+        debug: 1
         nodeLock: 0
         fieldToFormula: []
         varToGuidSerialization: []
         input: 
         output: 0
     00000007:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 8f617195-2393-49db-a40c-3457d1efef8a
+        computeOrder: 5
+        position:
+          serializedVersion: 2
+          x: 930.4742
+          y: 767.1953
+          width: 240
+          height: 138
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 
+        varToGuidSerialization:
+        - Item1: textToLog
+          Item2: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+        - Item1: amount
+          Item2: df1c53d3-925b-4359-8197-1e249a1a5344
+        textToLog: A-Param
+        amount: 2
+    00000008:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: efdec728-808b-4661-9d16-73f797501bff
+        computeOrder: 8
+        position:
+          serializedVersion: 2
+          x: 1553.5504
+          y: 602
+          width: 240
+          height: 138
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 
+        varToGuidSerialization:
+        - Item1: textToLog
+          Item2: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+        - Item1: amount
+          Item2: df1c53d3-925b-4359-8197-1e249a1a5344
+        textToLog: A-Param
+        amount: 2
+    00000009:
+      type: {class: BranchNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: ef02ce3e-11d2-4ea1-81e3-f9e76b0c1c79
+        computeOrder: 6
+        position:
+          serializedVersion: 2
+          x: 1252
+          y: 695
+          width: 113
+          height: 114
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization: []
+    0000000A:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 10253d35-4df3-4567-872b-8a063927030b
+        computeOrder: 8
+        position:
+          serializedVersion: 2
+          x: 1568
+          y: 818
+          width: 240
+          height: 138
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 
+        varToGuidSerialization:
+        - Item1: textToLog
+          Item2: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+        - Item1: amount
+          Item2: df1c53d3-925b-4359-8197-1e249a1a5344
+        textToLog: A-Param
+        amount: 0
+    0000000B:
+      type: {class: RoundNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 2ebf391f-e314-425a-94d1-c0a3a4d42810
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: 1141
+          y: 965.65216
+          width: 224
+          height: 90
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: input
+          formula:
+            Expression: 
+        varToGuidSerialization: []
+        input: 0
+        output: 0
+    0000000C:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: a318f562-7c01-43f8-9e43-ce206bfc94a9
+        computeOrder: 9
+        position:
+          serializedVersion: 2
+          x: 1851.2504
+          y: 553.65
+          width: 240
+          height: 138
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 
+        varToGuidSerialization: []
+        textToLog: 
+        amount: 0
+    0000000D:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 584d3926-a326-49de-876a-db38abba696d
+        computeOrder: 11
+        position:
+          serializedVersion: 2
+          x: 2488.9507
+          y: 719.30005
+          width: 240
+          height: 138
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 
+        varToGuidSerialization: []
+        textToLog: 
+        amount: 0
+    0000000E:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 55146627-8437-445e-96ee-7226451aeba5
+        computeOrder: 10
+        position:
+          serializedVersion: 2
+          x: 2143.5505
+          y: 485.00003
+          width: 240
+          height: 138
+        expanded: 0
+        debug: 1
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 
+        varToGuidSerialization: []
+        textToLog: 
+        amount: 0
+    0000000F:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
@@ -291,9 +554,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 11
+          id: 19
         val: {x: 1, y: 2, z: 3}
-    00000008:
+    00000010:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
@@ -305,9 +568,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 12
+          id: 20
         val: A-Param
-    00000009:
+    00000011:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: df1c53d3-925b-4359-8197-1e249a1a5344
@@ -319,9 +582,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 13
+          id: 21
         val: 2
-    0000000A:
+    00000012:
       type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 2a4c7df4-254b-4a0b-a546-0ab9e40c4583
@@ -333,21 +596,21 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 14
+          id: 22
         val: 0
-    0000000B:
+    00000013:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
-    0000000C:
+    00000014:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
-    0000000D:
+    00000015:
       type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
@@ -356,7 +619,7 @@ MonoBehaviour:
         mode: 0
         min: 0
         max: 10
-    0000000E:
+    00000016:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0

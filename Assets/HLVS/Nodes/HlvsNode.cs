@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
+using HLVS.Runtime;
 using IkTools.FormulaParser;
 using UnityEngine;
 
@@ -16,9 +17,8 @@ namespace HLVS.Nodes
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
-
 		[SerializeField, HideInInspector] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
-		
+
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
 		/// </summary>
@@ -28,18 +28,23 @@ namespace HLVS.Nodes
 		/// Used for serialization of fieldToParamGuid
 		/// </summary>
 		[SerializeField] private List<StringStringPair> varToGuidSerialization;
-		
+
 		internal BaseGraph Graph
 		{
 			get => graph;
 			set => graph = value;
 		}
-		
+
 		protected sealed override void Process()
 		{
 			ParseExpressions();
 			UpdateParameterValues();
 		}
+
+		/// <summary>
+		/// Returns the name of the port that has the next node connected
+		/// </summary>
+		public virtual string nextExecutionLink => null;
 
 		/// <summary>
 		/// Called when node shall be evaluated and execute its actions
@@ -62,9 +67,9 @@ namespace HLVS.Nodes
 			var graph = this.graph as HlvsGraph;
 			foreach (var formulaPair in fieldToFormula)
 			{
-				if(formulaPair.formula.Expression == string.Empty)
+				if (formulaPair.formula.Expression == string.Empty)
 					continue;
-				
+
 				try
 				{
 					var targetField = GetType().GetField(formulaPair.fieldName);
@@ -72,7 +77,7 @@ namespace HLVS.Nodes
 					var template = formulaPair.formula.Template();
 					var function = template.Resolve(graph);
 					var trueValue = function(graph);
-					
+
 					var value = Convert.ChangeType(trueValue, targetField.FieldType);
 					targetField.SetValue(this, value);
 				}
@@ -85,7 +90,7 @@ namespace HLVS.Nodes
 
 		public static bool CanBeExpression(Type type)
 		{
-			return  type == typeof(float) || type == typeof(int);
+			return type == typeof(float) || type == typeof(int);
 		}
 
 		/// <summary>
@@ -149,7 +154,7 @@ namespace HLVS.Nodes
 						break;
 					}
 				}
-				
+
 				fieldToFormula.RemoveAll(pair => pair.fieldName == fieldName);
 				fieldToParamGuid.Add(fieldName, parameterGuid);
 			}
@@ -204,6 +209,42 @@ namespace HLVS.Nodes
 			{
 				Item1 = item1;
 				Item2 = item2;
+			}
+		}
+
+		/// <summary>
+		/// Get all the nodes connected to the input ports of this node
+		/// </summary>
+		/// <returns>an enumerable of node</returns>
+		public IEnumerable<BaseNode> GetDataInputNodes()
+		{
+			foreach (var port in inputPorts)
+			{
+				if(port.fieldInfo.FieldType == typeof(ExecutionLink))
+					continue;
+				
+				foreach (var edge in port.GetEdges())
+				{
+					yield return edge.outputNode;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Get all the nodes connected to the input ports of this node
+		/// </summary>
+		/// <returns>an enumerable of node</returns>
+		public IEnumerable<BaseNode> GetDataOutputNodes()
+		{
+			foreach (var port in outputPorts)
+			{
+				if(port.fieldInfo.FieldType == typeof(ExecutionLink))
+					continue;
+				
+				foreach (var edge in port.GetEdges())
+				{
+					yield return edge.inputNode;
+				}
 			}
 		}
 	}

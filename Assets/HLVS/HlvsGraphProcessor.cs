@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
 using HLVS.Nodes;
+using HLVS.Runtime;
 using UnityEngine;
 
 namespace HLVS
@@ -26,43 +27,109 @@ namespace HLVS
 			if (_startNodes.Count == 0)
 				return;
 
-			_startNodes.Sort((node1, node2) => Mathf.CeilToInt(node1.position.y - node2.position.y));
+			_startNodes.Sort((node1, node2) => Mathf.CeilToInt((node1.position.y - node2.position.y) * 1024));
+			List<HlvsNode> computedNodes = new List<HlvsNode>();
 
-			// reset computation order
-			_graph.nodes.ForEach(node => node.computeOrder = Int32.MaxValue);
-
-			// evaluate compute order for all nodes
-			int executionOrder = -1;
-			foreach (var startNode in _startNodes)
+            // First iteration working only on nodes with ExecutionLinks
 			{
-				executionOrder++;
-				startNode.computeOrder = executionOrder;
-				Apply(startNode, node =>
-				{
-					ComputeDependencyComputeOrder(node, ref executionOrder);
+				HashSet<HlvsNode> alreadyComputedNodes = new HashSet<HlvsNode>();
+				int executionOrder = -1;
 
-					executionOrder++;
-					node.computeOrder = executionOrder;
-				});
+				foreach (var startNode in _startNodes)
+				{
+					List<HlvsNode> currNodes = new List<HlvsNode> { startNode };
+					List<HlvsNode> nextNodes = new List<HlvsNode>();
+					while (currNodes.Count != 0)
+					{
+						// stops executing infinite loops
+						if (executionOrder > 5000)
+							break;
+
+						nextNodes.Clear();
+
+						executionOrder++;
+						foreach (var node in currNodes)
+						{
+							if (node.computeOrder < executionOrder)
+							{
+								node.computeOrder = executionOrder;
+
+								var currNextNodes = GetPossibleNextNodes(node);
+								nextNodes.AddRange(currNextNodes);
+								
+								if (!alreadyComputedNodes.Contains(node))
+								{
+									alreadyComputedNodes.Add(node);
+									computedNodes.Add(node);
+								}
+							}
+						}
+
+						// swap current with next
+						(currNodes, nextNodes) = (nextNodes, currNodes);
+					}
+				}
+			}
+
+			{
+				int computeOrderOffset = 0;
+				var finalNodes = computedNodes.OrderBy(node => node.computeOrder);
+				foreach (var node in finalNodes)
+				{
+					node.computeOrder += computeOrderOffset;
+
+					if (node.GetDataInputNodes().Count() == 0)
+						continue;
+
+					int nodeComputeOrder = node.computeOrder;
+					ComputeDependencyOrder(node, ref nodeComputeOrder);
+					int nodesComputeOrderOffset = nodeComputeOrder - node.computeOrder;
+					node.computeOrder = nodeComputeOrder;
+
+					computeOrderOffset += nodesComputeOrderOffset;
+				}
 			}
 		}
 
-		private static void ComputeDependencyComputeOrder(BaseNode node, ref int computeOrder)
+		private static void ComputeDependencyOrder(HlvsNode node, ref int computeOrder)
 		{
-			foreach (var dependencyNode in node.GetInputNodes())
+			foreach (var dependencyNode in node.GetDataInputNodes())
 			{
-				if (dependencyNode is HlvsActionNode || dependencyNode is ExecutionStarterNode)
-				{
-					// TODO: Check if this dependency works
-					Debug.Assert(dependencyNode.computeOrder <= computeOrder);
+				if (dependencyNode.computeOrder != -1 && dependencyNode.computeOrder < computeOrder)
 					continue;
+
+				ComputeDependencyOrder((HlvsNode)dependencyNode, ref computeOrder);
+
+				dependencyNode.computeOrder = computeOrder;
+				computeOrder++;
+			}
+		}
+
+		private static (HashSet<HlvsNode> branchBegins, HashSet<HlvsNode> branchEnds) FindExecutionBranches(List<HlvsNode> nodes)
+		{
+			HashSet<HlvsNode> branchBegins = new HashSet<HlvsNode>();
+			HashSet<HlvsNode> branchEnds = new HashSet<HlvsNode>();
+
+			foreach (var node in nodes)
+			{
+				foreach (var inputPort in node.inputPorts)
+				{
+					if (inputPort.fieldInfo.FieldType == typeof(ExecutionLink) && inputPort.GetEdges().Count > 1)
+					{
+						branchEnds.Add(node);
+					}
 				}
 
-				ComputeDependencyComputeOrder(dependencyNode, ref computeOrder);
-
-				computeOrder++;
-				dependencyNode.computeOrder = computeOrder;
+				foreach (var outputPort in node.outputPorts)
+				{
+					if (outputPort.fieldInfo.FieldType == typeof(ExecutionLink) && outputPort.GetEdges().Count > 1)
+					{
+						branchBegins.Add(node);
+					}
+				}
 			}
+
+			return (branchBegins, branchEnds);
 		}
 
 
@@ -164,7 +231,27 @@ namespace HLVS
 
 		public static HlvsNode GetNextNode(HlvsNode node)
 		{
-			return node.GetOutputNodes().FirstOrDefault() as HlvsNode;
+			var nextLink = node.nextExecutionLink;
+			var nextPort = node.outputPorts
+				.Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
+				.FirstOrDefault(port => port.fieldName == nextLink);
+			if (nextPort != null)
+			{
+				return nextPort.GetEdges().FirstOrDefault()?.inputNode as HlvsNode;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+
+		public static IEnumerable<HlvsNode> GetPossibleNextNodes(HlvsNode node)
+		{
+			return node.outputPorts
+				.Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
+				.Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null)
+				.Select(edge => edge.inputNode as HlvsNode);
 		}
 
 		public static HlvsNode GetPreviousNode(HlvsNode node)

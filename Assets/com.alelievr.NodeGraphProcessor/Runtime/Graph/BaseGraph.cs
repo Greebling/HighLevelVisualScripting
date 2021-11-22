@@ -522,8 +522,7 @@ namespace GraphProcessor
 		/// <summary>
 		/// Update the compute order of the nodes in the graph
 		/// </summary>
-		/// <param name="type">Compute order type</param>
-		public void UpdateComputeOrder(ComputeOrderType type = ComputeOrderType.DepthFirst)
+		public virtual void UpdateComputeOrder()
 		{
 			if (nodes.Count == 0)
 				return;
@@ -540,17 +539,7 @@ namespace GraphProcessor
 			computeOrderDictionary.Clear();
 			infiniteLoopTracker.Clear();
 
-			switch (type)
-			{
-				default:
-				case ComputeOrderType.DepthFirst:
-					UpdateComputeOrderDepthFirst();
-					break;
-				case ComputeOrderType.BreadthFirst:
-					foreach (var node in nodes)
-						UpdateComputeOrderBreadthFirst(0, node);
-					break;
-			}
+			UpdateComputeOrderDepthFirst();
 		}
 
 		/// <summary>

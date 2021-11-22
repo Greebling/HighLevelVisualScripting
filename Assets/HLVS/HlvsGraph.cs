@@ -40,11 +40,6 @@ namespace HLVS
 			onParameterListChanged += BuildVariableDict;
 			onBlackboardListChanged += BuildVariableDict;
 			base.OnEnable();
-			
-
-			_startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
-			_updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
-			_triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
 
 			foreach (var baseNode in nodes)
 			{
@@ -58,6 +53,23 @@ namespace HLVS
 			foreach (BaseNode baseNode in nodes)
 			{
 				((HlvsNode) baseNode).Reset();
+			}
+
+			UpdateComputeOrder();
+		}
+
+		public override void UpdateComputeOrder()
+		{
+			foreach (var baseNode in nodes)
+			{
+				baseNode.computeOrder = -1;
+			}
+
+			if (_startNodeProcessor == null)
+			{
+				_startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
+				_updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
+				_triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
 			}
 			
 			_startNodeProcessor.UpdateComputeOrder();
