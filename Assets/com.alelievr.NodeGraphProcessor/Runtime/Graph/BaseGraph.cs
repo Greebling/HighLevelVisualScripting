@@ -264,7 +264,7 @@ namespace GraphProcessor
 		/// </summary>
 		/// <param name="inputPort">input port</param>
 		/// <param name="outputPort">output port</param>
-		/// <param name="DisconnectInputs">is the edge allowed to disconnect another edge</param>
+		/// <param name="autoDisconnectInputs">is the edge allowed to disconnect another edge</param>
 		/// <returns>the connecting edge</returns>
 		public SerializableEdge Connect(NodePort inputPort, NodePort outputPort, bool autoDisconnectInputs = true)
 		{
