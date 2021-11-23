@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
+using HLVS.Nodes;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Group = GraphProcessor.Group;
+using Direction = UnityEditor.Experimental.GraphView.Direction;
 
 namespace HLVS.Editor.Views
 {
@@ -61,6 +61,59 @@ namespace HLVS.Editor.Views
 			_graph.onBlackboardRemoved += RemoveBlackboardView;
 
 			Add(boardContainer);
+		}
+		
+		public override List< Port > GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+		{
+			var compatiblePorts = new List< Port >();
+
+			var startNode = (startPort as PortView).owner.nodeTarget;
+			int executionOrder = startNode.computeOrder;
+			bool isDataNode = startNode is HlvsDataNode;
+			var startView = ((PortView)startPort).owner;
+			
+			foreach (var p in ports)
+			{
+				var portView = (PortView) p;
+				if (p.direction == startPort.direction)
+					continue;
+
+				//Check for type assignability
+				if (!BaseGraph.TypesAreConnectable(startPort.portType, p.portType))
+					continue;
+				
+				// for data nodes compute order is not important
+				if(!isDataNode)
+				{
+					var currNode = portView.owner.nodeTarget;
+					int otherExecutionOrder = currNode.computeOrder;
+					
+					if (executionOrder != int.MaxValue && otherExecutionOrder != int.MaxValue)
+					{
+						if (startPort.direction == Direction.Input)
+						{
+							if (otherExecutionOrder > executionOrder)
+								continue;
+						}
+						else
+						{
+							if (otherExecutionOrder < executionOrder)
+								continue;
+						}
+					}
+				}
+
+				if (portView.owner == startView)
+					continue;
+
+				//Check if the edge already exists
+				if (portView.GetEdges().Any(e => e.input == startPort || e.output == startPort))
+					continue;
+
+				compatiblePorts.Add(p);
+			}
+
+			return compatiblePorts;
 		}
 
 		void AddBlackboardView(HlvsBlackboard board)
