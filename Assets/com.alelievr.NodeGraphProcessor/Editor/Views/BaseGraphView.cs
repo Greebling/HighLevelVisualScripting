@@ -425,21 +425,52 @@ namespace GraphProcessor
                 groupView.group.size = groupView.GetPosition().size;
         }
 
+        public List<BaseNode> GetAllPreviousNodes(BaseNode startingNode)
+        {
+	        List<BaseNode> previousNodes = new List<BaseNode>(){startingNode};
+	        List<BaseNode> frontier = new List<BaseNode>() {startingNode};
+	        List<BaseNode> nextFrontier = new List<BaseNode>();
+
+	        while (frontier.Count != 0)
+	        {
+		        nextFrontier.Clear();
+
+		        foreach (var node in frontier)
+		        {
+			        nextFrontier.AddRange(node.GetInputNodes());
+		        }
+		        previousNodes.AddRange(frontier);
+		        
+		        (frontier, nextFrontier) = (nextFrontier, frontier);
+	        }
+
+	        return previousNodes;
+        }
+
 		public override List< Port > GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
 		{
 			var compatiblePorts = new List< Port >();
 
-			compatiblePorts.AddRange(ports.ToList().Where(p => {
-				var portView = p as PortView;
+			var previousNodes = new HashSet<BaseNode>();
+			{
+				var previousNodesList = GetAllPreviousNodes((startPort as PortView).owner.nodeTarget);
+				foreach (var previousNode in previousNodesList)
+				{
+					previousNodes.Add(previousNode);
+				}
+			}
 
-				if (portView.owner == (startPort as PortView).owner)
-					return false;
+			compatiblePorts.AddRange(ports.Where(p => {
+				var portView = p as PortView;
 
 				if (p.direction == startPort.direction)
 					return false;
 
 				//Check for type assignability
 				if (!BaseGraph.TypesAreConnectable(startPort.portType, p.portType))
+					return false;
+				
+				if (previousNodes.Contains((p as PortView).owner.nodeTarget))
 					return false;
 
 				//Check if the edge already exists
