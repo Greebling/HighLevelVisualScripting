@@ -463,16 +463,22 @@ namespace GraphProcessor
 					return false;
 
 				int otherExecutionOrder = (p as PortView).owner.nodeTarget.computeOrder;
-				if (startPort.direction == Direction.Input)
+				if(executionOrder != int.MaxValue && otherExecutionOrder != int.MaxValue)
 				{
-					if (otherExecutionOrder > executionOrder)
-						return false;
+					if (startPort.direction == Direction.Input)
+					{
+						if (otherExecutionOrder > executionOrder)
+							return false;
+					}
+					else
+					{
+						if (otherExecutionOrder < executionOrder)
+							return false;
+					}
 				}
-				else
-				{
-					if (otherExecutionOrder < executionOrder)
-						return false;
-				}
+
+				if ((p as PortView).owner == (startPort as PortView).owner)
+					return false;
 
 				//Check if the edge already exists
 				if (portView.GetEdges().Any(e => e.input == startPort || e.output == startPort))
