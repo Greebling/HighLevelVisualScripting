@@ -218,16 +218,33 @@ namespace HLVS.Nodes
 		/// <returns>an enumerable of node</returns>
 		public IEnumerable<BaseNode> GetDataInputNodes()
 		{
-			foreach (var port in inputPorts)
+			foreach (var inputNode in GetInputNodes())
 			{
-				if(port.fieldInfo.FieldType == typeof(ExecutionLink))
-					continue;
-				
-				foreach (var edge in port.GetEdges())
-				{
-					yield return edge.outputNode;
-				}
+				if (inputNode is HlvsDataNode)
+					yield return inputNode;
 			}
+		}
+		
+		public List<BaseNode> GetAllPreviousNodes()
+		{
+			List<BaseNode> previousNodes = new List<BaseNode>();
+			List<BaseNode> frontier = new List<BaseNode>() {this};
+			List<BaseNode> nextFrontier = new List<BaseNode>();
+
+			while (frontier.Count != 0)
+			{
+				nextFrontier.Clear();
+
+				foreach (var node in frontier)
+				{
+					nextFrontier.AddRange(node.GetInputNodes());
+				}
+				previousNodes.AddRange(frontier);
+		        
+				(frontier, nextFrontier) = (nextFrontier, frontier);
+			}
+
+			return previousNodes;
 		}
 
 		/// <summary>

@@ -30,7 +30,7 @@ namespace HLVS
 			_startNodes.Sort((node1, node2) => Mathf.CeilToInt((node1.position.y - node2.position.y) * 1024));
 			List<HlvsNode> computedNodes = new List<HlvsNode>();
 
-            // First iteration working only on nodes with ExecutionLinks
+			// First iteration working only on nodes with ExecutionLinks
 			{
 				HashSet<HlvsNode> alreadyComputedNodes = new HashSet<HlvsNode>();
 				int executionOrder = -1;
@@ -56,7 +56,7 @@ namespace HLVS
 
 								var currNextNodes = GetPossibleNextNodes(node);
 								nextNodes.AddRange(currNextNodes);
-								
+
 								if (!alreadyComputedNodes.Contains(node))
 								{
 									alreadyComputedNodes.Add(node);
@@ -71,41 +71,110 @@ namespace HLVS
 				}
 			}
 
+			// second iteration taking care of data dependencies
+			if (computedNodes.Count != 0)
 			{
 				int computeOrderOffset = 0;
-				var finalNodes = computedNodes.OrderBy(node => node.computeOrder);
-				foreach (var node in finalNodes)
+				var finalNodes = computedNodes.OrderBy(node => node.computeOrder).ToList();
+
+				for (var lowIndex = 0; lowIndex < finalNodes.Count; lowIndex++)
 				{
-					node.computeOrder += computeOrderOffset;
+					int currComputeOrder = finalNodes[lowIndex].computeOrder;
+					
+					// find out all of the nodes processed at the same time
+					int highIndex = finalNodes.Count;
+					for (int i = lowIndex; i < finalNodes.Count; i++)
+					{
+						if (finalNodes[i].computeOrder != currComputeOrder)
+						{
+							highIndex = i;
+							break;
+						}
+					}
 
-					if (node.GetDataInputNodes().Count() == 0)
-						continue;
+					// set nodes compute order and get longest dependency chain length
+					currComputeOrder += computeOrderOffset;
+					int longestDependency = 0;
+					for (int i = lowIndex; i < highIndex; i++)
+					{
+						var node = finalNodes[i];
+						node.computeOrder = currComputeOrder;
+						
+						if (!node.GetDataInputNodes().Any())
+							continue;
+						
+						int calculatedDependency = LongestDependencyChainLength(node);
+						longestDependency = Math.Max(longestDependency, calculatedDependency);
+					}
 
-					int nodeComputeOrder = node.computeOrder;
-					ComputeDependencyOrder(node, ref nodeComputeOrder);
-					int nodesComputeOrderOffset = nodeComputeOrder - node.computeOrder;
-					node.computeOrder = nodeComputeOrder;
+					currComputeOrder += longestDependency;
+					for (int i = lowIndex; i < highIndex; i++)
+					{
+						var node = finalNodes[i];
+						node.computeOrder = currComputeOrder;
+					}
+					
+					for (int i = lowIndex; i < highIndex; i++)
+					{
+						var node = finalNodes[i];
+						ComputeDependencyOrder(node);
+					}
 
-					computeOrderOffset += nodesComputeOrderOffset;
+					computeOrderOffset += longestDependency;
+					lowIndex = highIndex - 1; // advance to the next frontier
 				}
 			}
 		}
 
-		private static void ComputeDependencyOrder(HlvsNode node, ref int computeOrder)
+		private static int LongestDependencyChainLength(HlvsNode start)
 		{
-			foreach (var dependencyNode in node.GetDataInputNodes())
+			List<BaseNode> frontier = new List<BaseNode>();
+			List<BaseNode> nextFrontier = new List<BaseNode>();
+
+			frontier.AddRange(start.GetDataInputNodes().OfType<HlvsDataNode>());
+			int dependencyChainLength = 0;
+
+			while (frontier.Count != 0)
 			{
-				if (dependencyNode.computeOrder != -1 && dependencyNode.computeOrder < computeOrder)
-					continue;
+				dependencyChainLength++;
+				nextFrontier.Clear();
 
-				ComputeDependencyOrder((HlvsNode)dependencyNode, ref computeOrder);
+				foreach (var node in frontier)
+				{
+					nextFrontier.AddRange(node.GetInputNodes().OfType<HlvsDataNode>());
+				}
 
-				dependencyNode.computeOrder = computeOrder;
-				computeOrder++;
+				(frontier, nextFrontier) = (nextFrontier, frontier);
+			}
+
+			return dependencyChainLength;
+		}
+
+		private static void ComputeDependencyOrder(HlvsNode start)
+		{
+			List<BaseNode> frontier = new List<BaseNode>();
+			List<BaseNode> nextFrontier = new List<BaseNode>();
+
+			frontier.AddRange(start.GetDataInputNodes().OfType<HlvsDataNode>());
+			int computeOrder = start.computeOrder;
+
+			while (frontier.Count != 0)
+			{
+				computeOrder--;
+				nextFrontier.Clear();
+
+				foreach (var node in frontier)
+				{
+					node.computeOrder = computeOrder;
+
+					nextFrontier.AddRange(node.GetInputNodes().OfType<HlvsDataNode>());
+				}
+
+				(frontier, nextFrontier) = (nextFrontier, frontier);
 			}
 		}
 
-		private static (HashSet<HlvsNode> branchBegins, HashSet<HlvsNode> branchEnds) FindExecutionBranches(List<HlvsNode> nodes)
+		private static (HashSet<HlvsNode> branchBegins, HashSet<HlvsNode> branchEnds) FindBranches(List<HlvsNode> nodes)
 		{
 			HashSet<HlvsNode> branchBegins = new HashSet<HlvsNode>();
 			HashSet<HlvsNode> branchEnds = new HashSet<HlvsNode>();
