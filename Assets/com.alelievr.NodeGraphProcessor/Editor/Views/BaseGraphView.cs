@@ -451,15 +451,7 @@ namespace GraphProcessor
 		{
 			var compatiblePorts = new List< Port >();
 
-			var previousNodes = new HashSet<BaseNode>();
-			{
-				var previousNodesList = GetAllPreviousNodes((startPort as PortView).owner.nodeTarget);
-				foreach (var previousNode in previousNodesList)
-				{
-					previousNodes.Add(previousNode);
-				}
-			}
-
+			int executionOrder = (startPort as PortView).owner.nodeTarget.computeOrder;
 			compatiblePorts.AddRange(ports.Where(p => {
 				var portView = p as PortView;
 
@@ -469,9 +461,18 @@ namespace GraphProcessor
 				//Check for type assignability
 				if (!BaseGraph.TypesAreConnectable(startPort.portType, p.portType))
 					return false;
-				
-				if (previousNodes.Contains((p as PortView).owner.nodeTarget))
-					return false;
+
+				int otherExecutionOrder = (p as PortView).owner.nodeTarget.computeOrder;
+				if (startPort.direction == Direction.Input)
+				{
+					if (otherExecutionOrder > executionOrder)
+						return false;
+				}
+				else
+				{
+					if (otherExecutionOrder < executionOrder)
+						return false;
+				}
 
 				//Check if the edge already exists
 				if (portView.GetEdges().Any(e => e.input == startPort || e.output == startPort))
