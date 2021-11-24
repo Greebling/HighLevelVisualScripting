@@ -98,7 +98,6 @@ namespace HLVS
 					for (int i = lowIndex; i < highIndex; i++)
 					{
 						var node = finalNodes[i];
-						node.computeOrder = currComputeOrder;
 						
 						if (!node.GetDataInputNodes().Any())
 							continue;

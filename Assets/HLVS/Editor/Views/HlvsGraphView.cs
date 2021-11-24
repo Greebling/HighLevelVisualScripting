@@ -67,10 +67,13 @@ namespace HLVS.Editor.Views
 		{
 			var compatiblePorts = new List< Port >();
 
-			var startNode = (startPort as PortView).owner.nodeTarget;
-			int executionOrder = startNode.computeOrder;
-			bool isDataNode = startNode is HlvsDataNode;
+			var startNode = (HlvsNode) (startPort as PortView).owner.nodeTarget;
 			var startView = ((PortView)startPort).owner;
+			var previousNodes = new HashSet<BaseNode>();
+			foreach (var previousNode in startNode.GetAllPreviousNodes())
+			{
+				previousNodes.Add(previousNode);
+			}
 			
 			foreach (var p in ports)
 			{
@@ -81,29 +84,12 @@ namespace HLVS.Editor.Views
 				//Check for type assignability
 				if (!BaseGraph.TypesAreConnectable(startPort.portType, p.portType))
 					continue;
-				
-				// for data nodes compute order is not important
-				if(!isDataNode)
-				{
-					var currNode = portView.owner.nodeTarget;
-					int otherExecutionOrder = currNode.computeOrder;
-					
-					if (executionOrder != int.MaxValue && otherExecutionOrder != int.MaxValue)
-					{
-						if (startPort.direction == Direction.Input)
-						{
-							if (otherExecutionOrder > executionOrder)
-								continue;
-						}
-						else
-						{
-							if (otherExecutionOrder < executionOrder)
-								continue;
-						}
-					}
-				}
 
 				if (portView.owner == startView)
+					continue;
+				
+				var nextNode = (p as PortView).owner.nodeTarget;
+				if(!(startNode is HlvsDataNode || nextNode is HlvsDataNode) && previousNodes.Contains(nextNode))
 					continue;
 
 				//Check if the edge already exists
