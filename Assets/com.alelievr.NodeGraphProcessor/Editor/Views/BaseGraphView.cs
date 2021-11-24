@@ -451,7 +451,6 @@ namespace GraphProcessor
 		{
 			var compatiblePorts = new List< Port >();
 
-			int executionOrder = (startPort as PortView).owner.nodeTarget.computeOrder;
 			compatiblePorts.AddRange(ports.Where(p => {
 				var portView = p as PortView;
 
@@ -461,21 +460,6 @@ namespace GraphProcessor
 				//Check for type assignability
 				if (!BaseGraph.TypesAreConnectable(startPort.portType, p.portType))
 					return false;
-
-				int otherExecutionOrder = (p as PortView).owner.nodeTarget.computeOrder;
-				if(executionOrder != int.MaxValue && otherExecutionOrder != int.MaxValue)
-				{
-					if (startPort.direction == Direction.Input)
-					{
-						if (otherExecutionOrder > executionOrder)
-							return false;
-					}
-					else
-					{
-						if (otherExecutionOrder < executionOrder)
-							return false;
-					}
-				}
 
 				if ((p as PortView).owner == (startPort as PortView).owner)
 					return false;
