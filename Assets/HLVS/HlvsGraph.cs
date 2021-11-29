@@ -32,9 +32,29 @@ namespace HLVS
 		private readonly Dictionary<string, ExposedParameter> _upperCaseNameToVar = new Dictionary<string, ExposedParameter>();
 		private readonly Dictionary<string, ExposedParameter> _guidToVar = new Dictionary<string, ExposedParameter>();
 
+		public readonly Dictionary<HlvsNode, int> nodeToIndex = new Dictionary<HlvsNode, int>();
+
 		protected override void OnEnable()
 		{
 			blackboards = blackboards == null ? new List<HlvsBlackboard>() : blackboards.Where(blackboard => blackboard).ToList();
+
+			BuildNodeDict();
+			onGraphChanges += changes =>
+			{
+				if (changes.addedNode != null)
+				{
+					nodeToIndex.Add((HlvsNode)changes.addedNode, nodes.Count - 1);
+				}
+			};
+			
+			onGraphChanges += changes =>
+			{
+				if (changes.removedNode != null)
+				{
+					nodeToIndex.Clear();
+					BuildNodeDict();
+				}
+			};
 			
 			BuildVariableDict();
 			onParameterListChanged += BuildVariableDict;
@@ -169,6 +189,14 @@ namespace HLVS
 			return _guidToVar.ContainsKey(guid) ? _guidToVar[guid] : null;
 		}
 
+		private void BuildNodeDict()
+		{
+			for (int i = 0; i < nodes.Count; i++)
+			{
+				nodeToIndex.Add((HlvsNode) nodes[i], i);
+			}
+		}
+		
 		private void BuildVariableDict()
 		{
 			_nameToVar.Clear();

@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using GraphProcessor;
+using HLVS.Editor.Views;
 using HLVS.Nodes;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -10,9 +11,8 @@ namespace HLVS.Editor.NodeViews
 	[NodeCustomEditor(typeof(HlvsNode))]
 	public class HlvsNodeView : BaseNodeView
 	{
-		// TODO: Create customized port view to create here
 		protected override PortView CreatePortView(Direction direction, FieldInfo fieldInfo, PortData portData, BaseEdgeConnectorListener listener)
-			=> HlvsPortView.CreatePortView(graph, owner, nodeTarget, direction, fieldInfo, portData, listener);
+			=> HlvsPortView.CreatePortView(graph, (HlvsGraphView) owner, (HlvsNode) nodeTarget, direction, fieldInfo, portData, listener);
 
 		public HlvsGraph graph => owner.graph as HlvsGraph;
 
