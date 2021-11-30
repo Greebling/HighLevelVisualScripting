@@ -47,6 +47,7 @@ MonoBehaviour:
   - id: 30
   - id: 31
   - id: 32
+  - id: 33
   edges:
   - GUID: 5a0d3d27-697a-4994-b076-d95cacf865d5
     owner: {fileID: 11400000}
@@ -304,6 +305,14 @@ MonoBehaviour:
     outputFieldName: followingAction
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: bf682043-e7e8-4c97-bed1-14e1b87f628c
+    owner: {fileID: 11400000}
+    inputNodeGUID: b13680ac-4b88-4a3d-8620-b7158237195e
+    outputNodeGUID: 6e94b473-a374-4aef-839a-8d386ce8d161
+    inputFieldName: floatVal
+    outputFieldName: outFloatVal
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements: []
@@ -311,15 +320,15 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 1390, y: -782, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: 2692, y: -2358, z: 0}
+  scale: {x: 1.7490063, y: 1.7490063, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
-  - id: 33
   - id: 34
   - id: 35
   - id: 36
+  - id: 37
   references:
     version: 1
     00000000:
@@ -341,6 +350,9 @@ MonoBehaviour:
         - fieldName: floatVal
           formula:
             Expression: 1.4
+        - fieldName: intValue
+          formula:
+            Expression: 
         varToGuidSerialization:
         - Item1: boolField
           Item2: 2a4c7df4-254b-4a0b-a546-0ab9e40c4583
@@ -1143,6 +1155,25 @@ MonoBehaviour:
         input: 0
         output: 0
     00000021:
+      type: {class: GetJoystickInputNode, ns: HLVS.Nodes.DataNodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: def6e551-5852-43cd-ad8d-3aaa6e12d560
+        computeOrder: -1
+        position:
+          serializedVersion: 2
+          x: -1265.1356
+          y: 1515.7935
+          width: 284
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization: []
+        axisName: Horizontal
+        output: 0
+    00000022:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
@@ -1154,9 +1185,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 37
+          id: 38
         val: {x: 1, y: 2, z: 3}
-    00000022:
+    00000023:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
@@ -1168,9 +1199,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 38
+          id: 39
         val: A-Param
-    00000023:
+    00000024:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: df1c53d3-925b-4359-8197-1e249a1a5344
@@ -1182,9 +1213,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 39
+          id: 40
         val: 2
-    00000024:
+    00000025:
       type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 2a4c7df4-254b-4a0b-a546-0ab9e40c4583
@@ -1196,21 +1227,21 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 40
+          id: 41
         val: 0
-    00000025:
-      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        isHidden: 0
-        expanded: 0
-        guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
     00000026:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
-        guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+        guid: fcc69bf7-5eed-4dbc-a506-06f82e309e07
     00000027:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: b8be52ad-3b45-42dc-a6b0-70becb4e5795
+    00000028:
       type: {class: IntParameter/IntSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
@@ -1219,7 +1250,7 @@ MonoBehaviour:
         mode: 0
         min: 0
         max: 10
-    00000028:
+    00000029:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
