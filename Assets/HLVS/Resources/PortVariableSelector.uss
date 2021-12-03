@@ -47,11 +47,15 @@
 }
 
 .variable-selectable-field > .unity-base-field > .unity-base-field__input {
-    width: 150px;
+    width: 96px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     margin-right: 0;
     border-right-width: 0;
+}
+
+.unity-vector4-field__input {
+    margin-left: 5px;
 }
 
 .unity-base-field{
@@ -62,4 +66,11 @@
 
 .unity-object-field__input{
     border-top-width: 0;
+}
+
+.unity-float-field__label{
+    flex-basis: 0;
+    min-width: 0;
+    visibility: hidden;
+    padding: 0;
 }
