@@ -778,8 +778,6 @@ namespace GraphProcessor
 					SaveGraphToDisk();
 			});
 
-			ClearGraphElements();
-
 			InitializeGraphView();
 			InitializeNodeViews();
 			InitializeEdgeViews();
@@ -800,7 +798,7 @@ namespace GraphProcessor
 			{
 				var interfaces = nodeInfo.type.GetInterfaces();
                 var exceptInheritedInterfaces = interfaces.Except(interfaces.SelectMany(t => t.GetInterfaces()));
-				foreach (var i in interfaces)
+				foreach (var i in exceptInheritedInterfaces)
 				{
 					if (i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ICreateNodeFrom<>))
 					{

@@ -30,6 +30,18 @@ namespace HLVS.Editor.Views
 				var graph = (HlvsGraph)_view.graph;
 				graph.RunUpdateNodes();
 			});
+			AddButton("Toggle Debug", () =>
+			{
+				foreach (BaseNodeView nodeView in _view.nodeViews)
+				{
+					nodeView.ToggleDebug();
+				}
+			});
+			AddButton("Run Compute", () =>
+			{
+				var graph = (HlvsGraph)_view.graph;
+				graph.UpdateComputeOrder();
+			});
 
 			AddButton("Save", () =>
 			{

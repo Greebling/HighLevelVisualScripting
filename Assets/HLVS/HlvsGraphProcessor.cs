@@ -4,6 +4,7 @@ using System.Linq;
 using GraphProcessor;
 using HLVS.Nodes;
 using HLVS.Runtime;
+using UnityEditor;
 using UnityEngine;
 
 namespace HLVS
@@ -43,7 +44,11 @@ namespace HLVS
 					{
 						// stops executing infinite loops
 						if (executionOrder > 5000)
+						{
+							var assetPath = AssetDatabase.GetAssetPath(_graph);
+							Debug.LogError("Infinite loop in nodes of graph " + assetPath.Split('/').Last() + " detected", _graph);
 							break;
+						}
 
 						nextNodes.Clear();
 
