@@ -93,6 +93,19 @@ namespace HLVS.Editor.NodeViews
 			{
 				ShowValueField();
 			}
+			
+
+			// add node parsing on formula changing
+			if (_isExpressionPort)
+			{
+				_valueField.RegisterCallback<FocusOutEvent>(_ =>
+				{
+					if (_mode == PortMode.ShowValue)
+					{
+						targetNode.ParseExpressions();
+					}
+				});
+			}
 
 			Add(_valueField);
 			Add(_resetButton);

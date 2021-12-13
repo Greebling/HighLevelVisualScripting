@@ -37,7 +37,6 @@ namespace HLVS.Nodes
 
 		protected sealed override void Process()
 		{
-			ParseExpressions();
 			UpdateParameterValues();
 		}
 
@@ -227,6 +226,9 @@ namespace HLVS.Nodes
 		
 		public List<BaseNode> GetAllPreviousNodes()
 		{
+			// TODO: This method is safe, but kinda slow. Is there a more optimal solution?
+			HashSet<BaseNode> visitedNodes = new HashSet<BaseNode>();
+			
 			List<BaseNode> previousNodes = new List<BaseNode>();
 			List<BaseNode> frontier = new List<BaseNode>() {this};
 			List<BaseNode> nextFrontier = new List<BaseNode>();
@@ -237,7 +239,14 @@ namespace HLVS.Nodes
 
 				foreach (var node in frontier)
 				{
-					nextFrontier.AddRange(node.GetInputNodes());
+					foreach (BaseNode inputNode in node.GetInputNodes())
+					{
+						if (!visitedNodes.Contains(inputNode))
+						{
+							visitedNodes.Add(inputNode);
+							nextFrontier.Add(inputNode);
+						}
+					}
 				}
 				previousNodes.AddRange(frontier);
 		        

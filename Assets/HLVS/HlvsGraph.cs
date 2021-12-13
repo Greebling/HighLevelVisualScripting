@@ -72,7 +72,9 @@ namespace HLVS
 		{
 			foreach (BaseNode baseNode in nodes)
 			{
-				((HlvsNode) baseNode).Reset();
+				var node = (HlvsNode) baseNode;
+				node.Reset();
+				node.ParseExpressions();
 			}
 
 			UpdateComputeOrder();
