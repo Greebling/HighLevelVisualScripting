@@ -17,6 +17,29 @@ namespace HLVS.Nodes
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
+		/// <summary>
+		/// Called when node shall be evaluated and execute its actions
+		/// </summary>
+		/// <returns>Whether the node finished all of its evaluation in this frame</returns>
+		public virtual ProcessingStatus Evaluate()
+		{
+			return ProcessingStatus.Finished;
+		}
+
+		/// <summary>
+		/// Used for coroutine like nodes to reset their status
+		/// </summary>
+		public virtual void Reset()
+		{
+		}
+
+		/// <summary>
+		/// Called when user inputted data into a node. Can be used for assertions and warnings
+		/// </summary>
+		public virtual void CheckFieldInputs()
+		{
+		}
+		
 		[SerializeField, HideInInspector] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
 		
 		/// <summary>
@@ -46,22 +69,6 @@ namespace HLVS.Nodes
 		/// </summary>
 		public virtual string nextExecutionLink => null;
 
-		/// <summary>
-		/// Called when node shall be evaluated and execute its actions
-		/// </summary>
-		/// <returns>Whether the node finished all of its evaluation in this frame</returns>
-		public virtual ProcessingStatus Evaluate()
-		{
-			return ProcessingStatus.Finished;
-		}
-
-		/// <summary>
-		/// Useful for coroutine like nodes to reset their status
-		/// </summary>
-		public virtual void Reset()
-		{
-		}
-
 		internal void ParseExpressions()
 		{
 			foreach (var formulaPair in fieldToFormula)
@@ -72,7 +79,7 @@ namespace HLVS.Nodes
 				try
 				{
 					var template = formulaPair.formula.Template();
-					formulaPair.template = template;
+					formulaPair.function = template.Resolve((HlvsGraph) graph);
 				}
 				catch (Exception e)
 				{
@@ -93,8 +100,7 @@ namespace HLVS.Nodes
 				{
 					var targetField = GetType().GetField(formulaPair.fieldName);
 					
-					var function = formulaPair.template.Resolve(graph);
-					var trueValue = function(graph);
+					var trueValue = formulaPair.function(graph);
 
 					var value = Convert.ChangeType(trueValue, targetField.FieldType);
 					targetField.SetValue(this, value);
@@ -216,7 +222,7 @@ namespace HLVS.Nodes
 			[SerializeField] public RawFormula formula;
 
 			[NonSerialized]
-			public FormulaTemplate template;
+			public Func<HlvsGraph, double> function;
 		}
 
 

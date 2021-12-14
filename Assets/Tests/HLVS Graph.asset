@@ -18,18 +18,18 @@ MonoBehaviour:
   - id: 1
   - id: 2
   edges:
-  - GUID: 5adb2901-85af-4cf7-a33d-85c1ee403d3a
-    owner: {fileID: 11400000}
-    inputNodeGUID: bf43efb7-d820-490c-bddb-a1e5b1fcd690
-    outputNodeGUID: bcf50290-58d1-451c-81b2-ecee12aa1bef
-    inputFieldName: previousAction
-    outputFieldName: followingAction
-    inputPortIdentifier: 
-    outputPortIdentifier: 
   - GUID: d6b68860-ff86-49ed-bfef-9c3953cbc165
     owner: {fileID: 11400000}
     inputNodeGUID: 291524ad-3b09-4184-a32b-0ffca76d43dc
     outputNodeGUID: bf43efb7-d820-490c-bddb-a1e5b1fcd690
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 10ee7a24-026a-4502-94ac-3c5bc36fa951
+    owner: {fileID: 11400000}
+    inputNodeGUID: bf43efb7-d820-490c-bddb-a1e5b1fcd690
+    outputNodeGUID: a817349f-e55a-41c0-879f-98763875c323
     inputFieldName: previousAction
     outputFieldName: followingAction
     inputPortIdentifier: 
@@ -41,8 +41,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 1644, y: -118, z: 0}
-  scale: {x: 1.15, y: 1.15, z: 1}
+  position: {x: 1986, y: -591, z: 0}
+  scale: {x: 1.7490063, y: 1.7490063, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
@@ -53,23 +53,6 @@ MonoBehaviour:
   references:
     version: 1
     00000000:
-      type: {class: OnStartNode, ns: HLVS.Nodes, asm: HLVS}
-      data:
-        nodeCustomName: 
-        GUID: bcf50290-58d1-451c-81b2-ecee12aa1bef
-        computeOrder: 0
-        position:
-          serializedVersion: 2
-          x: -1049
-          y: 422.36
-          width: 89
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        fieldToFormula: []
-        varToGuidSerialization: []
-    00000001:
       type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
@@ -91,7 +74,7 @@ MonoBehaviour:
         varToGuidSerialization: []
         textToLog: Couting... 1
         amount: 3
-    00000002:
+    00000001:
       type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
@@ -113,6 +96,23 @@ MonoBehaviour:
         varToGuidSerialization: []
         textToLog: Couting... 2
         amount: 2
+    00000002:
+      type: {class: OnStartNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: a817349f-e55a-41c0-879f-98763875c323
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: -997.414
+          y: 563
+          width: 89
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization: []
     00000003:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:

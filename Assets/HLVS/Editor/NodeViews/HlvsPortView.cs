@@ -14,8 +14,8 @@ namespace HLVS.Editor.NodeViews
 {
 	public class HlvsPortView : PortView
 	{
-		protected HlvsPortView(FieldInfo fieldInfo, Direction direction, PortData portData,
-			BaseEdgeConnectorListener edgeConnectorListener, HlvsGraphView owner) : base(direction, fieldInfo, portData,
+		protected HlvsPortView(FieldInfo                 fieldInfo,             Direction     direction, PortData portData,
+		                       BaseEdgeConnectorListener edgeConnectorListener, HlvsGraphView owner) : base(direction, fieldInfo, portData,
 			edgeConnectorListener)
 		{
 			_isExpressionPort = HlvsNode.CanBeExpression(fieldInfo.FieldType);
@@ -27,8 +27,8 @@ namespace HLVS.Editor.NodeViews
 		/// Used in HlvsNodeView
 		/// </summary>
 		public static HlvsPortView CreatePortView(HlvsGraph graph, HlvsGraphView owner, HlvsNode targetNode,
-			Direction direction,
-			FieldInfo fieldInfo, PortData portData, BaseEdgeConnectorListener edgeConnectorListener)
+		                                          Direction direction,
+		                                          FieldInfo fieldInfo, PortData portData, BaseEdgeConnectorListener edgeConnectorListener)
 		{
 			var pv = new HlvsPortView(fieldInfo, direction, portData, edgeConnectorListener, owner);
 			pv.m_EdgeConnector = new BaseEdgeConnector(edgeConnectorListener);
@@ -48,7 +48,7 @@ namespace HLVS.Editor.NodeViews
 			InitValueProperty(graph, view, targetNode);
 			InitResetButton(graph, view, targetNode);
 
-			CreateValueField();
+			CreateValueField(targetNode, view);
 
 			if (targetNode.fieldToParamGuid.TryGetValue(fieldInfo.Name, out string paramGuid))
 			{
@@ -71,21 +71,22 @@ namespace HLVS.Editor.NodeViews
 						{
 							ExposedParameter blackboardParam = fields[i];
 
-							if(blackboardParam.guid != paramGuid)
+							if (blackboardParam.guid != paramGuid)
 								continue;
-							
+
 							if (blackboardParam.GetValueType() != fieldInfo.FieldType)
 								continue;
 
 							var serializedBlackboard = new SerializedObject(blackboard);
 							int blackboardIndex = i;
-							
+
 							_blackboardProp = serializedBlackboard.FindProperty("fields").GetArrayElementAtIndex(blackboardIndex)
-								.FindPropertyRelative("name");
+							                                      .FindPropertyRelative("name");
 							goto ShowBlackboardField;
 						}
 					}
-					ShowBlackboardField: 
+
+					ShowBlackboardField:
 					ShowBlackboardField();
 				}
 			}
@@ -93,25 +94,56 @@ namespace HLVS.Editor.NodeViews
 			{
 				ShowValueField();
 			}
-			
+
 
 			// add node parsing on formula changing
 			if (_isExpressionPort)
 			{
-				_valueField.RegisterCallback<FocusOutEvent>(_ =>
-				{
-					if (_mode == PortMode.ShowValue)
-					{
-						targetNode.ParseExpressions();
-					}
-				});
+				_valueField.RegisterCallback<FocusOutEvent>(_ => { CheckInputtedValue(targetNode); });
+			}
+			else
+			{
+				_valueField.RegisterCallback<FocusOutEvent>(_ => { targetNode.CheckFieldInputs(); });
 			}
 
 			Add(_valueField);
 			Add(_resetButton);
 		}
 
-		private void CreateValueField()
+		private void CheckInputtedValue(HlvsNode targetNode)
+		{
+			if (_mode == PortMode.ShowValue)
+			{
+				targetNode.ParseExpressions();
+
+				foreach (var formulaPair in targetNode.fieldToFormula)
+				{
+					if (formulaPair.formula.Expression == string.Empty)
+						continue;
+
+					if (formulaPair.fieldName != fieldInfo.Name)
+						continue;
+
+					try
+					{
+						var targetField = targetNode.GetType().GetField(formulaPair.fieldName);
+
+						var trueValue = formulaPair.function(null);
+
+						var value = Convert.ChangeType(trueValue, targetField.FieldType);
+						targetField.SetValue(targetNode, value);
+
+						targetNode.CheckFieldInputs();
+					}
+					catch (Exception)
+					{
+						// ignored
+					}
+				}
+			}
+		}
+
+		private void CreateValueField(HlvsNode targetNode, HlvsGraphView view)
 		{
 			_valueField = new PropertyField(_valueProp)
 			{
@@ -212,8 +244,8 @@ namespace HLVS.Editor.NodeViews
 
 
 							_blackboardProp = serializedBlackboard.FindProperty("fields")
-								.GetArrayElementAtIndex(blackboardIndex)
-								.FindPropertyRelative("name");
+							                                      .GetArrayElementAtIndex(blackboardIndex)
+							                                      .FindPropertyRelative("name");
 							SetDisplayMode(PortMode.ReferenceBlackboardVariable);
 						});
 						view.serializedGraph.Update();
@@ -235,7 +267,7 @@ namespace HLVS.Editor.NodeViews
 						OnReferenceVariable(node, fieldInfo.Name, parameter.guid);
 
 						_graphParamProp = _serializedGraph.FindProperty("parametersBlueprint").GetArrayElementAtIndex(index)
-							.FindPropertyRelative("name");
+						                                  .FindPropertyRelative("name");
 
 						SetDisplayMode(PortMode.ReferenceGraphVariable);
 					});
@@ -270,8 +302,8 @@ namespace HLVS.Editor.NodeViews
 				}
 
 				_valueProp = _valueProp
-					.FindPropertyRelative("fieldToFormula").GetArrayElementAtIndex(formulaIndex)
-					.FindPropertyRelative("formula").FindPropertyRelative("Expression");
+				             .FindPropertyRelative("fieldToFormula").GetArrayElementAtIndex(formulaIndex)
+				             .FindPropertyRelative("formula").FindPropertyRelative("Expression");
 			}
 			else
 			{
@@ -339,9 +371,9 @@ namespace HLVS.Editor.NodeViews
 
 		private Button _resetButton;
 
-		private readonly SerializedObject _serializedGraph;
-		private SerializedProperty _valueProp;
-		private SerializedProperty _blackboardProp;
-		private SerializedProperty _graphParamProp;
+		private readonly SerializedObject   _serializedGraph;
+		private          SerializedProperty _valueProp;
+		private          SerializedProperty _blackboardProp;
+		private          SerializedProperty _graphParamProp;
 	}
 }

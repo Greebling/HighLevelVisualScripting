@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using GraphProcessor;
 using UnityEngine;
 
@@ -36,6 +37,16 @@ namespace HLVS.Nodes
 			} else
 			{
 				return ProcessingStatus.Unfinished;
+			}
+		}
+
+		public override void CheckFieldInputs()
+		{
+			base.CheckFieldInputs();
+			if (amount <= 0)
+			{
+				amount = 1;
+				Debug.LogError("Amount cant be lower than 1");
 			}
 		}
 	}
