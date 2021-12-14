@@ -109,11 +109,7 @@ namespace GraphProcessor
 			RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
 			RegisterCallback<DetachFromPanelEvent>(e => ExceptionToLog.Call(Disable));
 			OnGeometryChanged(null);
-
-			OnInitialized();
 		}
-		
-		protected virtual void OnInitialized(){}
 
 		void InitializePorts()
 		{

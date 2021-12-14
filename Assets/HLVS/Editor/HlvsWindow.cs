@@ -1,4 +1,5 @@
 ﻿using GraphProcessor;
+using HLVS.Editor.NodeViews;
 using HLVS.Editor.Views;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -65,6 +66,12 @@ namespace HLVS.Editor
 
 			view.blackboardViews.ForEach(blackboardView => blackboardView.DisplayExistingBlackboardEntries());
 			view.paramView.DisplayExistingParameterEntries();
+			
+			foreach (BaseNodeView viewNode in view.nodeViews)
+			{
+				var v = (HlvsNodeView)viewNode;
+				v.CheckInputtedData();
+			}
 		}
 
 		private void UnloadTempGraph()

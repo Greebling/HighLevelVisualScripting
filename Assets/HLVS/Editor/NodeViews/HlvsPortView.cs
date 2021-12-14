@@ -101,7 +101,6 @@ namespace HLVS.Editor.NodeViews
 			{
 				_valueField.RegisterCallback<FocusOutEvent>(_ =>
 				{
-					TryApplyInputtedValue(targetNode);
 					nodeView.CheckInputtedData();
 				});
 			}
@@ -115,7 +114,7 @@ namespace HLVS.Editor.NodeViews
 			Add(errorBox);
 		}
 
-		private void TryApplyInputtedValue(HlvsNode targetNode)
+		public void TryApplyInputtedValue(HlvsNode targetNode)
 		{
 			if (_mode == PortMode.ShowValue)
 			{

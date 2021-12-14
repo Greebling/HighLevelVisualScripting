@@ -30,15 +30,16 @@ namespace HLVS.Editor.NodeViews
 			styleSheets.Add(portStyle);
 		}
 
-		protected override void OnInitialized()
-		{
-			base.OnInitialized();
-			CheckInputtedData();
-		}
-
 		internal void CheckInputtedData()
 		{
 			var node = (HlvsNode)nodeTarget;
+
+			foreach (PortView v in inputPortViews)
+			{
+				var port = (HlvsPortView)v;
+				port.TryApplyInputtedValue(node);
+			}
+			
 			var errors = node.CheckFieldInputs();
 
 			foreach (HlvsPortView port in inputPortViews.Cast<HlvsPortView>())
