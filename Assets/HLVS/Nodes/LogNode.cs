@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using GraphProcessor;
 using UnityEngine;
 
@@ -17,26 +16,27 @@ namespace HLVS.Nodes
 		public override string name => "Log in Console";
 		
 		[NonSerialized]
-		private int _currAmount = -1;
+		private int _amountPrinted = 0;
 
 		public override void Reset()
 		{
-			_currAmount = -1;
+			_amountPrinted = 0;
 		}
 
 		public override ProcessingStatus Evaluate()
 		{
-			_currAmount++;
-			if (_currAmount >= amount)
-			{
-				_currAmount = -1;
-				return ProcessingStatus.Finished;
-			}
-
 			if (!string.IsNullOrEmpty(textToLog))
 				Debug.Log(textToLog);
 			
-			return ProcessingStatus.Unfinished;
+			_amountPrinted++;
+			if (_amountPrinted == amount)
+			{
+				Reset();
+				return ProcessingStatus.Finished;
+			} else
+			{
+				return ProcessingStatus.Unfinished;
+			}
 		}
 	}
 }
