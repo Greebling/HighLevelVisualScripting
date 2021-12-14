@@ -41,8 +41,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 1986, y: -591, z: 0}
-  scale: {x: 1.7490063, y: 1.7490063, z: 1}
+  position: {x: 1582, y: -81, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
@@ -60,20 +60,20 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: -803.13043
-          y: 563.13043
-          width: 259
-          height: 123
-        expanded: 0
+          x: -845.4146
+          y: 405.4912
+          width: 289
+          height: 155
+        expanded: 1
         debug: 0
         nodeLock: 0
         fieldToFormula:
         - fieldName: amount
           formula:
-            Expression: 3
+            Expression: -1
         varToGuidSerialization: []
         textToLog: Couting... 1
-        amount: 3
+        amount: 1
     00000001:
       type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
       data:
@@ -82,8 +82,8 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: -410.86984
-          y: 525.86957
+          x: -502
+          y: 405
           width: 259
           height: 123
         expanded: 0
@@ -104,8 +104,8 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: -997.414
-          y: 563
+          x: -986
+          y: 405
           width: 89
           height: 75
         expanded: 0

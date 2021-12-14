@@ -48,7 +48,7 @@ namespace HLVS.Editor.NodeViews
 			InitValueProperty(graph, view, targetNode);
 			InitResetButton(graph, view, targetNode);
 
-			CreateValueField(targetNode, view);
+			CreateValueField();
 
 			if (targetNode.fieldToParamGuid.TryGetValue(fieldInfo.Name, out string paramGuid))
 			{
@@ -145,7 +145,7 @@ namespace HLVS.Editor.NodeViews
 			}
 		}
 
-		private void CreateValueField(HlvsNode targetNode, HlvsGraphView view)
+		private void CreateValueField()
 		{
 			_valueField = new PropertyField(_valueProp)
 			{
