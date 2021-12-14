@@ -252,6 +252,7 @@ namespace HLVS
 				var currNode = currNodes.Dequeue();
 				if (_currentPausedNodes.Contains(currNode))
 				{
+					currNode.Reset();
 					_currentPausedNodes.Remove(currNode);
 				}
 
@@ -291,17 +292,6 @@ namespace HLVS
 					
 				}
 			}
-		}
-
-		private TExecutionStartNode GetStarterNodeOf(HlvsNode node)
-		{
-			while (!(node is TExecutionStartNode))
-			{
-				Debug.Assert(node.GetInputNodes().Count(baseNode => true) != 0);
-				node = GetPreviousNode(node);
-			}
-
-			return (TExecutionStartNode)node;
 		}
 
 		private static void GetNodeDataDependencies(HlvsNode currNode)
@@ -355,6 +345,17 @@ namespace HLVS
 			           .Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
 			           .Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null)
 			           .Select(edge => edge.inputNode as HlvsNode);
+		}
+
+		private TExecutionStartNode GetStarterNodeOf(HlvsNode node)
+		{
+			while (!(node is TExecutionStartNode))
+			{
+				Debug.Assert(node.GetInputNodes().Count(baseNode => true) != 0);
+				node = GetPreviousNode(node);
+			}
+
+			return (TExecutionStartNode)node;
 		}
 
 		public static HlvsNode GetPreviousNode(HlvsNode node)
