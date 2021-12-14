@@ -26,19 +26,19 @@ namespace HLVS.Editor.NodeViews
 		/// <summary>
 		/// Used in HlvsNodeView
 		/// </summary>
-		public static HlvsPortView CreatePortView(HlvsGraph graph, HlvsGraphView owner, HlvsNode targetNode,
+		public static HlvsPortView CreatePortView(HlvsGraph graph, HlvsGraphView owner, HlvsNodeView nodeView, HlvsNode targetNode,
 		                                          Direction direction,
 		                                          FieldInfo fieldInfo, PortData portData, BaseEdgeConnectorListener edgeConnectorListener)
 		{
 			var pv = new HlvsPortView(fieldInfo, direction, portData, edgeConnectorListener, owner);
 			pv.m_EdgeConnector = new BaseEdgeConnector(edgeConnectorListener);
 			pv.AddManipulator(pv.m_EdgeConnector);
-			pv.Init(graph, owner, targetNode);
+			pv.Init(graph, owner, nodeView, targetNode);
 
 			return pv;
 		}
 
-		public void Init(HlvsGraph graph, HlvsGraphView view, HlvsNode targetNode)
+		public void Init(HlvsGraph graph, HlvsGraphView view, HlvsNodeView nodeView, HlvsNode targetNode)
 		{
 			if (direction == Direction.Output || fieldInfo.FieldType == typeof(ExecutionLink))
 				return;
@@ -99,7 +99,11 @@ namespace HLVS.Editor.NodeViews
 			// add node parsing on formula changing
 			if (_isExpressionPort)
 			{
-				_valueField.RegisterCallback<FocusOutEvent>(_ => { CheckInputtedValue(targetNode); });
+				_valueField.RegisterCallback<FocusOutEvent>(_ =>
+				{
+					TryApplyInputtedValue(targetNode);
+					nodeView.CheckInputtedData();
+				});
 			}
 			else
 			{
@@ -108,9 +112,10 @@ namespace HLVS.Editor.NodeViews
 
 			Add(_valueField);
 			Add(_resetButton);
+			Add(errorBox);
 		}
 
-		private void CheckInputtedValue(HlvsNode targetNode)
+		private void TryApplyInputtedValue(HlvsNode targetNode)
 		{
 			if (_mode == PortMode.ShowValue)
 			{
@@ -132,8 +137,6 @@ namespace HLVS.Editor.NodeViews
 
 						var value = Convert.ChangeType(trueValue, targetField.FieldType);
 						targetField.SetValue(targetNode, value);
-
-						targetNode.CheckFieldInputs();
 					}
 					catch (Exception)
 					{
@@ -375,5 +378,7 @@ namespace HLVS.Editor.NodeViews
 		private          SerializedProperty _valueProp;
 		private          SerializedProperty _blackboardProp;
 		private          SerializedProperty _graphParamProp;
+
+		public readonly VisualElement errorBox = new VisualElement();
 	}
 }

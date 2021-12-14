@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using GraphProcessor;
 using UnityEngine;
@@ -40,14 +41,16 @@ namespace HLVS.Nodes
 			}
 		}
 
-		public override void CheckFieldInputs()
+		public override List<(string fieldName, string errorMessage)> CheckFieldInputs()
 		{
-			base.CheckFieldInputs();
+			List<(string fieldName, string errorMessage)> errors = new List<(string fieldName, string errorMessage)>();
 			if (amount <= 0)
 			{
 				amount = 1;
-				Debug.LogError("Amount cant be lower than 1");
+				errors.Add((nameof(amount), "Cannot be lower than 1"));
 			}
+
+			return errors;
 		}
 	}
 }

@@ -45,3 +45,9 @@
     border-top-width: 1px;
     padding-top: 1px;
 }
+
+.error-node{
+    border-color: #bf1c36;
+    border-width: 2px;
+    border-radius: 5px ;
+}

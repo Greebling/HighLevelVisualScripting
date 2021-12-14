@@ -36,8 +36,10 @@ namespace HLVS.Nodes
 		/// <summary>
 		/// Called when user inputted data into a node. Can be used for assertions and warnings
 		/// </summary>
-		public virtual void CheckFieldInputs()
+		/// <returns>A Dictionary that maps each variable to its error message or null if no errors were found</returns>
+		public virtual List<(string fieldName, string errorMessage)> CheckFieldInputs()
 		{
+			return null;
 		}
 		
 		[SerializeField, HideInInspector] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
