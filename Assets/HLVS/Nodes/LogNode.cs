@@ -29,7 +29,7 @@ namespace HLVS.Nodes
 				Debug.Log(textToLog);
 			
 			_amountPrinted++;
-			if (_amountPrinted == amount)
+			if (_amountPrinted >= amount)
 			{
 				Reset();
 				return ProcessingStatus.Finished;
