@@ -108,7 +108,7 @@ namespace HLVS
 		{
 			if (_startNodeProcessor.status == ProcessingStatus.Unfinished)
 			{
-				_startNodeProcessor.Run();
+				_startNodeProcessor.RunPausedNodes();
 			}
 			
 			_updateNodeProcessor.Run();
@@ -217,14 +217,12 @@ namespace HLVS
 		public void SetParameterValues(GameObject currentGameObject, List<ExposedParameter> parameters)
 		{
 			Debug.Assert(parameters.Count == parametersBlueprint.Count, "Parameter lists don't match");
-			this.activeGameObject = currentGameObject;
+			activeGameObject = currentGameObject;
 			
 			for (int i = 0; i < parametersBlueprint.Count; i++)
 			{
 				parametersBlueprint[i].value = parameters[i].value;
 			}
-
-			parametersBlueprint = parameters;
 		}
 
 		public Func<HlvsGraph, double> Get(string name)

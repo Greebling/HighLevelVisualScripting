@@ -37,7 +37,7 @@ MonoBehaviour:
       type: {class: IntParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: c9a7dfd7-0661-4288-8775-1e9f1de452bf
-        name: My Int
+        name: My_Int
         type: 
         serializedValue:
           serializedType: 
@@ -60,7 +60,7 @@ MonoBehaviour:
         input: 1
         settings:
           id: 6
-        val: 0
+        val: 234
     00000003:
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:

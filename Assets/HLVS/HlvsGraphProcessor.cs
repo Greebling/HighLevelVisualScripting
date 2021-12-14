@@ -24,6 +24,8 @@ namespace HLVS
 
 		public void UpdateComputeOrder()
 		{
+			_currentPausedNodes.Clear();
+			
 			_startNodes = _graph.nodes.Where(node => node is TExecutionStartNode).Cast<HlvsNode>().ToList();
 			if (_startNodes.Count == 0)
 				return;
@@ -85,7 +87,7 @@ namespace HLVS
 				for (var lowIndex = 0; lowIndex < finalNodes.Count; lowIndex++)
 				{
 					int currComputeOrder = finalNodes[lowIndex].computeOrder;
-					
+
 					// find out all of the nodes processed at the same time
 					int highIndex = finalNodes.Count;
 					for (int i = lowIndex; i < finalNodes.Count; i++)
@@ -103,10 +105,10 @@ namespace HLVS
 					for (int i = lowIndex; i < highIndex; i++)
 					{
 						var node = finalNodes[i];
-						
+
 						if (!node.GetDataInputNodes().Any())
 							continue;
-						
+
 						int calculatedDependency = LongestDependencyChainLength(node);
 						longestDependency = Math.Max(longestDependency, calculatedDependency);
 					}
@@ -117,7 +119,7 @@ namespace HLVS
 						var node = finalNodes[i];
 						node.computeOrder = currComputeOrder;
 					}
-					
+
 					for (int i = lowIndex; i < highIndex; i++)
 					{
 						var node = finalNodes[i];
@@ -210,46 +212,49 @@ namespace HLVS
 		{
 			if (_startNodes == null)
 				UpdateComputeOrder();
-
-			status = ProcessingStatus.Finished;
-			List<HlvsNode> nextStartNode = new List<HlvsNode>();
+			
 			foreach (var startNode in _startNodes)
 			{
-				var node = ProcessGraph(startNode);
-
-				if (!(node is TExecutionStartNode))
-				{
-					status = ProcessingStatus.Unfinished;
-				}
-
-				nextStartNode.Add(node);
+				ProcessGraph(startNode);
 			}
 
-			_startNodes = nextStartNode;
+			RunPausedNodes();
 		}
 
-		protected delegate void ApplyFunction(HlvsNode node);
-
-		protected void Apply(HlvsNode beginNode, ApplyFunction func)
+		public void RunPausedNodes()
 		{
-			HlvsNode currNode = GetNextNode(beginNode);
-			while (currNode != null)
+			var pausedNodes = _currentPausedNodes.ToArray();
+			_currentPausedNodes.Clear();
+			foreach (HlvsNode node in pausedNodes)
 			{
-				func(currNode);
-
-				currNode = GetNextNode(currNode);
+				ProcessGraph(node);
 			}
+
+			(_currentPausedNodes, _nextPausedNodes) = (_nextPausedNodes, _currentPausedNodes);
+
+			status = _currentPausedNodes.Count == 0 ? ProcessingStatus.Finished : ProcessingStatus.Unfinished;
 		}
+
+		private HashSet<HlvsNode> _currentPausedNodes = new HashSet<HlvsNode>();
+		private HashSet<HlvsNode> _nextPausedNodes = new HashSet<HlvsNode>();
 
 		/// <summary>
 		/// Applies a given function to all nodes, beginning AFTER startNode
 		/// </summary>
 		/// <param name="beginNode"></param>
-		private HlvsNode ProcessGraph(HlvsNode beginNode)
+		private void ProcessGraph(HlvsNode beginNode)
 		{
-			HlvsNode currNode = beginNode;
-			while (currNode != null)
+			Queue<HlvsNode> currNodes = new Queue<HlvsNode>();
+			currNodes.Enqueue(beginNode);
+
+			while (currNodes.Count > 0)
 			{
+				var currNode = currNodes.Dequeue();
+				if (_currentPausedNodes.Contains(currNode))
+				{
+					_currentPausedNodes.Remove(currNode);
+				}
+
 				GetNodeDataDependencies(currNode);
 
 				currNode.OnProcess();
@@ -257,14 +262,35 @@ namespace HLVS
 
 				if (result == ProcessingStatus.Unfinished)
 				{
-					return currNode;
+					_nextPausedNodes.Add(currNode);
 				}
+				else
+				{
+					if (currNode is HlvsActionNode actionNode)
+					{
+						if (actionNode.hasMultipleFollowingNodes)
+						{
+							var nextNodes = GetNextNodes(actionNode);
+							if (nextNodes != null)
+							{
+								foreach (HlvsNode nextNode in nextNodes)
+								{
+									currNodes.Enqueue(nextNode);
+								}
+							}
 
-				currNode = GetNextNode(currNode);
+							continue;
+						}
+					}
+					
+					HlvsNode next = GetNextNode(currNode);
+					if (next != null)
+					{
+						currNodes.Enqueue(next);
+					}
+					
+				}
 			}
-
-			// we ran fully through the network so we will begin with the start node next time
-			return beginNode is TExecutionStartNode ? beginNode : GetStarterNodeOf(beginNode);
 		}
 
 		private TExecutionStartNode GetStarterNodeOf(HlvsNode node)
@@ -302,29 +328,33 @@ namespace HLVS
 			}
 		}
 
-		public static HlvsNode GetNextNode(HlvsNode node)
+		private static HlvsNode[] GetNextNodes(HlvsActionNode actionNode)
+		{
+			var nextLinks = actionNode.nextExecutionLinks;
+			var nextPort = actionNode.outputPorts
+			                         .Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
+			                         .Where(port => nextLinks.Contains(port.fieldName));
+			return nextPort.Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null).Select(edge => (HlvsNode)edge.inputNode)
+			               .ToArray();
+		}
+
+		private static HlvsNode GetNextNode(HlvsNode node)
 		{
 			var nextLink = node.nextExecutionLink;
 			var nextPort = node.outputPorts
-				.Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
-				.FirstOrDefault(port => port.fieldName == nextLink);
-			if (nextPort != null)
-			{
-				return nextPort.GetEdges().FirstOrDefault()?.inputNode as HlvsNode;
-			}
-			else
-			{
-				return null;
-			}
+			                   .Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
+			                   .FirstOrDefault(port => port.fieldName == nextLink);
+
+			return (HlvsNode)nextPort?.GetEdges().FirstOrDefault()?.inputNode;
 		}
 
 
 		public static IEnumerable<HlvsNode> GetPossibleNextNodes(HlvsNode node)
 		{
 			return node.outputPorts
-				.Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
-				.Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null)
-				.Select(edge => edge.inputNode as HlvsNode);
+			           .Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
+			           .Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null)
+			           .Select(edge => edge.inputNode as HlvsNode);
 		}
 
 		public static HlvsNode GetPreviousNode(HlvsNode node)

@@ -18,28 +18,20 @@ MonoBehaviour:
   - id: 1
   - id: 2
   edges:
-  - GUID: 9a02f9b9-64d5-43ed-9633-3b1e93907e80
+  - GUID: 5adb2901-85af-4cf7-a33d-85c1ee403d3a
     owner: {fileID: 11400000}
-    inputNodeGUID: 8cc68c11-38e2-477c-a191-6a86dc97b07c
+    inputNodeGUID: bf43efb7-d820-490c-bddb-a1e5b1fcd690
     outputNodeGUID: bcf50290-58d1-451c-81b2-ecee12aa1bef
     inputFieldName: previousAction
     outputFieldName: followingAction
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 2738f117-60c4-40ff-b7ee-ad54d24a4681
+  - GUID: d6b68860-ff86-49ed-bfef-9c3953cbc165
     owner: {fileID: 11400000}
-    inputNodeGUID: a5596453-7c92-4fbd-8994-23ab8ab44c30
-    outputNodeGUID: 8cc68c11-38e2-477c-a191-6a86dc97b07c
+    inputNodeGUID: 291524ad-3b09-4184-a32b-0ffca76d43dc
+    outputNodeGUID: bf43efb7-d820-490c-bddb-a1e5b1fcd690
     inputFieldName: previousAction
     outputFieldName: followingAction
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 8aa6b5b5-d5b6-4fb1-b47e-183f4f377057
-    owner: {fileID: 11400000}
-    inputNodeGUID: 8cc68c11-38e2-477c-a191-6a86dc97b07c
-    outputNodeGUID: a5596453-7c92-4fbd-8994-23ab8ab44c30
-    inputFieldName: textToLog
-    outputFieldName: textToLog2
     inputPortIdentifier: 
     outputPortIdentifier: 
   groups: []
@@ -49,8 +41,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 1110, y: 15, z: 0}
-  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  position: {x: 1644, y: -118, z: 0}
+  scale: {x: 1.15, y: 1.15, z: 1}
   blackboards:
   - {fileID: 11400000, guid: 522a065f2c2a2dc4ea20ef6670ace686, type: 2}
   parametersBlueprint:
@@ -68,10 +60,10 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: -1043.2609
-          y: 254.73914
-          width: 104
-          height: 90
+          x: -1049
+          y: 422.36
+          width: 89
+          height: 75
         expanded: 0
         debug: 0
         nodeLock: 0
@@ -81,52 +73,46 @@ MonoBehaviour:
       type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
-        GUID: 8cc68c11-38e2-477c-a191-6a86dc97b07c
+        GUID: bf43efb7-d820-490c-bddb-a1e5b1fcd690
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: -702.52167
-          y: 522.4783
-          width: 274
+          x: -803.13043
+          y: 563.13043
+          width: 259
           height: 123
         expanded: 0
-        debug: 1
+        debug: 0
         nodeLock: 0
         fieldToFormula:
         - fieldName: amount
           formula:
-            Expression: my_InT * 2
-        varToGuidSerialization:
-        - Item1: textToLog
-          Item2: b49ed65b-e5d2-48fc-a8a4-3ab301fc2a1f
-        textToLog: Lololol
-        textToLog2: 
-        amount: 4
+            Expression: 3
+        varToGuidSerialization: []
+        textToLog: Couting... 1
+        amount: 3
     00000002:
       type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
       data:
         nodeCustomName: 
-        GUID: a5596453-7c92-4fbd-8994-23ab8ab44c30
+        GUID: 291524ad-3b09-4184-a32b-0ffca76d43dc
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: -183.1304
-          y: 413.30435
-          width: 274
+          x: -410.86984
+          y: 525.86957
+          width: 259
           height: 123
         expanded: 0
-        debug: 1
+        debug: 0
         nodeLock: 0
         fieldToFormula:
         - fieldName: amount
           formula:
-            Expression: my_InT * 2
-        varToGuidSerialization:
-        - Item1: textToLog
-          Item2: b49ed65b-e5d2-48fc-a8a4-3ab301fc2a1f
-        textToLog: Lololol
-        textToLog2: 
-        amount: 4
+            Expression: 2
+        varToGuidSerialization: []
+        textToLog: Couting... 2
+        amount: 2
     00000003:
       type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:

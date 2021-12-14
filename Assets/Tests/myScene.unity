@@ -206,7 +206,7 @@ MonoBehaviour:
       type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 2a4c7df4-254b-4a0b-a546-0ab9e40c4583
-        name: My Boolean
+        name: A Boolean
         type: 
         serializedValue:
           serializedType: 
@@ -516,7 +516,7 @@ MonoBehaviour:
       type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 2a4c7df4-254b-4a0b-a546-0ab9e40c4583
-        name: My Boolean
+        name: A Boolean
         type: 
         serializedValue:
           serializedType: 

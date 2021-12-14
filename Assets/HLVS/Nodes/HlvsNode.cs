@@ -18,7 +18,7 @@ namespace HLVS.Nodes
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
 		[SerializeField, HideInInspector] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
-
+		
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
 		/// </summary>
@@ -38,6 +38,7 @@ namespace HLVS.Nodes
 		protected sealed override void Process()
 		{
 			UpdateParameterValues();
+			UpdateExpressionsValue();
 		}
 
 		/// <summary>
@@ -63,6 +64,25 @@ namespace HLVS.Nodes
 
 		internal void ParseExpressions()
 		{
+			foreach (var formulaPair in fieldToFormula)
+			{
+				if (formulaPair.formula.Expression == string.Empty)
+					continue;
+
+				try
+				{
+					var template = formulaPair.formula.Template();
+					formulaPair.template = template;
+				}
+				catch (Exception e)
+				{
+					Debug.Log($"Formula error in {formulaPair.fieldName}: {e.Message}");
+				}
+			}
+		}
+		
+		internal void UpdateExpressionsValue()
+		{
 			var graph = this.graph as HlvsGraph;
 			foreach (var formulaPair in fieldToFormula)
 			{
@@ -72,9 +92,8 @@ namespace HLVS.Nodes
 				try
 				{
 					var targetField = GetType().GetField(formulaPair.fieldName);
-
-					var template = formulaPair.formula.Template();
-					var function = template.Resolve(graph);
+					
+					var function = formulaPair.template.Resolve(graph);
 					var trueValue = function(graph);
 
 					var value = Convert.ChangeType(trueValue, targetField.FieldType);
@@ -195,6 +214,9 @@ namespace HLVS.Nodes
 		{
 			public string fieldName;
 			[SerializeField] public RawFormula formula;
+
+			[NonSerialized]
+			public FormulaTemplate template;
 		}
 
 
