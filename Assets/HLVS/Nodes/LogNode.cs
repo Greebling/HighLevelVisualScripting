@@ -13,7 +13,7 @@ namespace HLVS.Nodes
 		[Input("Text")]
 		public string textToLog = "";
 
-		[Input("Amount")] [Minimum(1)] [Maximum(10)]
+		[Input("Amount Printed")] [Minimum(1)]
 		public int amount = 1;
 
 		public override string name => "Log in Console";
