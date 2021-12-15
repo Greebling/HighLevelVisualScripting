@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using GraphProcessor;
 using HLVS.Editor.Views;
 using HLVS.Nodes;
@@ -32,50 +33,55 @@ namespace HLVS.Editor.NodeViews
 
 		internal void CheckInputtedData()
 		{
+			bottomPortContainer.Clear();
 			var node = (HlvsNode)nodeTarget;
 
+			List<string> errors = new List<string>();
 			foreach (PortView v in inputPortViews)
 			{
 				var port = (HlvsPortView)v;
-				port.TryApplyInputtedValue(node);
+				port.errorBox.Clear();
+				
+				var portErrors = port.TryApplyInputtedValue(node);
+				if (portErrors == null || portErrors.Count == 0)
+					continue;
+
+				errors.AddRange(portErrors);
+
+				var errorButton = new Button()
+				{
+					style =
+					{
+						backgroundColor = new Color(0.85f, 0.2f, 0.17f),
+						color = Color.white
+					},
+					text = "!",
+				};
+				foreach (string error in portErrors)
+				{
+					bottomPortContainer.Add(new Label(error));
+					if (errorButton.tooltip.Length != 0)
+						errorButton.tooltip += "\n";
+					errorButton.tooltip += error;
+				}
+
+				port.errorBox.Add(errorButton);
 			}
-			
+
 
 			ClearErrorMessages();
-			var errors = node.CheckFieldInputs();
-			if (errors != null && errors.Count != 0)
+			if (errors.Count != 0)
 			{
-				GenerateErrorMessages(errors);
-			}
-		}
-
-		private void GenerateErrorMessages(List<(string fieldName, string errorMessage)> errors)
-		{
-			List<string> messageTexts = new List<string>();
-			foreach ((string fieldName, string errorMessage) error in errors)
-			{
-				foreach (HlvsPortView port in portsPerFieldName[error.fieldName].Cast<HlvsPortView>())
+				StringBuilder errorsMessage = new StringBuilder();
+				foreach (var error in errors)
 				{
-					var errorLabel = port.portName + ": " + error.errorMessage;
-					messageTexts.Add(errorLabel);
-
-					var errorButton = new Button()
-					{
-						style =
-						{
-							backgroundColor = new Color(0.85f, 0.2f, 0.17f),
-							color = Color.white
-						},
-						text = "!",
-						tooltip = error.errorMessage,
-					};
-					port.errorBox.Add(errorButton);
+					errorsMessage.AppendLine(error);
 				}
-			}
 
-			foreach (string messageLabel in messageTexts)
-			{
-				AddMessageView(messageLabel, EditorGUIUtility.IconContent("CollabConflict").image, new Color(0.75f, 0.11f, 0.21f));
+				// remove additional line break from end
+				errorsMessage.Remove(errorsMessage.Length - 1, 1);
+
+				AddMessageView(errorsMessage.ToString(), EditorGUIUtility.IconContent("CollabConflict").image, new Color(0.75f, 0.11f, 0.21f));
 			}
 		}
 

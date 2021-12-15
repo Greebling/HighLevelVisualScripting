@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using GraphProcessor;
+using HLVS.Runtime;
 using UnityEngine;
 
 namespace HLVS.Nodes
@@ -12,7 +13,7 @@ namespace HLVS.Nodes
 		[Input("Text")]
 		public string textToLog = "";
 
-		[Input("Amount")]
+		[Input("Amount")] [Minimum(1)] [Maximum(10)]
 		public int amount = 1;
 
 		public override string name => "Log in Console";
@@ -39,18 +40,6 @@ namespace HLVS.Nodes
 			{
 				return ProcessingStatus.Unfinished;
 			}
-		}
-
-		public override List<(string fieldName, string errorMessage)> CheckFieldInputs()
-		{
-			List<(string fieldName, string errorMessage)> errors = new List<(string fieldName, string errorMessage)>();
-			if (amount <= 0)
-			{
-				amount = 1;
-				errors.Add((nameof(amount), "Cannot be lower than 1"));
-			}
-
-			return errors;
 		}
 	}
 }

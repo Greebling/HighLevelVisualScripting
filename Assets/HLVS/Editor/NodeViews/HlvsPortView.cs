@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using GraphProcessor;
 using HLVS.Editor.Views;
@@ -106,7 +107,7 @@ namespace HLVS.Editor.NodeViews
 			}
 			else
 			{
-				_valueField.RegisterCallback<FocusOutEvent>(_ => { targetNode.CheckFieldInputs(); });
+				_valueField.RegisterCallback<FocusOutEvent>(_ => { TryApplyInputtedValue(targetNode); });
 			}
 
 			Add(_valueField);
@@ -114,35 +115,54 @@ namespace HLVS.Editor.NodeViews
 			Add(errorBox);
 		}
 
-		public void TryApplyInputtedValue(HlvsNode targetNode)
+		public List<string> TryApplyInputtedValue(HlvsNode targetNode)
 		{
-			if (_mode == PortMode.ShowValue)
+			if (_mode != PortMode.ShowValue) 
+				return null;
+			
+			targetNode.ParseExpressions();
+			foreach (var formulaPair in targetNode.fieldToFormula)
 			{
-				targetNode.ParseExpressions();
+				if (formulaPair.formula.Expression == string.Empty)
+					continue;
 
-				foreach (var formulaPair in targetNode.fieldToFormula)
+				if (formulaPair.fieldName != fieldInfo.Name)
+					continue;
+
+				try
 				{
-					if (formulaPair.formula.Expression == string.Empty)
-						continue;
+					var nodeType = targetNode.GetType();
+					var targetField = nodeType.GetField(formulaPair.fieldName);
 
-					if (formulaPair.fieldName != fieldInfo.Name)
-						continue;
+					var trueValue = formulaPair.function(null);
+					var value = Convert.ChangeType(trueValue, targetField.FieldType);
 
-					try
+					// check inputted values
+					var fieldAttributes = targetField.GetCustomAttributes<NodeFieldAttribute>();
+					List<string> errors = new List<string>();
+					foreach (NodeFieldAttribute nodeFieldAttribute in fieldAttributes)
 					{
-						var targetField = targetNode.GetType().GetField(formulaPair.fieldName);
+						var isCorrect = nodeFieldAttribute.CheckField(trueValue);
+						if (!isCorrect)
+						{
+							errors.Add( portName + ": " + nodeFieldAttribute.GetErrorMessage());
+						}
+					}
 
-						var trueValue = formulaPair.function(null);
-
-						var value = Convert.ChangeType(trueValue, targetField.FieldType);
+					if (errors.Count == 0)
+					{
 						targetField.SetValue(targetNode, value);
 					}
-					catch (Exception)
-					{
-						// ignored
-					}
+
+					return errors;
+				}
+				catch (Exception)
+				{
+					// ignored
+					return null;
 				}
 			}
+			return null;
 		}
 
 		private void CreateValueField()
