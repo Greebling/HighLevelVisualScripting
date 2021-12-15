@@ -25,7 +25,7 @@ namespace HLVS
 		public void UpdateComputeOrder()
 		{
 			_currentPausedNodes.Clear();
-			
+
 			_startNodes = _graph.nodes.Where(node => node is TExecutionStartNode).Cast<HlvsNode>().ToList();
 			if (_startNodes.Count == 0)
 				return;
@@ -212,7 +212,7 @@ namespace HLVS
 		{
 			if (_startNodes == null)
 				UpdateComputeOrder();
-			
+
 			foreach (var startNode in _startNodes)
 			{
 				ProcessGraph(startNode);
@@ -236,7 +236,7 @@ namespace HLVS
 		}
 
 		private HashSet<HlvsNode> _currentPausedNodes = new HashSet<HlvsNode>();
-		private HashSet<HlvsNode> _nextPausedNodes = new HashSet<HlvsNode>();
+		private HashSet<HlvsNode> _nextPausedNodes    = new HashSet<HlvsNode>();
 
 		/// <summary>
 		/// Applies a given function to all nodes, beginning AFTER startNode
@@ -267,29 +267,25 @@ namespace HLVS
 				}
 				else
 				{
-					if (currNode is HlvsActionNode actionNode)
+					if (currNode is HlvsFlowNode flowNode)
 					{
-						if (actionNode.hasMultipleFollowingNodes)
+						var nextNodes = GetNextNodes(flowNode);
+						if (nextNodes != null)
 						{
-							var nextNodes = GetNextNodes(actionNode);
-							if (nextNodes != null)
+							foreach (HlvsNode nextNode in nextNodes)
 							{
-								foreach (HlvsNode nextNode in nextNodes)
-								{
-									currNodes.Enqueue(nextNode);
-								}
+								currNodes.Enqueue(nextNode);
 							}
-
-							continue;
 						}
+
+						continue;
 					}
-					
+
 					HlvsNode next = GetNextNode(currNode);
 					if (next != null)
 					{
 						currNodes.Enqueue(next);
 					}
-					
 				}
 			}
 		}
@@ -318,9 +314,9 @@ namespace HLVS
 			}
 		}
 
-		private static HlvsNode[] GetNextNodes(HlvsActionNode actionNode)
+		private static HlvsNode[] GetNextNodes(HlvsFlowNode actionNode)
 		{
-			var nextLinks = actionNode.nextExecutionLinks;
+			var nextLinks = actionNode.GetNextExecutionLinks();
 			var nextPort = actionNode.outputPorts
 			                         .Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
 			                         .Where(port => nextLinks.Contains(port.fieldName));

@@ -10,10 +10,10 @@ namespace HLVS.Nodes
 	public class LogNode : HlvsActionNode
 	{
 		[Input("Text")]
-		public string textToLog;
+		public string textToLog = "";
 
 		[Input("Amount")]
-		public int amount;
+		public int amount = 1;
 
 		public override string name => "Log in Console";
 		
