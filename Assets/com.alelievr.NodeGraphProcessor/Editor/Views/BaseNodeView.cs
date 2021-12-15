@@ -625,6 +625,17 @@ namespace GraphProcessor
 			});
 		}
 
+		protected void ClearAllBadges()
+		{
+			foreach (IconBadge iconBadge in badges)
+			{
+				iconBadge.Detach();
+				iconBadge.RemoveFromHierarchy();
+			}
+
+			badges.Clear();
+		}
+
 		public void RemoveMessageViewContains(string message) => RemoveBadge(b => b.badgeText.Contains(message));
 		
 		public void RemoveMessageView(string message) => RemoveBadge(b => b.badgeText == message);

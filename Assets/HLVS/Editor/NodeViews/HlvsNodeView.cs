@@ -40,26 +40,25 @@ namespace HLVS.Editor.NodeViews
 				port.TryApplyInputtedValue(node);
 			}
 			
+
+			ClearErrorMessages();
 			var errors = node.CheckFieldInputs();
-
-			foreach (HlvsPortView port in inputPortViews.Cast<HlvsPortView>())
+			if (errors != null && errors.Count != 0)
 			{
-				port.errorBox.Clear();
+				GenerateErrorMessages(errors);
 			}
+		}
 
-			if (errors == null || errors.Count == 0)
-			{
-				return;
-			}
-
+		private void GenerateErrorMessages(List<(string fieldName, string errorMessage)> errors)
+		{
 			List<string> messageTexts = new List<string>();
 			foreach ((string fieldName, string errorMessage) error in errors)
 			{
 				foreach (HlvsPortView port in portsPerFieldName[error.fieldName].Cast<HlvsPortView>())
 				{
-					var errorLabel =port.portName + ": " + error.errorMessage;
+					var errorLabel = port.portName + ": " + error.errorMessage;
 					messageTexts.Add(errorLabel);
-					
+
 					var errorButton = new Button()
 					{
 						style =
@@ -73,10 +72,19 @@ namespace HLVS.Editor.NodeViews
 					port.errorBox.Add(errorButton);
 				}
 			}
-			
+
 			foreach (string messageLabel in messageTexts)
 			{
 				AddMessageView(messageLabel, EditorGUIUtility.IconContent("CollabConflict").image, new Color(0.75f, 0.11f, 0.21f));
+			}
+		}
+
+		private void ClearErrorMessages()
+		{
+			ClearAllBadges();
+			foreach (HlvsPortView port in inputPortViews.Cast<HlvsPortView>())
+			{
+				port.errorBox.Clear();
 			}
 		}
 	}
