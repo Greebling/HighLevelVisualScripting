@@ -76,7 +76,7 @@ namespace HLVS.Nodes
 				}
 				catch (Exception e)
 				{
-					Debug.Log($"Formula error in {formulaPair.fieldName}: {e.Message}");
+					Debug.Log($"Mistake in {formulaPair.fieldName}: {e.Message}");
 				}
 			}
 		}

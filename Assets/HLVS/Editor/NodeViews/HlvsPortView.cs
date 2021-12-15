@@ -8,7 +8,9 @@ using HLVS.Runtime;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
+using Button = UnityEngine.UIElements.Button;
 using Direction = UnityEditor.Experimental.GraphView.Direction;
 
 namespace HLVS.Editor.NodeViews
@@ -97,18 +99,10 @@ namespace HLVS.Editor.NodeViews
 			}
 
 
-			// add node parsing on formula changing
-			if (_isExpressionPort)
+			_valueField.RegisterCallback<FocusOutEvent>(_ =>
 			{
-				_valueField.RegisterCallback<FocusOutEvent>(_ =>
-				{
-					nodeView.CheckInputtedData();
-				});
-			}
-			else
-			{
-				_valueField.RegisterCallback<FocusOutEvent>(_ => { TryApplyInputtedValue(targetNode); });
-			}
+				nodeView.CheckInputtedData();
+			});
 
 			Add(_valueField);
 			Add(_resetButton);
@@ -120,7 +114,6 @@ namespace HLVS.Editor.NodeViews
 			if (_mode != PortMode.ShowValue) 
 				return null;
 			
-			targetNode.ParseExpressions();
 			foreach (var formulaPair in targetNode.fieldToFormula)
 			{
 				if (formulaPair.formula.Expression == string.Empty)

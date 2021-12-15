@@ -36,12 +36,12 @@ namespace HLVS.Editor.NodeViews
 			bottomPortContainer.Clear();
 			var node = (HlvsNode)nodeTarget;
 
+			node.ParseExpressions();
 			List<string> errors = new List<string>();
 			foreach (PortView v in inputPortViews)
 			{
 				var port = (HlvsPortView)v;
 				port.errorBox.Clear();
-				
 				var portErrors = port.TryApplyInputtedValue(node);
 				if (portErrors == null || portErrors.Count == 0)
 					continue;
