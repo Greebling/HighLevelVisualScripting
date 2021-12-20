@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace HLVS.Nodes.ActionNodes
 {
-	[Serializable, NodeMenuItem("HLVS/Scenes/Load Scene")]
+	[Serializable, NodeMenuItem("Scenes/Load Scene")]
 	public class LoadSceneNode : HlvsActionNode
 	{
 		public override string name => "Load Scene";
@@ -21,7 +21,7 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 	
-	[Serializable, NodeMenuItem("HLVS/Scenes/Unload Scene")]
+	[Serializable, NodeMenuItem("Scenes/Unload Scene")]
 	public class UnloadSceneNode : HlvsActionNode
 	{
 		public override string name => "Unload Scene";

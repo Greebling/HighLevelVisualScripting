@@ -3,7 +3,7 @@ using GraphProcessor;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("Math/Round"), ConverterNode(typeof(float), typeof(int))]
+	[Serializable, NodeMenuItem("Math/Round"), NodeMenuItem("Convert/Float to Int"), ConverterNode(typeof(float), typeof(int))]
 	public class RoundNode : HlvsDataNode, IConversionNode
 	{
 		[Input("In")]

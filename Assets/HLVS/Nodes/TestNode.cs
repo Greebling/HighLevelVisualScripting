@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("Test Node")]
+	[Serializable, NodeMenuItem("Internal/Test Node")]
 	public class TestNode : HlvsActionNode
 	{
 		[Input("Gobj")] public GameObject gobj;

@@ -3,7 +3,7 @@ using GraphProcessor;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("String/Read Integer"), ConverterNode(typeof(string), typeof(int))]
+	[Serializable, NodeMenuItem("Convert/Read Integer from String"), ConverterNode(typeof(string), typeof(int))]
 	public class ParseIntNode : HlvsDataNode, IConversionNode
 	{
 		[Input("In")]
@@ -31,7 +31,7 @@ namespace HLVS.Nodes
 		}
 	}
 	
-	[Serializable, NodeMenuItem("String/Read Float"), ConverterNode(typeof(string), typeof(float))]
+	[Serializable, NodeMenuItem("Convert/Read Float from String"), ConverterNode(typeof(string), typeof(float))]
 	public class ParseFloatNode : HlvsDataNode, IConversionNode
 	{
 		[Input("In")]

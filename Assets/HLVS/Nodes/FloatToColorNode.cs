@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("Converter/Create Color"), ConverterNode(typeof(float), typeof(Color))]
+	[Serializable, NodeMenuItem("Convert/Create Color"), ConverterNode(typeof(float), typeof(Color))]
 	public class FloatToColorNode : HlvsDataNode, IConversionNode
 	{
 		public override string name => "Create Color";

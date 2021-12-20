@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace HLVS.Nodes.ActionNodes
 {
-	[Serializable, NodeMenuItem("HLVS/Transform/Move Towards")]
+	[Serializable, NodeMenuItem("Transform/Move Towards")]
 	public class MoveTowardNode : HlvsActionNode
 	{
 		public override string name => "Move Towards";
@@ -68,7 +68,7 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
-	[Serializable, NodeMenuItem("HLVS/Transform/Rotate")]
+	[Serializable, NodeMenuItem("Transform/Rotate")]
 	public class RotateNode : HlvsActionNode
 	{
 		public override string name => "Rotate";
@@ -136,7 +136,7 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
-	[Serializable, NodeMenuItem("HLVS/Transform/Scale")]
+	[Serializable, NodeMenuItem("Transform/Scale")]
 	public class ScaleNode : HlvsActionNode
 	{
 		public override string name => "Scale";
@@ -196,7 +196,7 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
-	[Serializable, NodeMenuItem("HLVS/Transform/Parent To")]
+	[Serializable, NodeMenuItem("Transform/Parent To")]
 	public class ParentNode : HlvsActionNode
 	{
 		public override string name => "Parent To";

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace HLVS.Nodes.ActionNodes
 {
-	[Serializable, NodeMenuItem("HLVS/Time/Wait")]
+	[Serializable, NodeMenuItem("Time/Wait")]
 	public class WaitNode : HlvsActionNode
 	{
 		public override string name => "Wait";
@@ -46,7 +46,7 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
-	[Serializable, NodeMenuItem("HLVS/Time/Change Time Speed")]
+	[Serializable, NodeMenuItem("Time/Change Time Speed")]
 	public class SetTimescaleNode : HlvsActionNode
 	{
 		public override string name => "Change Time Speed";
@@ -62,7 +62,7 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
-	[Serializable, NodeMenuItem("HLVS/Time/Slow motion")]
+	[Serializable, NodeMenuItem("Time/Slow motion")]
 	public class DoSlowMotionNode : HlvsActionNode
 	{
 		public override string name => "Slow motion";

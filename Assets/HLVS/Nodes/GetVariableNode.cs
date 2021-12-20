@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("Data/Get Variable")]
+	[Serializable, NodeMenuItem("Internal/Get Variable")]
 	public class GetVariableNode : HlvsDataNode
 	{
 		public string variableName = string.Empty;

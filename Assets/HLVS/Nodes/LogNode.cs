@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("HLVS/Log")]
+	[Serializable, NodeMenuItem("Internal/Log")]
 	public class LogNode : HlvsActionNode
 	{
 		[Input("Text")]
