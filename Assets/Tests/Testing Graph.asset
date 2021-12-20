@@ -1,0 +1,164 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de97d8a431ad41f48dcf16f5f3731999, type: 3}
+  m_Name: Testing Graph
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  nodes:
+  - id: 0
+  - id: 1
+  - id: 2
+  - id: 3
+  - id: 4
+  edges:
+  - GUID: a52cc9e6-febf-4b94-99f4-0f832257065d
+    owner: {fileID: 11400000}
+    inputNodeGUID: 8acae915-0d6d-4c7d-92d9-45a67c8c5e7a
+    outputNodeGUID: f08ce26e-fd8f-475b-8cec-134b43b2000a
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: fc966429-7eb8-4066-896b-72834eb9bb3f
+    owner: {fileID: 11400000}
+    inputNodeGUID: cfff1510-6403-4a42-ac08-6fb4114a5187
+    outputNodeGUID: 0c623d01-8132-4206-ae82-f43e84c484d8
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 42375503-131d-46a3-acbb-110a50a439ea
+    owner: {fileID: 11400000}
+    inputNodeGUID: 67204d20-2b60-4724-9a8f-fc4ef6ec8aab
+    outputNodeGUID: cfff1510-6403-4a42-ac08-6fb4114a5187
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 0da79f02-3ef2-4c71-94a2-0e158f90c47a
+    owner: {fileID: 11400000}
+    inputNodeGUID: f08ce26e-fd8f-475b-8cec-134b43b2000a
+    outputNodeGUID: 67204d20-2b60-4724-9a8f-fc4ef6ec8aab
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  groups: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  nodeInspectorReference: {fileID: 0}
+  position: {x: -83, y: 12, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  blackboards: []
+  parametersBlueprint: []
+  references:
+    version: 1
+    00000000:
+      type: {class: OnStartNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 0c623d01-8132-4206-ae82-f43e84c484d8
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 552.60754
+          y: 215.00005
+          width: 89
+          height: 75
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization: []
+    00000001:
+      type: {class: LoadSceneNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: cfff1510-6403-4a42-ac08-6fb4114a5187
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 807.5002
+          y: 441.05005
+          width: 259
+          height: 123
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization: []
+        toLoad: other Scene
+        loadAdditive: 1
+    00000002:
+      type: {class: UnloadSceneNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: f08ce26e-fd8f-475b-8cec-134b43b2000a
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 1487.9055
+          y: 290
+          width: 259
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization: []
+        toUnload: other Scene
+    00000003:
+      type: {class: WaitNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 67204d20-2b60-4724-9a8f-fc4ef6ec8aab
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 1016.5501
+          y: 215
+          width: 259
+          height: 99
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: duration
+          formula:
+            Expression: 2
+        varToGuidSerialization: []
+        duration: 2
+    00000004:
+      type: {class: LogNode, ns: HLVS.Nodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: 8acae915-0d6d-4c7d-92d9-45a67c8c5e7a
+        computeOrder: 4
+        position:
+          serializedVersion: 2
+          x: 1863.1381
+          y: 350.85068
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula:
+        - fieldName: amount
+          formula:
+            Expression: 1
+        varToGuidSerialization: []
+        textToLog: Unloaded
+        amount: 1
