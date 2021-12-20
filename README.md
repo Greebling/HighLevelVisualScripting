@@ -39,13 +39,3 @@ public class CompareTagNode : HlvsDataNode
 
 ### Node creation menu
 ![](https://user-images.githubusercontent.com/6877923/58935811-893adf80-876e-11e9-9f69-69ce51a432b8.png)
-
-### Graph Parameters
-![](https://user-images.githubusercontent.com/6877923/90035202-d6470980-dcc1-11ea-92e0-a754820bdc55.png)
-
-### Node Inspector
-![](https://user-images.githubusercontent.com/6877923/87306684-ac5ec380-c518-11ea-9346-1ed47e8cd016.gif)
-
-
-### Drag And Drop Objects
-![CreateNodeFromObject](https://user-images.githubusercontent.com/6877923/110240003-20d3f000-7f4a-11eb-8adc-e52340945b74.gif)
