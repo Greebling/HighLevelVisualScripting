@@ -4,19 +4,21 @@ using HLVS.Runtime;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("Branch")]
+	[Serializable, NodeMenuItem("Branch/Conditional Branch")]
 	public class BranchNode : HlvsFlowNode
 	{
-		[Input(" ", true)]
+		public override string name => "Condition";
+
+		[Input(" ")]
 		public ExecutionLink inputLink;
 
-		[Input("Condition", true)]
+		[Input("Condition")]
 		public bool condition = true;
 
-		[Output("True", false)]
+		[Output("True")]
 		public ExecutionLink trueLink;
 
-		[Output("False", false)]
+		[Output("False")]
 		public ExecutionLink falseLink;
 
 		public override string[] GetNextExecutionLinks()
