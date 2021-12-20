@@ -431,6 +431,8 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: a2068314d3863e94392bdaf8b58206ec, type: 2}
   graphParameters:
   - id: 0
+  - id: 1
+  - id: 2
   references:
     version: 1
     00000000:
@@ -445,14 +447,54 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 1
+          id: 3
         val: {fileID: 1608112222}
     00000001:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 0f3fd4c0-9ccc-4e2d-897f-2c599e981abe
+        name: Cam
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 4
+        val: {fileID: 0}
+    00000002:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: fad29361-7017-4b48-a7da-b6edf667b05f
+        name: Light
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 5
+        val: {fileID: 1581654372}
+    00000003:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: ae84f757-26c2-4b2c-8417-6e8d73a8e764
+    00000004:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 0f3fd4c0-9ccc-4e2d-897f-2c599e981abe
+    00000005:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: fad29361-7017-4b48-a7da-b6edf667b05f
 --- !u!65 &1608112224
 BoxCollider:
   m_ObjectHideFlags: 0
