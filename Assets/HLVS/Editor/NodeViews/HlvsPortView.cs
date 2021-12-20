@@ -6,24 +6,37 @@ using HLVS.Editor.Views;
 using HLVS.Nodes;
 using HLVS.Runtime;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UIElements;
-using Button = UnityEngine.UIElements.Button;
-using Direction = UnityEditor.Experimental.GraphView.Direction;
 
 namespace HLVS.Editor.NodeViews
 {
 	public class HlvsPortView : PortView
 	{
 		protected HlvsPortView(FieldInfo                 fieldInfo,             Direction     direction, PortData portData,
-		                       BaseEdgeConnectorListener edgeConnectorListener, HlvsGraphView owner) : base(direction, fieldInfo, portData,
-			edgeConnectorListener)
+		                       BaseEdgeConnectorListener edgeConnectorListener, HlvsGraphView owner)
+			: base(direction, fieldInfo, portData, edgeConnectorListener)
 		{
 			_isExpressionPort = HlvsNode.CanBeExpression(fieldInfo.FieldType);
 			_mode = PortMode.ShowValue;
 			_serializedGraph = owner.serializedGraph;
+
+			OnConnected += (view, edge) =>
+			{
+				if (_valueField != null)
+					_valueField.visible = false;
+				if (_resetButton != null)
+					_resetButton.visible = false;
+			};
+			OnDisconnected += (view, edge) =>
+			{
+				if (_valueField != null)
+					_valueField.visible = true;
+				if (_resetButton != null)
+					_resetButton.visible = true;
+			};
 		}
 
 		/// <summary>
@@ -343,25 +356,6 @@ namespace HLVS.Editor.NodeViews
 			node.SetFieldToReference(nameOfField, parameterGuid);
 		}
 
-		private static void AddDefaultPortElements(PortData portData, HlvsPortView pv)
-		{
-			// Force picking in the port label to enlarge the edge creation zone
-			var portLabel = pv.Q("type");
-			if (portLabel != null)
-			{
-				portLabel.pickingMode = PickingMode.Position;
-				portLabel.style.flexGrow = 1;
-			}
-
-			// hide label when the port is vertical
-			if (portData.vertical && portLabel != null)
-				portLabel.style.display = DisplayStyle.None;
-
-			// Fixup picking mode for vertical top ports
-			if (portData.vertical)
-				pv.Q("connector").pickingMode = PickingMode.Position;
-		}
-
 		public enum PortMode
 		{
 			// only show name
@@ -371,7 +365,7 @@ namespace HLVS.Editor.NodeViews
 			ReferenceBlackboardVariable,
 
 			// show serialized value
-			ShowValue
+			ShowValue,
 		}
 
 		/// <summary>

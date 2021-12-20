@@ -18,18 +18,26 @@ MonoBehaviour:
   - id: 1
   - id: 2
   edges:
-  - GUID: af6ec7ed-2e05-4984-aea3-31822f2aa489
+  - GUID: 841d2a06-f4dc-4614-9605-a637096bca8e
     owner: {fileID: 11400000}
     inputNodeGUID: bfe68bf8-1e36-4be3-873d-4219bb81eeb3
+    outputNodeGUID: df8f4984-5d37-425f-8a83-ee90c735274c
+    inputFieldName: target
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: f3caf4dc-2265-4625-b9ef-8e95562e7411
+    owner: {fileID: 11400000}
+    inputNodeGUID: b49ee170-a73a-481c-abdf-451d32f48a20
     outputNodeGUID: 0c623d01-8132-4206-ae82-f43e84c484d8
     inputFieldName: previousAction
     outputFieldName: followingAction
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 1664dfc8-e1e2-4eed-9bfd-ee9391205aa0
+  - GUID: e9901d4b-d424-4fb1-bc04-cac37bcd9f07
     owner: {fileID: 11400000}
-    inputNodeGUID: bfe68bf8-1e36-4be3-873d-4219bb81eeb3
-    outputNodeGUID: df8f4984-5d37-425f-8a83-ee90c735274c
+    inputNodeGUID: b49ee170-a73a-481c-abdf-451d32f48a20
+    outputNodeGUID: cfac9a2c-7292-4bb6-bd08-fbc73be10136
     inputFieldName: target
     outputFieldName: output
     inputPortIdentifier: 
@@ -41,8 +49,8 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -72, y: -150.4, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: -315.2, y: -184.8, z: 0}
+  scale: {x: 1.3225, y: 1.3225, z: 1}
   blackboards: []
   parametersBlueprint:
   - id: 3
@@ -69,12 +77,12 @@ MonoBehaviour:
       type: {class: AddForceNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
       data:
         nodeCustomName: 
-        GUID: bfe68bf8-1e36-4be3-873d-4219bb81eeb3
+        GUID: b49ee170-a73a-481c-abdf-451d32f48a20
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 918.8
-          y: 312.4
+          x: 944.5747
+          y: 376.40833
           width: 100
           height: 100
         expanded: 0
@@ -83,19 +91,19 @@ MonoBehaviour:
         fieldToFormula: []
         varToGuidSerialization: []
         target: {fileID: 0}
-        force: {x: 0, y: 1000, z: 0}
+        force: {x: 0, y: 0, z: 0}
     00000002:
       type: {class: GetRigidbodyNode, ns: HLVS.Nodes.DataNodes, asm: HLVS}
       data:
         nodeCustomName: 
-        GUID: df8f4984-5d37-425f-8a83-ee90c735274c
+        GUID: cfac9a2c-7292-4bb6-bd08-fbc73be10136
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 535.2
-          y: 446.8
+          x: 534.6344
+          y: 482.2806
           width: 274.39996
-          height: 74.39996
+          height: 75.20001
         expanded: 0
         debug: 0
         nodeLock: 0
