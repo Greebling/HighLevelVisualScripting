@@ -1,5 +1,6 @@
 ﻿using System;
 using GraphProcessor;
+using UnityEngine;
 
 namespace HLVS.Nodes
 {
@@ -22,6 +23,13 @@ namespace HLVS.Nodes
 		public string GetConversionOutput()
 		{
 			return nameof(output);
+		}
+
+		public override ProcessingStatus Evaluate()
+		{
+			output = Mathf.RoundToInt(input);
+			
+			return ProcessingStatus.Finished;
 		}
 	}
 }
