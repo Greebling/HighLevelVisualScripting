@@ -1,5 +1,7 @@
 ﻿using System;
 using GraphProcessor;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace HLVS.Nodes.ActionNodes
@@ -11,8 +13,9 @@ namespace HLVS.Nodes.ActionNodes
 
 		[Input("Scene name")]
 		public string toLoad;
-		
-		[Input("Mode")] public LoadSceneMode loadAdditive = LoadSceneMode.Single;
+
+		[Input("Mode")]
+		public LoadSceneMode loadAdditive = LoadSceneMode.Single;
 
 		public override ProcessingStatus Evaluate()
 		{
@@ -20,7 +23,7 @@ namespace HLVS.Nodes.ActionNodes
 			return ProcessingStatus.Finished;
 		}
 	}
-	
+
 	[Serializable, NodeMenuItem("Scenes/Unload Scene")]
 	public class UnloadSceneNode : HlvsActionNode
 	{
@@ -32,6 +35,24 @@ namespace HLVS.Nodes.ActionNodes
 		public override ProcessingStatus Evaluate()
 		{
 			SceneManager.UnloadSceneAsync(toUnload);
+			return ProcessingStatus.Finished;
+		}
+	}
+
+	[Serializable, NodeMenuItem("Game/Quit")]
+	public class QuitGameNode : HlvsActionNode
+	{
+		public override string name => "Quit Game";
+
+		public override ProcessingStatus Evaluate()
+		{
+#if UNITY_EDITOR
+			EditorApplication.isPlaying = false;
+			Debug.LogWarning("Quitting Game..."); // give users a message so they wont wonder why their editor suddenly stopped
+#else
+			Application.Quit();
+#endif
+
 			return ProcessingStatus.Finished;
 		}
 	}
