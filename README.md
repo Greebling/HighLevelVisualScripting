@@ -5,29 +5,28 @@ Based on Unity's GraphView technology
 Simple and powerful C# node API to create new nodes and custom views.
 
 ```CSharp
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 using GraphProcessor;
-using System.Linq;
+using UnityEngine;
 
-[System.Serializable, NodeMenuItem("Operations/Sub")] // Add the node in the node creation context menu
-public class SubNode : BaseNode
+[Serializable, NodeMenuItem("Gameobject/Has Tag")]
+public class CompareTagNode : HlvsDataNode
 {
-    [Input(name = "A")]
-    public float                inputA;
-    [Input(name = "B")]
-    public float                inputB;
+    public override string name => "Has Tag";
 
-    [Output(name = "Out")]
-    public float				output;
+    [Input("Object")]
+    public GameObject target;
 
-    public override string		name => "Sub";
+    [Input("Tag")]
+    public string tag;
 
-    // Called when the graph is process, process inputs and assign the result in output.
-    protected override void Process()
+    [Output("Has Tag")]
+    public bool hasTag;
+
+    public override ProcessingStatus Evaluate()
     {
-        output = inputA - inputB;
+        hasTag = target && target.CompareTag(tag);
+        return ProcessingStatus.Finished;
     }
 }
 ```
