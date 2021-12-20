@@ -5,29 +5,28 @@ Based on Unity's GraphView technology
 Simple and powerful C# node API to create new nodes and custom views.
 
 ```CSharp
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using System;
 using GraphProcessor;
-using System.Linq;
+using UnityEngine;
 
-[System.Serializable, NodeMenuItem("Operations/Sub")] // Add the node in the node creation context menu
-public class SubNode : BaseNode
+[Serializable, NodeMenuItem("Gameobject/Has Tag")]
+public class CompareTagNode : HlvsDataNode
 {
-    [Input(name = "A")]
-    public float                inputA;
-    [Input(name = "B")]
-    public float                inputB;
+    public override string name => "Has Tag";
 
-    [Output(name = "Out")]
-    public float				output;
+    [Input("Object")]
+    public GameObject target;
 
-    public override string		name => "Sub";
+    [Input("Tag")]
+    public string tag;
 
-    // Called when the graph is process, process inputs and assign the result in output.
-    protected override void Process()
+    [Output("Has Tag")]
+    public bool hasTag;
+
+    public override ProcessingStatus Evaluate()
     {
-        output = inputA - inputB;
+        hasTag = target && target.CompareTag(tag);
+        return ProcessingStatus.Finished;
     }
 }
 ```
@@ -40,13 +39,3 @@ public class SubNode : BaseNode
 
 ### Node creation menu
 ![](https://user-images.githubusercontent.com/6877923/58935811-893adf80-876e-11e9-9f69-69ce51a432b8.png)
-
-### Graph Parameters
-![](https://user-images.githubusercontent.com/6877923/90035202-d6470980-dcc1-11ea-92e0-a754820bdc55.png)
-
-### Node Inspector
-![](https://user-images.githubusercontent.com/6877923/87306684-ac5ec380-c518-11ea-9346-1ed47e8cd016.gif)
-
-
-### Drag And Drop Objects
-![CreateNodeFromObject](https://user-images.githubusercontent.com/6877923/110240003-20d3f000-7f4a-11eb-8adc-e52340945b74.gif)
