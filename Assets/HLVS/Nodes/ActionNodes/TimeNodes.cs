@@ -11,7 +11,7 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Wait";
 
 		[Input("Duration")]
-		[Minimum(0.01f)]
+		[LargerThan(0.0f)]
 		public float duration = 1;
 
 		private float _currentTime = 0, _endTime = 0;
@@ -50,7 +50,7 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Change Time Speed";
 
 		[Input("Time Speed")]
-		[Minimum(0.0f)]
+		[LargerOrEqual(0.0f)] 
 		public float timeScale = 1;
 
 		public override ProcessingStatus Evaluate()
@@ -66,11 +66,11 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Slow motion";
 
 		[Input("Amount")]
-		[Minimum(0.0f)]
+		[LargerThan(0.0f)]
 		public float timeScale = 1;
 
 		[Input("Duration")]
-		[Minimum(0.01f)]
+		[LargerThan(0.0f)]
 		public float duration = 1;
 
 		private float _previousTimeScale = 1;

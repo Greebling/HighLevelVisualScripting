@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using GraphProcessor;
 using HLVS.Runtime;
 using UnityEngine;
@@ -13,7 +11,7 @@ namespace HLVS.Nodes
 		[Input("Text")]
 		public string textToLog = "";
 
-		[Input("Amount Printed")] [Minimum(1)]
+		[Input("Amount Printed")] [LargerThan(0)]
 		public int amount = 1;
 
 		public override string name => "Log in Console";

@@ -17,7 +17,7 @@ namespace HLVS.Nodes.ActionNodes
 		public GameObject destination;
 
 		[Input("Duration")]
-		[Minimum(0.01f)]
+		[LargerThan(0.0f)]
 		public float duration = 1;
 
 		private float _endTime = 0;
@@ -80,7 +80,7 @@ namespace HLVS.Nodes.ActionNodes
 		public Vector3 angles;
 
 		[Input("Duration")]
-		[Minimum(0.01f)]
+		[LargerThan(0.0f)]
 		public float duration = 1;
 
 		private float   _endTime = 0;
@@ -148,7 +148,7 @@ namespace HLVS.Nodes.ActionNodes
 		public float scaling = 1;
 
 		[Input("Duration")]
-		[Minimum(0.01f)]
+		[LargerThan(0.0f)]
 		public float duration = 1;
 
 		private float   _endTime = 0;
