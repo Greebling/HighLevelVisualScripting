@@ -29,6 +29,8 @@ namespace HLVS.Nodes.ActionNodes
 				Init();
 			}
 
+			_currentTime = Time.time;
+
 			return IsFinished() ? ProcessingStatus.Finished : ProcessingStatus.Unfinished;
 		}
 
