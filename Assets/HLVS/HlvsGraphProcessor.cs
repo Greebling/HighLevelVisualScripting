@@ -306,6 +306,7 @@ namespace HLVS
 				}
 
 				node.OnProcess();
+				((HlvsNode) node).Evaluate();
 
 				foreach (var outputPort in node.outputPorts)
 				{

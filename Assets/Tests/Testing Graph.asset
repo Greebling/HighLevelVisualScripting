@@ -15,7 +15,25 @@ MonoBehaviour:
   serializedNodes: []
   nodes:
   - id: 0
-  edges: []
+  - id: 1
+  - id: 2
+  edges:
+  - GUID: af6ec7ed-2e05-4984-aea3-31822f2aa489
+    owner: {fileID: 11400000}
+    inputNodeGUID: bfe68bf8-1e36-4be3-873d-4219bb81eeb3
+    outputNodeGUID: 0c623d01-8132-4206-ae82-f43e84c484d8
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 1664dfc8-e1e2-4eed-9bfd-ee9391205aa0
+    owner: {fileID: 11400000}
+    inputNodeGUID: bfe68bf8-1e36-4be3-873d-4219bb81eeb3
+    outputNodeGUID: df8f4984-5d37-425f-8a83-ee90c735274c
+    inputFieldName: target
+    outputFieldName: output
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   groups: []
   stackNodes: []
   pinnedElements: []
@@ -23,10 +41,11 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: 20, y: -18, z: 0}
+  position: {x: -72, y: -150.4, z: 0}
   scale: {x: 1, y: 1, z: 1}
   blackboards: []
-  parametersBlueprint: []
+  parametersBlueprint:
+  - id: 3
   references:
     version: 1
     00000000:
@@ -46,3 +65,63 @@ MonoBehaviour:
         nodeLock: 0
         fieldToFormula: []
         varToGuidSerialization: []
+    00000001:
+      type: {class: AddForceNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: bfe68bf8-1e36-4be3-873d-4219bb81eeb3
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 918.8
+          y: 312.4
+          width: 100
+          height: 100
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization: []
+        target: {fileID: 0}
+        force: {x: 0, y: 1000, z: 0}
+    00000002:
+      type: {class: GetRigidbodyNode, ns: HLVS.Nodes.DataNodes, asm: HLVS}
+      data:
+        nodeCustomName: 
+        GUID: df8f4984-5d37-425f-8a83-ee90c735274c
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 535.2
+          y: 446.8
+          width: 274.39996
+          height: 74.39996
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        fieldToFormula: []
+        varToGuidSerialization:
+        - Item1: target
+          Item2: ae84f757-26c2-4b2c-8417-6e8d73a8e764
+        target: {fileID: 0}
+        output: {fileID: 0}
+    00000003:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: ae84f757-26c2-4b2c-8417-6e8d73a8e764
+        name: Self
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 4
+        val: {fileID: 0}
+    00000004:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: ae84f757-26c2-4b2c-8417-6e8d73a8e764
