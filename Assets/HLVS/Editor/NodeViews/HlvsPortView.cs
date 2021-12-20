@@ -99,10 +99,7 @@ namespace HLVS.Editor.NodeViews
 			}
 
 
-			_valueField.RegisterCallback<FocusOutEvent>(_ =>
-			{
-				nodeView.CheckInputtedData();
-			});
+			_valueField.RegisterCallback<FocusOutEvent>(_ => { nodeView.CheckInputtedData(); });
 
 			Add(_valueField);
 			Add(_resetButton);
@@ -111,9 +108,9 @@ namespace HLVS.Editor.NodeViews
 
 		public List<string> TryApplyInputtedValue(HlvsNode targetNode)
 		{
-			if (_mode != PortMode.ShowValue) 
+			if (_mode != PortMode.ShowValue)
 				return null;
-			
+
 			foreach (var formulaPair in targetNode.fieldToFormula)
 			{
 				if (formulaPair.formula.Expression == string.Empty)
@@ -138,7 +135,7 @@ namespace HLVS.Editor.NodeViews
 						var isCorrect = nodeFieldAttribute.CheckField(trueValue);
 						if (!isCorrect)
 						{
-							errors.Add( portName + ": " + nodeFieldAttribute.GetErrorMessage());
+							errors.Add(portName + ": " + nodeFieldAttribute.GetErrorMessage());
 						}
 					}
 
@@ -155,6 +152,7 @@ namespace HLVS.Editor.NodeViews
 					return null;
 				}
 			}
+
 			return null;
 		}
 
@@ -313,6 +311,10 @@ namespace HLVS.Editor.NodeViews
 				else
 				{
 					formulaIndex = node.AddExpressionField(fieldInfo.Name);
+
+					var fieldVal = fieldInfo.GetValue(node).ToString();
+					node.fieldToFormula[formulaIndex].formula.Expression = fieldVal;
+
 					view.serializedGraph.Update(); // mark addition to the list of expression at serialized object
 				}
 
