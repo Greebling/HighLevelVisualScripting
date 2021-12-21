@@ -17,37 +17,19 @@ MonoBehaviour:
   - id: 0
   - id: 1
   - id: 2
-  - id: 3
-  - id: 4
   edges:
-  - GUID: b962d3ed-1aaa-463d-ad2c-5e9ebfe6e43e
+  - GUID: cbaf4798-257e-43d1-aa93-4b9569054f28
     owner: {fileID: 11400000}
-    inputNodeGUID: 208e3d53-ec67-40bf-bcdb-26c823b2ad48
+    inputNodeGUID: 3a76c751-e80e-478a-b6ed-c57d5ac1b0c6
+    outputNodeGUID: 7a199847-b547-4d8c-a932-5a0d8fe11412
+    inputFieldName: previousAction
+    outputFieldName: followingAction
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: a0fd9631-43a6-40d3-a670-a388bca4032b
+    owner: {fileID: 11400000}
+    inputNodeGUID: 7a199847-b547-4d8c-a932-5a0d8fe11412
     outputNodeGUID: 0c623d01-8132-4206-ae82-f43e84c484d8
-    inputFieldName: previousAction
-    outputFieldName: followingAction
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 72e43650-787b-4d03-b650-09b8cc0e9dbe
-    owner: {fileID: 11400000}
-    inputNodeGUID: eaf703de-c189-4e1f-bdf3-ede85fe83a4e
-    outputNodeGUID: 208e3d53-ec67-40bf-bcdb-26c823b2ad48
-    inputFieldName: previousAction
-    outputFieldName: followingAction
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: aa21a364-5c28-483c-9c9f-bd3367b7577c
-    owner: {fileID: 11400000}
-    inputNodeGUID: ae625dae-0ae8-464c-991c-28556bd61e60
-    outputNodeGUID: eaf703de-c189-4e1f-bdf3-ede85fe83a4e
-    inputFieldName: previousAction
-    outputFieldName: followingAction
-    inputPortIdentifier: 
-    outputPortIdentifier: 
-  - GUID: 3fff9252-a20e-422e-934a-f1eac234c3e8
-    owner: {fileID: 11400000}
-    inputNodeGUID: 00bfadd2-082e-41fa-9c53-dd74b80813a9
-    outputNodeGUID: ae625dae-0ae8-464c-991c-28556bd61e60
     inputFieldName: previousAction
     outputFieldName: followingAction
     inputPortIdentifier: 
@@ -59,13 +41,13 @@ MonoBehaviour:
   serializedParameterList: []
   stickyNotes: []
   nodeInspectorReference: {fileID: 0}
-  position: {x: -1697.6, y: 89.6, z: 0}
-  scale: {x: 1.3225, y: 1.3225, z: 1}
+  position: {x: -1383.2, y: -555.2, z: 0}
+  scale: {x: 1.7490063, y: 1.7490063, z: 1}
   blackboards: []
   parametersBlueprint:
+  - id: 3
+  - id: 4
   - id: 5
-  - id: 6
-  - id: 7
   references:
     version: 1
     00000000:
@@ -76,90 +58,66 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 552.60754
-          y: 215.00005
-          width: 89
-          height: 75
+          x: 693.6882
+          y: 533.59985
+          width: 89.599976
+          height: 74.400024
         expanded: 0
         debug: 0
         nodeLock: 0
         fieldToFormula: []
         varToGuidSerialization: []
     00000001:
-      type: {class: ConsoleLogNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
+      type: {class: PlaySoundNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
       data:
         nodeCustomName: 
-        GUID: 208e3d53-ec67-40bf-bcdb-26c823b2ad48
+        GUID: 7a199847-b547-4d8c-a932-5a0d8fe11412
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 908.88477
-          y: 291.569
-          width: 100
-          height: 100
+          x: 1044.7999
+          y: 472
+          width: 258.40002
+          height: 195.20001
         expanded: 0
         debug: 0
         nodeLock: 0
-        fieldToFormula: []
+        fieldToFormula:
+        - fieldName: volume
+          formula:
+            Expression: 1
+        - fieldName: pitch
+          formula:
+            Expression: 1
+        - fieldName: maxDistance
+          formula:
+            Expression: 1
         varToGuidSerialization: []
-        text: A log
-        logType: 0
+        sound: {fileID: 0}
+        mixGroup: {fileID: 0}
+        volume: 1
+        pitch: 1
+        soundOwner: {fileID: 0}
     00000002:
       type: {class: ConsoleLogNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
       data:
         nodeCustomName: 
-        GUID: eaf703de-c189-4e1f-bdf3-ede85fe83a4e
+        GUID: 3a76c751-e80e-478a-b6ed-c57d5ac1b0c6
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 1233.6876
-          y: 292
-          width: 259.19995
+          x: 1323.756
+          y: 472
+          width: 259.20007
           height: 123.20001
         expanded: 0
         debug: 0
         nodeLock: 0
         fieldToFormula: []
         varToGuidSerialization: []
-        text: A log
-        logType: 1
+        text: 
+        logType: 0
     00000003:
-      type: {class: ConsoleLogNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
-      data:
-        nodeCustomName: 
-        GUID: ae625dae-0ae8-464c-991c-28556bd61e60
-        computeOrder: 3
-        position:
-          serializedVersion: 2
-          x: 1532.7047
-          y: 291.2
-          width: 259.19995
-          height: 123.20001
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        fieldToFormula: []
-        varToGuidSerialization: []
-        text: A log
-        logType: 2
-    00000004:
-      type: {class: PauseGameNode, ns: HLVS.Nodes.ActionNodes, asm: HLVS}
-      data:
-        nodeCustomName: 
-        GUID: 00bfadd2-082e-41fa-9c53-dd74b80813a9
-        computeOrder: 4
-        position:
-          serializedVersion: 2
-          x: 1960.3782
-          y: 352.6654
-          width: 100
-          height: 100
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        fieldToFormula: []
-        varToGuidSerialization: []
-    00000005:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: ae84f757-26c2-4b2c-8417-6e8d73a8e764
@@ -171,9 +129,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 8
+          id: 6
         val: {fileID: 0}
-    00000006:
+    00000004:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 0f3fd4c0-9ccc-4e2d-897f-2c599e981abe
@@ -185,9 +143,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 9
+          id: 7
         val: {fileID: 0}
-    00000007:
+    00000005:
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: fad29361-7017-4b48-a7da-b6edf667b05f
@@ -199,21 +157,21 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 10
+          id: 8
         val: {fileID: 0}
-    00000008:
+    00000006:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: ae84f757-26c2-4b2c-8417-6e8d73a8e764
-    00000009:
+    00000007:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: 0f3fd4c0-9ccc-4e2d-897f-2c599e981abe
-    0000000A:
+    00000008:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
