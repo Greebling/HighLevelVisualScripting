@@ -19,23 +19,23 @@ namespace HLVS.Editor.NodeViews
 		                       BaseEdgeConnectorListener edgeConnectorListener, HlvsGraphView owner)
 			: base(direction, fieldInfo, portData, edgeConnectorListener)
 		{
-			_isExpressionPort = HlvsNode.CanBeExpression(fieldInfo.FieldType);
+			isExpressionPort = HlvsNode.CanBeExpression(fieldInfo.FieldType);
 			_mode = PortMode.ShowValue;
-			_serializedGraph = owner.serializedGraph;
+			serializedGraph = owner.serializedGraph;
 
 			OnConnected += (view, edge) =>
 			{
+				_isConnected = true;
+
 				if (_valueField != null)
-					_valueField.visible = false;
-				if (_resetButton != null)
-					_resetButton.visible = false;
+					_valueField.SetEnabled(false);
 			};
 			OnDisconnected += (view, edge) =>
 			{
+				_isConnected = false;
+
 				if (_valueField != null)
-					_valueField.visible = true;
-				if (_resetButton != null)
-					_resetButton.visible = true;
+					_valueField.SetEnabled(true);
 			};
 		}
 
@@ -51,10 +51,20 @@ namespace HLVS.Editor.NodeViews
 			pv.AddManipulator(pv.m_EdgeConnector);
 			pv.Init(graph, owner, nodeView, targetNode);
 
+			if (pv.isExpressionPort)
+			{
+				pv.OnConnected += (view, edge) =>
+				{
+					if (!targetNode.HasExpressionField(fieldInfo.Name))
+						targetNode.AddExpressionField(fieldInfo.Name);
+				};
+				pv.OnDisconnected += (view, edge) => { targetNode.RemoveExpressionField(fieldInfo.Name); };
+			}
+
 			return pv;
 		}
 
-		public void Init(HlvsGraph graph, HlvsGraphView view, HlvsNodeView nodeView, HlvsNode targetNode)
+		public virtual void Init(HlvsGraph graph, HlvsGraphView view, HlvsNodeView nodeView, HlvsNode targetNode)
 		{
 			if (direction == Direction.Output || fieldInfo.FieldType == typeof(ExecutionLink))
 				return;
@@ -72,7 +82,7 @@ namespace HLVS.Editor.NodeViews
 				if (paramIndex != -1)
 				{
 					_mode = PortMode.ReferenceGraphVariable;
-					_graphParamProp = _serializedGraph.FindProperty("parametersBlueprint").GetArrayElementAtIndex(paramIndex).FindPropertyRelative("name");
+					graphParamProp = serializedGraph.FindProperty("parametersBlueprint").GetArrayElementAtIndex(paramIndex).FindPropertyRelative("name");
 					ShowGraphParamField();
 				}
 				else
@@ -96,8 +106,8 @@ namespace HLVS.Editor.NodeViews
 							var serializedBlackboard = new SerializedObject(blackboard);
 							int blackboardIndex = i;
 
-							_blackboardProp = serializedBlackboard.FindProperty("fields").GetArrayElementAtIndex(blackboardIndex)
-							                                      .FindPropertyRelative("name");
+							blackboardProp = serializedBlackboard.FindProperty("fields").GetArrayElementAtIndex(blackboardIndex)
+							                                     .FindPropertyRelative("name");
 							goto ShowBlackboardField;
 						}
 					}
@@ -111,11 +121,15 @@ namespace HLVS.Editor.NodeViews
 				ShowValueField();
 			}
 
-
 			_valueField.RegisterCallback<FocusOutEvent>(_ => { nodeView.CheckInputtedData(); });
 
+			AddVisualElements();
+		}
+
+		protected virtual void AddVisualElements()
+		{
 			Add(_valueField);
-			Add(_resetButton);
+			Add(resetButton);
 			Add(errorBox);
 		}
 
@@ -171,7 +185,7 @@ namespace HLVS.Editor.NodeViews
 
 		private void CreateValueField()
 		{
-			_valueField = new PropertyField(_valueProp)
+			_valueField = new PropertyField(valueProp)
 			{
 				style =
 				{
@@ -185,26 +199,26 @@ namespace HLVS.Editor.NodeViews
 			_valueField.AddToClassList("variable-selectable-field");
 		}
 
-		private void ShowValueField()
+		public virtual void ShowValueField()
 		{
-			_valueField.BindProperty(_valueProp);
-			_valueField.Bind(_serializedGraph);
+			_valueField.BindProperty(isExpressionPort & !_isConnected ? expressionProp : valueProp);
+			_valueField.Bind(serializedGraph);
 
 			_valueField.SetEnabled(true);
 		}
 
 		private void ShowBlackboardField()
 		{
-			_valueField.BindProperty(_blackboardProp);
-			_valueField.Bind(_serializedGraph);
+			_valueField.BindProperty(blackboardProp);
+			_valueField.Bind(serializedGraph);
 
 			_valueField.SetEnabled(false);
 		}
 
 		private void ShowGraphParamField()
 		{
-			_valueField.BindProperty(_graphParamProp);
-			_valueField.Bind(_serializedGraph);
+			_valueField.BindProperty(graphParamProp);
+			_valueField.Bind(serializedGraph);
 
 			_valueField.SetEnabled(false);
 		}
@@ -214,8 +228,7 @@ namespace HLVS.Editor.NodeViews
 			if (_mode == mode)
 				return;
 
-			// remove current
-			_valueField.Unbind();
+			OnBeforeSwitchDisplayMode();
 
 			// show next mode field
 			switch (mode)
@@ -234,9 +247,14 @@ namespace HLVS.Editor.NodeViews
 			_mode = mode;
 		}
 
+		public virtual void OnBeforeSwitchDisplayMode()
+		{
+			//_valueField.Unbind();
+		}
+
 		private void InitResetButton(HlvsGraph graph, HlvsGraphView view, HlvsNode node)
 		{
-			_resetButton = new Button(() =>
+			resetButton = new Button(() =>
 			{
 				var menu = new GenericMenu();
 
@@ -269,9 +287,9 @@ namespace HLVS.Editor.NodeViews
 							OnReferenceVariable(node, fieldInfo.Name, blackboardParam.guid);
 
 
-							_blackboardProp = serializedBlackboard.FindProperty("fields")
-							                                      .GetArrayElementAtIndex(blackboardIndex)
-							                                      .FindPropertyRelative("name");
+							blackboardProp = serializedBlackboard.FindProperty("fields")
+							                                     .GetArrayElementAtIndex(blackboardIndex)
+							                                     .FindPropertyRelative("name");
 							SetDisplayMode(PortMode.ReferenceBlackboardVariable);
 						});
 						view.serializedGraph.Update();
@@ -292,8 +310,8 @@ namespace HLVS.Editor.NodeViews
 					{
 						OnReferenceVariable(node, fieldInfo.Name, parameter.guid);
 
-						_graphParamProp = _serializedGraph.FindProperty("parametersBlueprint").GetArrayElementAtIndex(index)
-						                                  .FindPropertyRelative("name");
+						graphParamProp = serializedGraph.FindProperty("parametersBlueprint").GetArrayElementAtIndex(index)
+						                                .FindPropertyRelative("name");
 
 						SetDisplayMode(PortMode.ReferenceGraphVariable);
 					});
@@ -306,17 +324,17 @@ namespace HLVS.Editor.NodeViews
 					menu.ShowAsContext();
 				}
 			});
-			_resetButton.AddToClassList("variable-selector");
+			resetButton.AddToClassList("variable-selector");
 			var imageHolder = new VisualElement();
 			imageHolder.AddToClassList("selector-image");
-			_resetButton.Add(imageHolder);
+			resetButton.Add(imageHolder);
 		}
 
 		private void InitValueProperty(HlvsGraph graph, HlvsGraphView view, HlvsNode node)
 		{
 			var nodeIndex = graph.nodeToIndex[node];
-			_valueProp = view.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex);
-			if (_isExpressionPort)
+			valueProp = view.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex);
+			if (isExpressionPort)
 			{
 				int formulaIndex;
 				if (node.HasExpressionField(fieldInfo.Name))
@@ -331,14 +349,12 @@ namespace HLVS.Editor.NodeViews
 					view.serializedGraph.Update(); // mark addition to the list of expression at serialized object
 				}
 
-				_valueProp = _valueProp
-				             .FindPropertyRelative("fieldToFormula").GetArrayElementAtIndex(formulaIndex)
-				             .FindPropertyRelative("formula").FindPropertyRelative("Expression");
+				expressionProp = valueProp
+				                 .FindPropertyRelative("fieldToFormula").GetArrayElementAtIndex(formulaIndex)
+				                 .FindPropertyRelative("formula").FindPropertyRelative("Expression");
 			}
-			else
-			{
-				_valueProp = _valueProp.FindPropertyRelative(fieldInfo.Name);
-			}
+
+			valueProp = valueProp.FindPropertyRelative(fieldInfo.Name);
 		}
 
 
@@ -376,16 +392,19 @@ namespace HLVS.Editor.NodeViews
 		/// <summary>
 		/// Whether this port has an expression as value
 		/// </summary>
-		private readonly bool _isExpressionPort;
+		public readonly bool isExpressionPort;
+
+		private bool _isConnected = false;
 
 		private PropertyField _valueField;
 
-		private Button _resetButton;
+		protected Button resetButton;
 
-		private readonly SerializedObject   _serializedGraph;
-		private          SerializedProperty _valueProp;
-		private          SerializedProperty _blackboardProp;
-		private          SerializedProperty _graphParamProp;
+		protected readonly SerializedObject   serializedGraph;
+		protected          SerializedProperty valueProp;
+		protected          SerializedProperty expressionProp;
+		protected          SerializedProperty blackboardProp;
+		protected          SerializedProperty graphParamProp;
 
 		public readonly VisualElement errorBox = new VisualElement();
 	}
