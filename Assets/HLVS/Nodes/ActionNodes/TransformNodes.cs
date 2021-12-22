@@ -196,6 +196,64 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
+	[Serializable, NodeMenuItem("Transform/Move To Direction")]
+	public class MoveDirectionNode : HlvsActionNode
+	{
+		public override string name => "Move To Direction";
+
+		[Input("Object")]
+		public GameObject target;
+
+		[Input("Direction")]
+		public Vector3 direction;
+
+		[Input("Orientation")]
+		public CoordSystem orientation;
+
+		public enum CoordSystem
+		{
+			Global, Local,
+		}
+		
+		public override ProcessingStatus Evaluate()
+		{
+			if (!target)
+			{
+				Debug.LogError("No gameobject to move was given");
+				return ProcessingStatus.Finished;
+			}
+
+			var rb = target.GetComponent<Rigidbody>();
+			if (rb)
+			{
+				switch (orientation)
+				{
+					case CoordSystem.Global:
+						rb.MovePosition(target.transform.position + Time.deltaTime * direction);
+						break;
+					case CoordSystem.Local:
+						var movement = target.transform.rotation * direction;
+						rb.MovePosition(target.transform.position + Time.deltaTime * movement);
+						break;
+				}
+			} else
+			{
+				switch (orientation)
+				{
+					case CoordSystem.Global:
+						target.transform.position += Time.deltaTime * direction;
+						break;
+					case CoordSystem.Local:
+						var movement = target.transform.rotation * direction;
+						target.transform.position += Time.deltaTime * movement;
+						break;
+				}
+			}
+			
+			return ProcessingStatus.Finished;
+		}
+	}
+
 	[Serializable, NodeMenuItem("Transform/Parent To")]
 	public class ParentNode : HlvsActionNode
 	{
@@ -206,7 +264,6 @@ namespace HLVS.Nodes.ActionNodes
 
 		[Input("Child")]
 		public GameObject child;
-
 
 		public override ProcessingStatus Evaluate()
 		{
