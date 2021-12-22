@@ -256,10 +256,8 @@ namespace HLVS
 					_currentPausedNodes.Remove(currNode);
 				}
 
-				GetNodeDataDependencies(currNode);
 
-				currNode.OnProcess();
-				var result = currNode.Evaluate();
+				var result = EvaluateNodeAndDependencies(currNode);
 
 				if (result == ProcessingStatus.Unfinished)
 				{
@@ -290,7 +288,7 @@ namespace HLVS
 			}
 		}
 
-		private static void GetNodeDataDependencies(HlvsNode currNode)
+		private static ProcessingStatus EvaluateNodeAndDependencies(HlvsNode currNode)
 		{
 			// get own dependencies
 			foreach (var node in currNode.GetInputNodes())
@@ -299,20 +297,12 @@ namespace HLVS
 				if (node is HlvsActionNode || node is ExecutionStarterNode)
 					continue;
 
-				// fetch own data dependencies
-				foreach (var nodeInputPort in node.GetInputNodes())
-				{
-					GetNodeDataDependencies(nodeInputPort as HlvsNode);
-				}
-
-				node.OnProcess();
-				((HlvsNode) node).Evaluate();
-
-				foreach (var outputPort in node.outputPorts)
-				{
-					outputPort.PushData();
-				}
+				EvaluateNodeAndDependencies((HlvsNode)node);
 			}
+
+			var res = currNode.DoEvaluation();
+
+			return res;
 		}
 
 		private static HlvsNode[] GetNextNodes(HlvsFlowNode actionNode)

@@ -32,9 +32,10 @@ namespace HLVS.Nodes
 		public virtual void Reset()
 		{
 		}
-		
-		[SerializeField, HideInInspector] internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
-		
+
+		[SerializeField, HideInInspector]
+		internal List<FormulaPair> fieldToFormula = new List<FormulaPair>();
+
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
 		/// </summary>
@@ -43,7 +44,8 @@ namespace HLVS.Nodes
 		/// <summary>
 		/// Used for serialization of fieldToParamGuid
 		/// </summary>
-		[SerializeField] private List<StringStringPair> varToGuidSerialization;
+		[SerializeField]
+		private List<StringStringPair> varToGuidSerialization;
 
 		internal BaseGraph Graph
 		{
@@ -51,10 +53,19 @@ namespace HLVS.Nodes
 			set => graph = value;
 		}
 
-		protected sealed override void Process()
+		public ProcessingStatus DoEvaluation()
 		{
+			inputPorts.PullDatas();
+
 			UpdateParameterValues();
 			UpdateExpressionsValue();
+
+			var val = Evaluate();
+			
+			InvokeOnProcessed();
+			outputPorts.PushDatas();
+			
+			return val;
 		}
 
 		/// <summary>
@@ -72,7 +83,7 @@ namespace HLVS.Nodes
 				try
 				{
 					var template = formulaPair.formula.Template();
-					formulaPair.function = template.Resolve((HlvsGraph) graph);
+					formulaPair.function = template.Resolve((HlvsGraph)graph);
 				}
 				catch (Exception e)
 				{
@@ -80,7 +91,7 @@ namespace HLVS.Nodes
 				}
 			}
 		}
-		
+
 		internal void UpdateExpressionsValue()
 		{
 			var graph = this.graph as HlvsGraph;
@@ -92,7 +103,7 @@ namespace HLVS.Nodes
 				try
 				{
 					var targetField = GetType().GetField(formulaPair.fieldName);
-					
+
 					var trueValue = formulaPair.function(graph);
 
 					var value = Convert.ChangeType(trueValue, targetField.FieldType);
@@ -100,7 +111,7 @@ namespace HLVS.Nodes
 				}
 				catch (Exception e)
 				{
-					Debug.Log($"Formula error in {formulaPair.fieldName}: {e.Message}");
+					Debug.Log($"Formula error in field {formulaPair.fieldName}: {e.Message}");
 				}
 			}
 		}
@@ -135,6 +146,11 @@ namespace HLVS.Nodes
 			var pair = new FormulaPair { formula = addedFormula, fieldName = fieldName };
 			fieldToFormula.Add(pair);
 			return fieldToFormula.Count - 1;
+		}
+
+		public void RemoveExpressionField(string fieldName)
+		{
+			fieldToFormula.RemoveAll(pair => pair.fieldName == fieldName);
 		}
 
 		public int IndexOfExpression(string fieldName)
@@ -212,7 +228,9 @@ namespace HLVS.Nodes
 		public class FormulaPair
 		{
 			public string fieldName;
-			[SerializeField] public RawFormula formula;
+
+			[SerializeField]
+			public RawFormula formula;
 
 			[NonSerialized]
 			public Func<HlvsGraph, double> function;
@@ -244,14 +262,14 @@ namespace HLVS.Nodes
 					yield return inputNode;
 			}
 		}
-		
+
 		public List<BaseNode> GetAllPreviousNodes()
 		{
 			// TODO: This method is safe, but kinda slow. Is there a more optimal solution?
 			HashSet<BaseNode> visitedNodes = new HashSet<BaseNode>();
-			
+
 			List<BaseNode> previousNodes = new List<BaseNode>();
-			List<BaseNode> frontier = new List<BaseNode>() {this};
+			List<BaseNode> frontier = new List<BaseNode>() { this };
 			List<BaseNode> nextFrontier = new List<BaseNode>();
 
 			while (frontier.Count != 0)
@@ -269,8 +287,9 @@ namespace HLVS.Nodes
 						}
 					}
 				}
+
 				previousNodes.AddRange(frontier);
-		        
+
 				(frontier, nextFrontier) = (nextFrontier, frontier);
 			}
 
@@ -285,9 +304,9 @@ namespace HLVS.Nodes
 		{
 			foreach (var port in outputPorts)
 			{
-				if(port.fieldInfo.FieldType == typeof(ExecutionLink))
+				if (port.fieldInfo.FieldType == typeof(ExecutionLink))
 					continue;
-				
+
 				foreach (var edge in port.GetEdges())
 				{
 					yield return edge.inputNode;
