@@ -7,30 +7,30 @@ namespace HLVS.Nodes.DataNodes
 	[Serializable, NodeMenuItem("Input/Get Joystick Input")]
 	public class GetJoystickInputNode : HlvsDataNode
 	{
-		[Input("Axis")] public string axisName;
-		[Output("Value")] public float output;
-
-		public override string name => "Get Joystick Input";
+		public override          string name => "Get Joystick Input";
+		
+		[Input("Axis")]   public string axisName;
+		[Output("Value")] public float  output;
 
 		public override ProcessingStatus Evaluate()
 		{
 			output = Input.GetAxisRaw(axisName);
-			return base.Evaluate();
+			return ProcessingStatus.Finished;
 		}
 	}
 	
 	[Serializable, NodeMenuItem("Input/Get Button Input")]
 	public class GetButtonInputNode : HlvsDataNode
 	{
+		public override          string name => "Get Button Input";
+		
 		[Input("Button")] public string buttonName;
-		[Output("Value")] public bool output;
-
-		public override string name => "Get Button Input";
+		[Output("Value")] public bool   output;
 
 		public override ProcessingStatus Evaluate()
 		{
 			output = Input.GetButton(buttonName);
-			return base.Evaluate();
+			return ProcessingStatus.Finished;
 		}
 	}
 }
