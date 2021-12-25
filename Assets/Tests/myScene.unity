@@ -623,6 +623,7 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: 7d5ce6ecdc493c84c81bba7d6e6c5ae0, type: 2}
   graphParameters:
   - id: 0
+  - id: 1
   references:
     version: 1
     00000000:
@@ -637,14 +638,34 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          id: 1
+          id: 2
         val: {fileID: 1608112222}
     00000001:
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 3c74028c-e45b-446a-87ae-304603d5c232
+        name: My Game Object
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          id: 3
+        val: {fileID: 656151980}
+    00000002:
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: 04a22bb3-cb63-45cd-a8a8-1e1094b0c192
+    00000003:
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 3c74028c-e45b-446a-87ae-304603d5c232
 --- !u!65 &1608112224
 BoxCollider:
   m_ObjectHideFlags: 0

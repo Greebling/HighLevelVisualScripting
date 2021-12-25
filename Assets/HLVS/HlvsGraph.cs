@@ -10,9 +10,7 @@ namespace HLVS
 {
 	public class HlvsGraph : BaseGraph, IVariableProvider<HlvsGraph>
 	{
-		private HlvsGraphProcessor<OnStartNode> _startNodeProcessor;
-		private HlvsGraphProcessor<OnUpdateNode> _updateNodeProcessor;
-		private HlvsGraphProcessor<OnTriggerEnteredNode> _triggerNodeProcessor;
+		private HlvsGraphProcessor _processor;
 
 		public List<HlvsBlackboard> blackboards;
 
@@ -87,36 +85,32 @@ namespace HLVS
 				baseNode.computeOrder = -1;
 			}
 
-			if (_startNodeProcessor == null)
+			if (_processor == null)
 			{
-				_startNodeProcessor = new HlvsGraphProcessor<OnStartNode>(this);
-				_updateNodeProcessor = new HlvsGraphProcessor<OnUpdateNode>(this);
-				_triggerNodeProcessor = new HlvsGraphProcessor<OnTriggerEnteredNode>(this);
+				_processor = new HlvsGraphProcessor(this);
+				_processor.RegisterType(typeof(OnUpdateNode));
+				_processor.RegisterType(typeof(OnStartNode));
+				_processor.RegisterType(typeof(OnTriggerEnteredNode));
+				_processor.RegisterType(typeof(OnCollisionNode));
 			}
 			
-			_startNodeProcessor.UpdateComputeOrder();
-			_updateNodeProcessor.UpdateComputeOrder();
-			_triggerNodeProcessor.UpdateComputeOrder();
+			_processor.UpdateComputeOrder();
 		}
 
 		public void RunStartNodes()
 		{
-			_startNodeProcessor.Run();
+			_processor.Run(typeof(OnStartNode));
 		}
 
 		public void RunUpdateNodes()
 		{
-			if (_startNodeProcessor.status == ProcessingStatus.Unfinished)
-			{
-				_startNodeProcessor.RunPausedNodes();
-			}
-			
-			_updateNodeProcessor.Run();
+			_processor.RunAllPausedNodes();
+			_processor.Run(typeof(OnUpdateNode));
 		}
 
 		public void RunOnTriggerEnteredNodes()
 		{
-			_triggerNodeProcessor.Run();
+			_processor.Run(typeof(OnTriggerEnteredNode));
 		}
 
 		public void AddBlackboard(HlvsBlackboard board)

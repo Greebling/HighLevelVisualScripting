@@ -9,9 +9,13 @@ using UnityEngine;
 
 namespace HLVS
 {
-	public class HlvsGraphProcessor<TExecutionStartNode> where TExecutionStartNode : HlvsNode
+	public class HlvsGraphProcessor
 	{
-		List<HlvsNode> _startNodes;
+		List<ExecutionStarterNode> _startNodes;
+
+		private Dictionary<Type, (HashSet<HlvsNode> currentPausedNodes, HashSet<HlvsNode> nextPausedNodes)> _pausedNodes =
+			new Dictionary<Type, (HashSet<HlvsNode> currentPausedNodes, HashSet<HlvsNode> nextPausedNodes)>();
+
 
 		private readonly HlvsGraph _graph;
 
@@ -22,11 +26,68 @@ namespace HLVS
 			_graph = graph;
 		}
 
+		public void RegisterType(Type starterType)
+		{
+			if (!_pausedNodes.ContainsKey(starterType))
+			{
+				_pausedNodes.Add(starterType, (new HashSet<HlvsNode>(), new HashSet<HlvsNode>()));
+			}
+		}
+		
+		public void Run(Type starterType)
+		{
+			if (_startNodes == null)
+				UpdateComputeOrder();
+
+			foreach (var startNode in _startNodes)
+			{
+				ProcessGraph(startNode, starterType);
+			}
+
+			RunPreviouslyPausedNodes(starterType);
+		}
+
+		private void RunPreviouslyPausedNodes(Type starterType)
+		{
+			var (currentPausedNodes, nextPausedNodes) = _pausedNodes[starterType];
+			var pausedNodes = currentPausedNodes.ToArray();
+			currentPausedNodes.Clear();
+			foreach (HlvsNode node in pausedNodes)
+			{
+				ProcessGraph(node, starterType);
+			}
+
+			(currentPausedNodes, nextPausedNodes) = (nextPausedNodes, currentPausedNodes);
+
+			status = currentPausedNodes.Count == 0 ? ProcessingStatus.Finished : ProcessingStatus.Unfinished;
+		}
+
+		public void RunAllPausedNodes()
+		{
+			foreach (KeyValuePair<Type,(HashSet<HlvsNode> currentPausedNodes, HashSet<HlvsNode> nextPausedNodes)> keyValuePair in _pausedNodes)
+			{
+				var (currentPausedNodes, nextPausedNodes) = keyValuePair.Value;
+				var pausedNodes = currentPausedNodes.ToArray();
+				currentPausedNodes.Clear();
+				foreach (HlvsNode node in pausedNodes)
+				{
+					ProcessGraph(node, keyValuePair.Key);
+				}
+
+				(currentPausedNodes, nextPausedNodes) = (nextPausedNodes, currentPausedNodes);
+
+				status = currentPausedNodes.Count == 0 ? ProcessingStatus.Finished : ProcessingStatus.Unfinished;
+			}
+		}
+
 		public void UpdateComputeOrder()
 		{
-			_currentPausedNodes.Clear();
+			foreach (KeyValuePair<Type,(HashSet<HlvsNode> currentPausedNodes, HashSet<HlvsNode> nextPausedNodes)> pair in _pausedNodes)
+			{
+				pair.Value.currentPausedNodes.Clear();
+			}
 
-			_startNodes = _graph.nodes.Where(node => node is TExecutionStartNode).Cast<HlvsNode>().ToList();
+			_startNodes = _graph.nodes.Where(node => node is ExecutionStarterNode).Cast<ExecutionStarterNode>().ToList();
 			if (_startNodes.Count == 0)
 				return;
 
@@ -180,80 +241,25 @@ namespace HLVS
 			}
 		}
 
-		private static (HashSet<HlvsNode> branchBegins, HashSet<HlvsNode> branchEnds) FindBranches(List<HlvsNode> nodes)
-		{
-			HashSet<HlvsNode> branchBegins = new HashSet<HlvsNode>();
-			HashSet<HlvsNode> branchEnds = new HashSet<HlvsNode>();
-
-			foreach (var node in nodes)
-			{
-				foreach (var inputPort in node.inputPorts)
-				{
-					if (inputPort.fieldInfo.FieldType == typeof(ExecutionLink) && inputPort.GetEdges().Count > 1)
-					{
-						branchEnds.Add(node);
-					}
-				}
-
-				foreach (var outputPort in node.outputPorts)
-				{
-					if (outputPort.fieldInfo.FieldType == typeof(ExecutionLink) && outputPort.GetEdges().Count > 1)
-					{
-						branchBegins.Add(node);
-					}
-				}
-			}
-
-			return (branchBegins, branchEnds);
-		}
-
-
-		public void Run()
-		{
-			if (_startNodes == null)
-				UpdateComputeOrder();
-
-			foreach (var startNode in _startNodes)
-			{
-				ProcessGraph(startNode);
-			}
-
-			RunPausedNodes();
-		}
-
-		public void RunPausedNodes()
-		{
-			var pausedNodes = _currentPausedNodes.ToArray();
-			_currentPausedNodes.Clear();
-			foreach (HlvsNode node in pausedNodes)
-			{
-				ProcessGraph(node);
-			}
-
-			(_currentPausedNodes, _nextPausedNodes) = (_nextPausedNodes, _currentPausedNodes);
-
-			status = _currentPausedNodes.Count == 0 ? ProcessingStatus.Finished : ProcessingStatus.Unfinished;
-		}
-
-		private HashSet<HlvsNode> _currentPausedNodes = new HashSet<HlvsNode>();
-		private HashSet<HlvsNode> _nextPausedNodes    = new HashSet<HlvsNode>();
-
 		/// <summary>
 		/// Applies a given function to all nodes, beginning AFTER startNode
 		/// </summary>
 		/// <param name="beginNode"></param>
-		private void ProcessGraph(HlvsNode beginNode)
+		/// <param name="starterType"></param>
+		private void ProcessGraph(HlvsNode beginNode, Type starterType)
 		{
 			Queue<HlvsNode> currNodes = new Queue<HlvsNode>();
 			currNodes.Enqueue(beginNode);
 
+			var (currentPausedNodes, nextPausedNodes) = _pausedNodes[starterType];
+
 			while (currNodes.Count > 0)
 			{
 				var currNode = currNodes.Dequeue();
-				if (_currentPausedNodes.Contains(currNode))
+				if (currentPausedNodes.Contains(currNode))
 				{
 					currNode.Reset();
-					_currentPausedNodes.Remove(currNode);
+					currentPausedNodes.Remove(currNode);
 				}
 
 
@@ -261,7 +267,7 @@ namespace HLVS
 
 				if (result == ProcessingStatus.Unfinished)
 				{
-					_nextPausedNodes.Add(currNode);
+					nextPausedNodes.Add(currNode);
 				}
 				else
 				{
@@ -332,22 +338,6 @@ namespace HLVS
 			           .Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
 			           .Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null)
 			           .Select(edge => edge.inputNode as HlvsNode);
-		}
-
-		private TExecutionStartNode GetStarterNodeOf(HlvsNode node)
-		{
-			while (!(node is TExecutionStartNode))
-			{
-				Debug.Assert(node.GetInputNodes().Count(baseNode => true) != 0);
-				node = GetPreviousNode(node);
-			}
-
-			return (TExecutionStartNode)node;
-		}
-
-		public static HlvsNode GetPreviousNode(HlvsNode node)
-		{
-			return node.GetInputNodes().Last() as HlvsNode;
 		}
 	}
 }
