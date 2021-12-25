@@ -113,8 +113,10 @@ namespace HLVS.Editor
 					if (_graph == _behaviour.graph)
 						return;
 
+
 					Deinitialize();
 					Reinitialize();
+					serializedObject.Update();
 
 					_behaviour.CreateFittingParamList();
 					CreateInspector();
@@ -186,6 +188,7 @@ namespace HLVS.Editor
 			}
 
 			List<int> prevCategoriesHash = new List<int>();
+			serializedObject.Update();
 			foreach (var graphParameter in displayedParams)
 			{
 				var nameAndCategories = graphParameter.name.Split('/');
