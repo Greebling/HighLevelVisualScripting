@@ -254,6 +254,40 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
+	[Serializable, NodeMenuItem("Transform/Rotate To Direction")]
+	public class RotateToDirectionNode : HlvsActionNode
+	{
+		public override string name => "Rotate To Direction";
+
+		[Input("Object")]
+		public GameObject target;
+
+		[Input("Direction")]
+		public Vector3 direction;
+
+		[Input("Max Turnangle")] [LargerOrEqual(0)]
+		public float smoothAmount = 120.0f;
+
+		
+		public override ProcessingStatus Evaluate()
+		{
+			if (!target)
+			{
+				Debug.LogError("No gameobject to move was given");
+				return ProcessingStatus.Finished;
+			}
+
+			if(direction.sqrMagnitude != 0)
+			{
+				var rot = Quaternion.LookRotation(direction);
+				rot = Quaternion.RotateTowards(target.transform.rotation, rot, smoothAmount * Time.deltaTime);
+				target.transform.rotation = rot;
+			}
+
+			return ProcessingStatus.Finished;
+		}
+	}
+
 	[Serializable, NodeMenuItem("Transform/Parent To")]
 	public class ParentNode : HlvsActionNode
 	{
