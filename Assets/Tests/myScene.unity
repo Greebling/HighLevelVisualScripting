@@ -397,7 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e4e119bba4a4aae91190d49b253a3e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneName: Zone01
+  zoneName: My Zone
 --- !u!114 &656151986
 MonoBehaviour:
   m_ObjectHideFlags: 0

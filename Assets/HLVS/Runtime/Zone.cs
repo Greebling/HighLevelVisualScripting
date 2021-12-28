@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace HLVS.Runtime
@@ -7,7 +6,7 @@ namespace HLVS.Runtime
 	[RequireComponent(typeof(Collider))] [AddComponentMenu("Physics/Zone")][ExecuteInEditMode]
 	public class Zone : MonoBehaviour
 	{
-		public string zoneName;
+		public string zoneName = "";
 
 #if UNITY_EDITOR
 		private void Awake()
