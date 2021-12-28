@@ -46,6 +46,14 @@ namespace HLVS
 
 			RunPreviouslyPausedNodes(starterType);
 		}
+		
+		public void RunFromNodes(IEnumerable<HlvsNode> nodes, Type starterType)
+		{
+			foreach (var startNode in nodes)
+			{
+				ProcessGraph(startNode, starterType);
+			}
+		}
 
 		private void RunPreviouslyPausedNodes(Type starterType)
 		{
@@ -251,7 +259,7 @@ namespace HLVS
 			Queue<HlvsNode> currNodes = new Queue<HlvsNode>();
 			currNodes.Enqueue(beginNode);
 
-			var (currentPausedNodes, nextPausedNodes) = _pausedNodes[starterType];
+			var (currentPausedNodes, nextPausedNodes) = _pausedNodes.ContainsKey(starterType)? _pausedNodes[starterType] : (new HashSet<HlvsNode>(), new HashSet<HlvsNode>());
 
 			while (currNodes.Count > 0)
 			{

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
 using HLVS.Nodes;
+using HLVS.Runtime;
 using IkTools.FormulaParser;
+using UnityEditor;
 using UnityEngine;
 
 namespace HLVS
 {
-	public class HlvsGraph : BaseGraph, IVariableProvider<HlvsGraph>
+	public class HlvsGraph : BaseGraph, IVariableProvider<HlvsGraph>, INodeEventListener
 	{
 		private HlvsGraphProcessor _processor;
 
@@ -30,7 +32,9 @@ namespace HLVS
 		private readonly Dictionary<string, ExposedParameter> _upperCaseNameToVar = new Dictionary<string, ExposedParameter>();
 		private readonly Dictionary<string, ExposedParameter> _guidToVar = new Dictionary<string, ExposedParameter>();
 
-		public readonly Dictionary<HlvsNode, int> nodeToIndex = new Dictionary<HlvsNode, int>();
+		public readonly Dictionary<BaseNode, int> nodeToIndex = new Dictionary<BaseNode, int>();
+
+		private Dictionary<string, List<OnEventNode>> _eventNodes = new Dictionary<string, List<OnEventNode>>();
 
 		protected override void OnEnable()
 		{
@@ -41,7 +45,7 @@ namespace HLVS
 			{
 				if (changes.addedNode != null)
 				{
-					nodeToIndex.Add((HlvsNode)changes.addedNode, nodes.Count - 1);
+					nodeToIndex.Add(changes.addedNode, nodes.Count - 1);
 				}
 			};
 			
@@ -55,6 +59,7 @@ namespace HLVS
 			};
 			
 			BuildVariableDict();
+			ScanEventNodes();
 			onParameterListChanged += BuildVariableDict;
 			onBlackboardListChanged += BuildVariableDict;
 			base.OnEnable();
@@ -63,6 +68,22 @@ namespace HLVS
 			{
 				var node = (HlvsNode)baseNode;
 				node.Graph = this;
+			}
+
+			onGraphChanges += changes =>
+			{
+				if (changes.addedNode != null || changes.removedNode != null)
+				{
+					ScanEventNodes();
+				}
+			};
+		}
+
+		private void OnDestroy()
+		{
+			foreach (string listenedEvent in _listenedEvents)
+			{
+				EventManager.instance.RemoveListener(this, listenedEvent);
 			}
 		}
 
@@ -95,6 +116,7 @@ namespace HLVS
 			}
 			
 			_processor.UpdateComputeOrder();
+			ScanEventNodes();
 		}
 
 		public void RunStartNodes()
@@ -237,6 +259,37 @@ namespace HLVS
 				case "THIS":
 					return activeGameObject;
 			}
+		}
+
+		private HashSet<string> _listenedEvents = new HashSet<string>();
+
+		private void ScanEventNodes()
+		{
+			_listenedEvents.Clear();
+			foreach (OnEventNode node in nodes.Where(node => node is OnEventNode).Cast<OnEventNode>().Where(node => node.eventName != string.Empty))
+			{
+				if (!_listenedEvents.Contains(node.eventName))
+				{
+					EventManager.instance.RegisterListener(this, node.eventName);
+					_listenedEvents.Add(node.eventName);
+				}
+
+				List<OnEventNode> eventList;
+				if (_eventNodes.TryGetValue(node.eventName, out eventList))
+				{
+					eventList.Add(node);
+				}
+				else
+				{
+					eventList = new List<OnEventNode>() { node };
+					_eventNodes.Add(node.eventName, eventList);
+				}
+			}
+		}
+
+		public void OnEvent(HlvsEvent e)
+		{
+			_processor.RunFromNodes(_eventNodes[e.name].Where(node => true), typeof(OnEventNode));
 		}
 	}
 }
