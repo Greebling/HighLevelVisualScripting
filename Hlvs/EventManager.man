@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 61
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f710138dc224514aa64b0c29c1d31eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _savedEvents:
+  - name: bla
+    parameters:
+    - rid: 7108747941380882432
+    - rid: 7108747941380882433
+  - name: other
+    parameters:
+    - rid: 7108747941380882434
+  - name: Event02
+    parameters: []
+  - name: Event03
+    parameters: []
+  - name: Event04
+    parameters: []
+  - name: Event05
+    parameters: []
+  - name: Event06
+    parameters: []
+  - name: Event01
+    parameters: []
+  _savedNames:
+  - bla
+  - other
+  - Event02
+  - Event03
+  - Event04
+  - Event05
+  - Event06
+  - Event01
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
+    - rid: 7108747941380882432
+      type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: bool
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: 1
+    - rid: 7108747941380882433
+      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: float
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: 2.5
+    - rid: 7108747941380882434
+      type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: 
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: 0
