@@ -149,11 +149,6 @@ namespace HLVS.Editor.Views
 						: DropdownMenuAction.Status.Disabled);
 			}
 
-			evt.menu.AppendAction("Event 01", action =>
-			{
-				EventManager.instance.RaiseEvent(new HlvsEvent() { name = "Event01" });
-			});
-
 			evt.menu.AppendSeparator();
 			evt.menu.AppendAction("Undo", action =>
 			{

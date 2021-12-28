@@ -48,7 +48,25 @@ namespace HLVS.Nodes
 
 		public override ProcessingStatus Evaluate()
 		{
+			return ProcessingStatus.Finished;
+		}
+	}
 
+	[Serializable, NodeMenuItem("Start/On Zone Event")]
+	public class OnZoneEventNode : ExecutionStarterNode
+	{
+		public override string name => "On Zone Event";
+
+		
+		public string               zoneName = "";
+		
+		public ZoneNotificationType activationType;
+
+		[Output("Other Object")]
+		public GameObject other;
+
+		public override ProcessingStatus Evaluate()
+		{
 			return ProcessingStatus.Finished;
 		}
 	}

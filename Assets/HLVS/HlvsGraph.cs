@@ -19,22 +19,25 @@ namespace HLVS
 		/// <summary>
 		/// Blueprint of which types are needed as parameters
 		/// </summary>
-		[SerializeReference] public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
+		[SerializeReference]
+		public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
 
-		[NonSerialized] public GameObject activeGameObject;
+		[NonSerialized]
+		public GameObject activeGameObject;
 
 		public Action                 onParameterListChanged  = () => { };
 		public Action                 onBlackboardListChanged = () => { };
 		public Action<HlvsBlackboard> onBlackboardAdded       = (HlvsBlackboard) => { };
-		public Action<HlvsBlackboard> onBlackboardRemoved      = (HlvsBlackboard) => { };
+		public Action<HlvsBlackboard> onBlackboardRemoved     = (HlvsBlackboard) => { };
 
-		private readonly Dictionary<string, ExposedParameter> _nameToVar = new Dictionary<string, ExposedParameter>();
+		private readonly Dictionary<string, ExposedParameter> _nameToVar          = new Dictionary<string, ExposedParameter>();
 		private readonly Dictionary<string, ExposedParameter> _upperCaseNameToVar = new Dictionary<string, ExposedParameter>();
-		private readonly Dictionary<string, ExposedParameter> _guidToVar = new Dictionary<string, ExposedParameter>();
+		private readonly Dictionary<string, ExposedParameter> _guidToVar          = new Dictionary<string, ExposedParameter>();
 
 		public readonly Dictionary<BaseNode, int> nodeToIndex = new Dictionary<BaseNode, int>();
 
-		private Dictionary<string, List<OnEventNode>> _eventNodes = new Dictionary<string, List<OnEventNode>>();
+		private readonly Dictionary<string, List<OnEventNode>>     _eventNodes = new Dictionary<string, List<OnEventNode>>();
+		private readonly Dictionary<string, List<OnZoneEventNode>> _zoneNodes  = new Dictionary<string, List<OnZoneEventNode>>();
 
 		protected override void OnEnable()
 		{
@@ -48,7 +51,7 @@ namespace HLVS
 					nodeToIndex.Add(changes.addedNode, nodes.Count - 1);
 				}
 			};
-			
+
 			onGraphChanges += changes =>
 			{
 				if (changes.removedNode != null)
@@ -57,7 +60,7 @@ namespace HLVS
 					BuildNodeDict();
 				}
 			};
-			
+
 			BuildVariableDict();
 			ScanEventNodes();
 			onParameterListChanged += BuildVariableDict;
@@ -75,6 +78,7 @@ namespace HLVS
 				if (changes.addedNode != null || changes.removedNode != null)
 				{
 					ScanEventNodes();
+					ScanZoneNodes();
 				}
 			};
 		}
@@ -91,7 +95,7 @@ namespace HLVS
 		{
 			foreach (BaseNode baseNode in nodes)
 			{
-				var node = (HlvsNode) baseNode;
+				var node = (HlvsNode)baseNode;
 				node.Reset();
 				node.ParseExpressions();
 			}
@@ -114,9 +118,12 @@ namespace HLVS
 				_processor.RegisterType(typeof(OnTriggerEnteredNode));
 				_processor.RegisterType(typeof(OnCollisionNode));
 			}
-			
+
 			_processor.UpdateComputeOrder();
+#if UNITY_EDITOR
 			ScanEventNodes();
+			ScanZoneNodes();
+#endif
 		}
 
 		public void RunStartNodes()
@@ -143,7 +150,7 @@ namespace HLVS
 				return;
 			}
 
-			
+
 			// check for duplicate variables
 			{
 				HashSet<string> currentVariableNames = new HashSet<string>();
@@ -151,6 +158,7 @@ namespace HLVS
 				{
 					currentVariableNames.Add(param.name.ToUpperInvariant());
 				}
+
 				foreach (var param in parametersBlueprint)
 				{
 					currentVariableNames.Add(param.name.ToUpperInvariant());
@@ -201,7 +209,7 @@ namespace HLVS
 		{
 			return _upperCaseNameToVar.ContainsKey(variableName) ? _upperCaseNameToVar[variableName] : null;
 		}
-		
+
 		public ExposedParameter GetVariableByGuid(string guid)
 		{
 			return _guidToVar.ContainsKey(guid) ? _guidToVar[guid] : null;
@@ -211,20 +219,21 @@ namespace HLVS
 		{
 			for (int i = 0; i < nodes.Count; i++)
 			{
-				nodeToIndex.Add((HlvsNode) nodes[i], i);
+				nodeToIndex.Add((HlvsNode)nodes[i], i);
 			}
 		}
-		
+
 		private void BuildVariableDict()
 		{
 			_nameToVar.Clear();
 			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _nameToVar.Add(parameter.name, parameter)));
 			parametersBlueprint.ForEach(parameter => _nameToVar.Add(parameter.name, parameter));
-			
+
 			_upperCaseNameToVar.Clear();
-			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter)));
+			blackboards.ForEach(blackboard =>
+				blackboard.fields.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter)));
 			parametersBlueprint.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter));
-			
+
 			_guidToVar.Clear();
 			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter)));
 			parametersBlueprint.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter));
@@ -234,7 +243,7 @@ namespace HLVS
 		{
 			Debug.Assert(parameters.Count == parametersBlueprint.Count, "Parameter lists don't match");
 			activeGameObject = currentGameObject;
-			
+
 			for (int i = 0; i < parametersBlueprint.Count; i++)
 			{
 				parametersBlueprint[i].value = parameters[i].value;
@@ -283,6 +292,64 @@ namespace HLVS
 				{
 					eventList = new List<OnEventNode>() { node };
 					_eventNodes.Add(node.eventName, eventList);
+				}
+			}
+		}
+
+		private void ScanZoneNodes()
+		{
+			_zoneNodes.Clear();
+			foreach (OnZoneEventNode node in nodes.Where(node => node is OnZoneEventNode).Cast<OnZoneEventNode>().Where(node => node.zoneName != string.Empty))
+			{
+				List<OnZoneEventNode> nodeList;
+				if (_zoneNodes.TryGetValue(node.zoneName + node.activationType, out nodeList))
+				{
+					nodeList.Add(node);
+				}
+				else
+				{
+					_zoneNodes.Add(node.zoneName + node.activationType, new List<OnZoneEventNode>() { node });
+					switch (node.activationType)
+					{
+						case ZoneNotificationType.Enter:
+							ZoneManager.Instance.RegisterOnEnter(node.zoneName, other =>
+							{
+								var nodes = _zoneNodes[node.zoneName + ZoneNotificationType.Enter];
+								foreach (OnZoneEventNode onZoneEventNode in nodes)
+								{
+									onZoneEventNode.other = other;
+								}
+
+								_processor.RunFromNodes(_zoneNodes[node.zoneName + node.activationType], typeof(OnZoneEventNode));
+							});
+							break;
+						case ZoneNotificationType.Stay:
+							ZoneManager.Instance.RegisterOnStay(node.zoneName, other =>
+							{
+								var nodes = _zoneNodes[node.zoneName + ZoneNotificationType.Stay];
+								foreach (OnZoneEventNode onZoneEventNode in nodes)
+								{
+									onZoneEventNode.other = other;
+								}
+
+								_processor.RunFromNodes(_zoneNodes[node.zoneName + node.activationType], typeof(OnZoneEventNode));
+							});
+							break;
+						case ZoneNotificationType.Exit:
+							ZoneManager.Instance.RegisterOnExit(node.zoneName, other =>
+							{
+								var nodes = _zoneNodes[node.zoneName + ZoneNotificationType.Exit];
+								foreach (OnZoneEventNode onZoneEventNode in nodes)
+								{
+									onZoneEventNode.other = other;
+								}
+
+								_processor.RunFromNodes(_zoneNodes[node.zoneName + node.activationType], typeof(OnZoneEventNode));
+							});
+							break;
+						default:
+							throw new ArgumentOutOfRangeException();
+					}
 				}
 			}
 		}
