@@ -33,6 +33,9 @@ namespace HLVS.Editor
 				
 				_target.zoneName = _zoneField.value;
 				ZoneNameProvider.instance.AddZone(_zoneField.value);
+				
+				serializedObject.ApplyModifiedProperties();
+				serializedObject.Update();
 			});
 			_zoneField.style.flexGrow = 4;
 			_zoneField.Q<Label>().style.minWidth = 80;
@@ -63,6 +66,9 @@ namespace HLVS.Editor
 					_zoneField.value = zone;
 					_target.zoneName = zone;
 					ZoneNameProvider.instance.AddZone(_zoneField.value);
+					
+					serializedObject.ApplyModifiedProperties();
+					serializedObject.Update();
 				}, this);
 			}
 			
