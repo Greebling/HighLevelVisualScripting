@@ -6,6 +6,7 @@
 /[Ll]ogs/
 /Assets/AssetStoreTools*
 /Assets/Ikt.FormulaParser/
+/Assets/Example Game/
 
 # Visual Studio 2015 cache directory
 /.vs/
@@ -40,4 +41,4 @@ sysinfo.txt
 .idea/
 UserSettings
 Assets/Ikt.FormulaParser.meta
-Assets/Example Game
+Assets/Example Game.meta
