@@ -39,7 +39,7 @@ namespace HLVS
 			if (_startNodes == null)
 				UpdateComputeOrder();
 
-			foreach (var startNode in _startNodes)
+			foreach (var startNode in _startNodes.Where(node => node.GetType() == starterType))
 			{
 				ProcessGraph(startNode, starterType);
 			}
