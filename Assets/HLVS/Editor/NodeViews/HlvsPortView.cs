@@ -53,10 +53,7 @@ namespace HLVS.Editor.NodeViews
 
 			if (pv.isExpressionPort)
 			{
-				pv.OnConnected += (view, edge) =>
-				{
-					targetNode.RemoveExpressionField(fieldInfo.Name);
-				};
+				pv.OnConnected += (view, edge) => { targetNode.RemoveExpressionField(fieldInfo.Name); };
 				pv.OnDisconnected += (view, edge) =>
 				{
 					if (!targetNode.HasExpressionField(fieldInfo.Name))

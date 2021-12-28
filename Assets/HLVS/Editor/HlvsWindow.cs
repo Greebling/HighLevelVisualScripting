@@ -10,7 +10,7 @@ namespace HLVS.Editor
 {
 	public class HlvsWindow : BaseGraphWindow
 	{
-		private HlvsGraph _tmpGraph;
+		private HlvsGraph  _tmpGraph;
 		private StyleSheet _customStyling;
 
 		[MenuItem("HLVS/Graph Editor")]
@@ -66,11 +66,11 @@ namespace HLVS.Editor
 
 			view.blackboardViews.ForEach(blackboardView => blackboardView.DisplayExistingBlackboardEntries());
 			view.paramView.DisplayExistingParameterEntries();
-			
+
 			foreach (BaseNodeView viewNode in view.nodeViews)
 			{
-				var v = (HlvsNodeView)viewNode;
-				v.CheckInputtedData();
+				if (viewNode is HlvsNodeView v)
+					v.CheckInputtedData();
 			}
 		}
 
