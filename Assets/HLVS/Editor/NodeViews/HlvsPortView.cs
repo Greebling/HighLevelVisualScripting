@@ -201,6 +201,9 @@ namespace HLVS.Editor.NodeViews
 
 		public virtual void ShowValueField()
 		{
+			if(valueProp == null) // dont show non serializeable properties
+				return;
+			
 			_valueField.BindProperty(isExpressionPort & !_isConnected ? expressionProp : valueProp);
 			_valueField.Bind(serializedGraph);
 
