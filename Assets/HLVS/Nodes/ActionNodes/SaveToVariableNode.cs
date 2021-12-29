@@ -9,10 +9,9 @@ namespace HLVS.Nodes.ActionNodes
 	{
 		public override string name => "Save to";
 
-		[Input("Name")]
 		public string variableName = "";
 		
-		[Input("Input")]
+		[Input("Data")]
 		public object inputData;
 
 		public override ProcessingStatus Evaluate()
