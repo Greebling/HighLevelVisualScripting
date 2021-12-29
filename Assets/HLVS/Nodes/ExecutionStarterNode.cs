@@ -52,12 +52,11 @@ namespace HLVS.Nodes
 		}
 	}
 
-	[Serializable, NodeMenuItem("Start/On Zone Event")]
+	[Serializable, NodeMenuItem("Start/On Zone...")]
 	public class OnZoneEventNode : ExecutionStarterNode
 	{
-		public override string name => "On Zone Event";
+		public override string name => "On Zone " + activationType;
 
-		
 		public string               zoneName = "";
 		
 		public ZoneNotificationType activationType;
