@@ -18,7 +18,7 @@ namespace HLVS.Editor.Views
 			blackboard.subTitle = "";
 			blackboard.scrollable = true;
 			blackboard.windowed = true;
-			blackboard.style.height = 400;
+			blackboard.style.minHeight = 200;
 
 			blackboard.addItemRequested += OnClickedAdd;
 			blackboard.moveItemRequested += (blackboard1, index, element) => element.parent.Insert(index, element);

@@ -34,6 +34,7 @@ namespace HLVS.Editor.Views
 			boardContainer.style.alignSelf = new StyleEnum<Align>(Align.FlexStart);
 			boardContainer.style.width = 300;
 			boardContainer.style.marginTop = 1;
+			boardContainer.style.flexGrow = 1;
 
 			// handle adding of blackboards via drag n drop TODO: Set drag indicator on blackboards correct
 			RegisterCallback<DragExitedEvent>(evt =>
