@@ -9,6 +9,7 @@ namespace HLVS.Runtime
 	public class ZoneNameProvider : ScriptableSingleton<ZoneNameProvider>, ISerializationCallbackReceiver
 	{
 		private readonly Dictionary<string, uint> _zoneNames = new Dictionary<string, uint>();
+		private readonly Dictionary<string, uint> _sceneBasedZones = new Dictionary<string, uint>();
 
 		/// <summary>
 		/// Used only for serialization of _allNames
@@ -26,12 +27,12 @@ namespace HLVS.Runtime
 			if (!_zoneNames.ContainsKey(zoneName))
 			{
 				_zoneNames.Add(zoneName, 1);
-				DoSave();
 			}
 			else
 			{
 				_zoneNames[zoneName]++;
 			}
+			DoSave();
 		}
 
 		public void RemoveZone(string zoneName)
@@ -61,6 +62,7 @@ namespace HLVS.Runtime
 		private void SerializeData()
 		{
 			_serializedZoneNames.Clear();
+			_serializedZoneOccurences.Clear();
 			foreach (var pair in _zoneNames)
 			{
 				_serializedZoneNames.Add(pair.Key);

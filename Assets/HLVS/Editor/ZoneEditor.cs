@@ -29,13 +29,18 @@ namespace HLVS.Editor
 			_zoneField.value = _target.zoneName;
 			_zoneField.RegisterCallback<FocusOutEvent>(evt =>
 			{
-				ZoneNameProvider.instance.RemoveZone(_target.zoneName);
+				_zoneField.value = _zoneField.value.Trim(' ');
 				
-				_target.zoneName = _zoneField.value;
-				ZoneNameProvider.instance.AddZone(_zoneField.value);
-				
-				serializedObject.ApplyModifiedProperties();
-				serializedObject.Update();
+				if(_zoneField.value != _target.zoneName)
+				{
+					ZoneNameProvider.instance.RemoveZone(_target.zoneName);
+
+					_target.zoneName = _zoneField.value;
+					ZoneNameProvider.instance.AddZone(_zoneField.value);
+
+					serializedObject.ApplyModifiedProperties();
+					serializedObject.Update();
+				}
 			});
 			_zoneField.style.flexGrow = 4;
 			_zoneField.Q<Label>().style.minWidth = 80;

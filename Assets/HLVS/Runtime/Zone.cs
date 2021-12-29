@@ -1,9 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace HLVS.Runtime
 {
-	[RequireComponent(typeof(Collider))] [AddComponentMenu("Physics/Zone")][ExecuteInEditMode]
+	[RequireComponent(typeof(Collider))]
+	[AddComponentMenu("Physics/Zone")]
+	[ExecuteInEditMode]
 	public class Zone : MonoBehaviour
 	{
 		public string zoneName = "";
@@ -14,7 +19,16 @@ namespace HLVS.Runtime
 			if (!GetComponents<Collider>().Any(col => col.isTrigger))
 			{
 				Debug.LogError("Zone is attached to a gameobject without any trigger colliders");
-			}	
+			}
+		}
+		
+		private void OnDestroy()
+		{
+			if (Application.isEditor && gameObject.scene.isLoaded) // only when the component is removed
+			{
+				ZoneNameProvider.instance.RemoveZone(zoneName);
+				ZoneNameProvider.instance.RemoveZone(zoneName);
+			}
 		}
 #endif
 
