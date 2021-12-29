@@ -35,6 +35,11 @@ namespace HLVS.Runtime
 			DoSave();
 		}
 
+		public bool HasZone(string zone)
+		{
+			return _zoneNames.ContainsKey(zone);
+		}
+
 		public void RemoveZone(string zoneName)
 		{
 			if (_zoneNames.ContainsKey(zoneName))

@@ -84,6 +84,11 @@ namespace HLVS.Runtime
 			_eventDefinitions.Remove(e.name);
 		}
 
+		public bool HasEvent(string name)
+		{
+			return _eventDefinitions.ContainsKey(name);
+		}
+
 		public HlvsEvent GetEventDefinition(string name)
 		{
 			return _eventDefinitions[name];

@@ -50,6 +50,13 @@ namespace HLVS.Editor.NodeViews
 					},
 					name = "other"
 				});
+			
+			if (_target.eventName == "" &&  EventManager.instance.GetEventNames().FirstOrDefault() != null)
+			{
+				_target.eventName = EventManager.instance.GetEventNames().FirstOrDefault();
+			}
+			
+			
 			var choices = EventManager.instance.GetEventNames().ToList();
 			choices.Add(addText);
 
@@ -72,6 +79,7 @@ namespace HLVS.Editor.NodeViews
 			var namesField = new DropdownField(choices, 0);
 			namesField.name = "Name";
 			namesField.value = _target.eventName;
+
 			namesField.RegisterValueChangedCallback((v) =>
 			{
 				if (v.newValue == addText)

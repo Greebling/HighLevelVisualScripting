@@ -29,6 +29,11 @@ namespace HLVS.Editor.NodeViews
 				var field = controlsContainer.Q<PropertyField>(nameof(OnZoneEventNode.zoneName));
 				controlsContainer.Remove(field);
 			}
+			
+			if (ZoneNameProvider.instance.GetAllZoneNames().FirstOrDefault() != null && (_target.zoneName == "" || !ZoneNameProvider.instance.HasZone(_target.zoneName)))
+			{
+				_target.zoneName = ZoneNameProvider.instance.GetAllZoneNames().FirstOrDefault();
+			}
 
 			_currentDropDown = CreateDropDown();
 			controlsContainer.Insert(0, _currentDropDown);
@@ -48,10 +53,6 @@ namespace HLVS.Editor.NodeViews
 			namesField.name = "Name";
 			namesField.value = _target.zoneName;
 
-			if (namesField.value == "" &&  ZoneNameProvider.instance.GetAllZoneNames().FirstOrDefault() != null)
-			{
-				namesField.value = ZoneNameProvider.instance.GetAllZoneNames().FirstOrDefault();
-			}
 			
 			namesField.RegisterValueChangedCallback((v) =>
 			{

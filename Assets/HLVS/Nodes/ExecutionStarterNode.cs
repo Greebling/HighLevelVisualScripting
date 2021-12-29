@@ -44,7 +44,7 @@ namespace HLVS.Nodes
 	{
 		public override string name => "On Event";
 
-		public string eventName;
+		public string eventName = "";
 
 		public override ProcessingStatus Evaluate()
 		{
