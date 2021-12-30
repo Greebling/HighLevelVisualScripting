@@ -98,4 +98,29 @@ namespace HLVS.Nodes.ActionNodes
 			return ProcessingStatus.Finished;
 		}
 	}
+	
+	[Serializable, NodeMenuItem("Gameobject/Find Gameobject")]
+	public class FindGameobjectNode : HlvsActionNode
+	{
+		public override string name => "Find Gameobject";
+
+		[Input("Name")]
+		public string gameobjectName;
+
+		[Output("Gameobject")]
+		public GameObject output;
+
+
+		public override ProcessingStatus Evaluate()
+		{
+			output = GameObject.Find(gameobjectName);
+
+			if (!output)
+			{
+				Debug.LogWarning($"No gameobject called '{gameobjectName}' found");
+			}
+
+			return ProcessingStatus.Finished;
+		}
+	}
 }
