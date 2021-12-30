@@ -61,7 +61,7 @@ namespace HLVS.Nodes
 		
 		public ZoneNotificationType activationType;
 
-		[Output("Other Object")]
+		[Output("Colliding Object")]
 		public GameObject other;
 
 		public override ProcessingStatus Evaluate()

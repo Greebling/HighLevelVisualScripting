@@ -56,7 +56,7 @@ namespace HLVS.Editor
 				float height = 400;
 				dropDown.DropDown(new Rect(pos.x, pos.y- (height), 400, height), _zoneField);
 			};
-			selectButton.text = "Current";
+			selectButton.text = "From Existing";
 			_root.Add(selectButton);
 		}
 
