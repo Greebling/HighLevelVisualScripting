@@ -1,7 +1,5 @@
 ﻿using GraphProcessor;
-using HLVS.Runtime;
 using UnityEditor;
-using UnityEngine;
 
 namespace HLVS.Editor.Views
 {
@@ -32,7 +30,7 @@ namespace HLVS.Editor.Views
 				var graph = (HlvsGraph)_view.graph;
 				graph.RunUpdateNodes();
 			});
-			
+
 			AddButton("Run Compute", () =>
 			{
 				var graph = (HlvsGraph)_view.graph;
