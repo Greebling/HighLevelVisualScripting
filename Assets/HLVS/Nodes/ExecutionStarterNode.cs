@@ -46,9 +46,39 @@ namespace HLVS.Nodes
 
 		public string eventName = "";
 
+		[SerializeReference]
+		[Output("Event Data")]
+		public List<ExposedParameter> eventData = new List<ExposedParameter>();
+
 		public override ProcessingStatus Evaluate()
 		{
 			return ProcessingStatus.Finished;
+		}
+
+		[CustomPortOutput(nameof(eventData), typeof(object))]
+		void PushOutputs(List<SerializableEdge> connectedEdges)
+		{
+			foreach (SerializableEdge edge in connectedEdges)
+			{
+				var index = int.Parse(edge.outputPort.portData.identifier); // currently don't know a better solution
+				edge.passThroughBuffer = eventData[index].value;
+			}
+		}
+
+		[CustomPortBehavior(nameof(eventData))]
+		IEnumerable<PortData> ListPortBehavior(List<SerializableEdge> edges)
+		{
+			var portCount = eventData.Count;
+
+			for (int i = 0; i < portCount; i++)
+			{
+				yield return new PortData
+				{
+					displayName = eventData[i].name,
+					displayType = eventData[i].GetValueType(),
+					identifier = i.ToString(), // needed by PushOutputs!
+				};
+			}
 		}
 	}
 
@@ -57,8 +87,8 @@ namespace HLVS.Nodes
 	{
 		public override string name => "On Zone " + activationType;
 
-		public string               zoneName = "";
-		
+		public string zoneName = "";
+
 		public ZoneNotificationType activationType;
 
 		[Output("Colliding Object")]

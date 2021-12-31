@@ -38,6 +38,7 @@ namespace HLVS.Runtime
 		{
 			if (_listenerNodes.TryGetValue(eventName, out List<INodeEventListener> eventListeners))
 			{
+				Debug.Assert(!eventListeners.Contains(listener), "Already registered this listener");
 				eventListeners.Add(listener);
 			}
 			else

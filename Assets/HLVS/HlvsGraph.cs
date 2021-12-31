@@ -274,7 +274,13 @@ namespace HLVS
 
 		private void ScanEventNodes()
 		{
+			foreach (string listenedEvent in _listenedEvents)
+			{
+				EventManager.instance.RemoveListener(this, listenedEvent);
+			}
+			
 			_listenedEvents.Clear();
+			_eventNodes.Clear();
 			foreach (OnEventNode node in nodes.Where(node => node is OnEventNode).Cast<OnEventNode>().Where(node => node.eventName != string.Empty))
 			{
 				if (!_listenedEvents.Contains(node.eventName))

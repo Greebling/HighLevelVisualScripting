@@ -32,6 +32,8 @@ MonoBehaviour:
     parameters: []
   - name: Event01
     parameters: []
+  - name: My Event
+    parameters: []
   _savedNames:
   - bla
   - other
@@ -41,6 +43,7 @@ MonoBehaviour:
   - Event05
   - Event06
   - Event01
+  - My Event
   references:
     version: 2
     RefIds:

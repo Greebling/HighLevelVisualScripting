@@ -3,6 +3,7 @@ using System.Linq;
 using GraphProcessor;
 using HLVS.Nodes;
 using HLVS.Runtime;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace HLVS.Editor.NodeViews
@@ -32,28 +33,10 @@ namespace HLVS.Editor.NodeViews
 		{
 			_target = (OnEventNode)nodeTarget;
 
-			EventManager.instance.AddEventDefinition(new HlvsEvent()
-			{
-				parameters = new List<ExposedParameter>
-				{
-					new BoolParameter() { name = "bool", value = true},
-					new FloatParameter() { name = "float" , value = 2.5f}
-				},
-				name = "bla"
-			});
-			EventManager.instance.AddEventDefinition(
-				new HlvsEvent()
-				{
-					parameters = new List<ExposedParameter>
-					{
-						new BoolParameter()
-					},
-					name = "other"
-				});
-			
 			if (_target.eventName == "" &&  EventManager.instance.GetEventNames().FirstOrDefault() != null)
 			{
 				_target.eventName = EventManager.instance.GetEventNames().FirstOrDefault();
+				OnEventSelected();
 			}
 			
 			
@@ -72,6 +55,12 @@ namespace HLVS.Editor.NodeViews
 			var choices = EventManager.instance.GetEventNames().ToList();
 			choices.Add(addText);
 			_currentDropDown.choices = choices;
+		}
+
+		private void OnEventSelected()
+		{
+			_target.eventData = EventManager.instance.GetEventDefinition(_target.eventName).parameters;
+			ForceUpdatePorts();
 		}
 
 		private DropdownField CreateDropDown(List<string> choices)
@@ -95,15 +84,19 @@ namespace HLVS.Editor.NodeViews
 						EventManager.instance.AddEventDefinition(new HlvsEvent() { name = popup.value });
 
 						namesField.value = popup.value;
+						OnEventSelected();
+						
 						owner.Remove(popup);
 						owner.serializedGraph.ApplyModifiedProperties();
 						owner.serializedGraph.Update();
+
 					});
 				}
 				else
 				{
 					owner.RegisterCompleteObjectUndo("Updated event name of OnEventNode");
 					_target.eventName = namesField.value;
+					OnEventSelected();
 				}
 			});
 

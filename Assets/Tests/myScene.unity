@@ -297,9 +297,9 @@ GameObject:
   - component: {fileID: 656151984}
   - component: {fileID: 656151983}
   - component: {fileID: 656151982}
+  - component: {fileID: 656151987}
   - component: {fileID: 656151981}
   - component: {fileID: 656151986}
-  - component: {fileID: 656151987}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -398,10 +398,76 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000, guid: fab178de57658564394876dce0c4da82, type: 2}
-  graphParameters: []
+  graphParameters:
+  - rid: 7108747988361019392
+  - rid: 7108747988361019393
+  - rid: 7108747988361019394
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7108747988361019392
+      type: {class: Vector2Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 0319580e-358e-4f19-b535-13c1e8b1ccd5
+        name: My Vector 2
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 7108747988361019395
+        val: {x: 0, y: 0}
+    - rid: 7108747988361019393
+      type: {class: Vector4Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 9f2e9927-c1c8-4e1c-93cc-fb8234ac86cd
+        name: My Vector 4
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 7108747988361019396
+        val: {x: 0, y: 0, z: 0, w: 0}
+    - rid: 7108747988361019394
+      type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 0d8ee78c-5429-480e-9dda-ab7e5721b4d7
+        name: My String
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 7108747988361019397
+        val: 
+    - rid: 7108747988361019395
+      type: {class: Vector2Parameter/Vector2Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 0319580e-358e-4f19-b535-13c1e8b1ccd5
+        mode: 0
+        min: 0
+        max: 1
+    - rid: 7108747988361019396
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 9f2e9927-c1c8-4e1c-93cc-fb8234ac86cd
+    - rid: 7108747988361019397
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 0d8ee78c-5429-480e-9dda-ab7e5721b4d7
 --- !u!114 &656151987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,6 +493,7 @@ GameObject:
   - component: {fileID: 788633358}
   - component: {fileID: 788633357}
   - component: {fileID: 788633356}
+  - component: {fileID: 788633360}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -442,10 +509,10 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 788633355}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &788633357
@@ -513,6 +580,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &788633360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788633355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e4e119bba4a4aae91190d49b253a3e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoneName: Another Zone
 --- !u!1 &802631014
 GameObject:
   m_ObjectHideFlags: 0
