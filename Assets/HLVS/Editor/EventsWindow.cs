@@ -153,6 +153,8 @@ namespace HLVS.Editor
 			parameterList.style.marginTop = 2;
 			parameterList.style.minWidth = 350;
 			parameterList.style.flexGrow = 1;
+			parameterList.style.marginRight = 10;
+			parameterList.style.marginBottom = 10;
 
 			// make outline box around parameter list view
 			var box = parameterList.Q("unity-content-and-vertical-scroll-container");
