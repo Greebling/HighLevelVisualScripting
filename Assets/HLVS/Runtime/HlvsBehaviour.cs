@@ -125,6 +125,8 @@ namespace HLVS.Runtime
 				runtimeGraph.Init();
 				runtimeGraph.LinkToScene(gameObject.scene);
 			}
+
+			ZoneCleaner.Instantiate();
 		}
 
 		private void OnDestroy()

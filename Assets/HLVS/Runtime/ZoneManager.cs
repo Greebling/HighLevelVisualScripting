@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace HLVS.Runtime
 {
 	public enum ZoneNotificationType
 	{
-		Enter, Stay, Exit
+		Enter,
+		Stay,
+		Exit
 	}
 
 	public class ZoneManager
@@ -15,18 +19,18 @@ namespace HLVS.Runtime
 
 		public delegate void OnZoneEvent(GameObject other);
 
-		private readonly Dictionary<string, OnZoneEvent> _onZoneEntered = new Dictionary<string, OnZoneEvent>();
-		private readonly Dictionary<string, OnZoneEvent> _onZoneStay    = new Dictionary<string, OnZoneEvent>();
-		private readonly Dictionary<string, OnZoneEvent> _onZoneExit    = new Dictionary<string, OnZoneEvent>();
+		private readonly Dictionary<string, OnZoneEvent> _onZoneEntered = new();
+		private readonly Dictionary<string, OnZoneEvent> _onZoneStay    = new();
+		private readonly Dictionary<string, OnZoneEvent> _onZoneExit    = new();
 
-		private readonly Dictionary<string, float> _lastActivationTime = new Dictionary<string, float>();
+		private readonly Dictionary<string, float> _nameToLastActivationTime = new();
 
 		public void RegisterOnEnter(string zone, OnZoneEvent e)
 		{
 			var zoneName = zone + "_entered";
-			if (_onZoneEntered.TryGetValue(zoneName, out OnZoneEvent events))
+			if (_onZoneEntered.ContainsKey(zoneName))
 			{
-				events += e;
+				_onZoneEntered[zoneName] += e;
 			}
 			else
 			{
@@ -37,9 +41,9 @@ namespace HLVS.Runtime
 		public void RegisterOnStay(string zone, OnZoneEvent e)
 		{
 			var zoneName = zone + "_stay";
-			if (_onZoneStay.TryGetValue(zoneName, out OnZoneEvent events))
+			if (_onZoneStay.ContainsKey(zoneName))
 			{
-				events += e;
+				_onZoneStay[zoneName] += e;
 			}
 			else
 			{
@@ -50,9 +54,9 @@ namespace HLVS.Runtime
 		public void RegisterOnExit(string zone, OnZoneEvent e)
 		{
 			var zoneName = zone + "_exit";
-			if (_onZoneExit.TryGetValue(zoneName, out OnZoneEvent events))
+			if (_onZoneExit.ContainsKey(zoneName))
 			{
-				events += e;
+				_onZoneExit[zoneName] += e;
 			}
 			else
 			{
@@ -63,21 +67,22 @@ namespace HLVS.Runtime
 		public void OnEntered(string zone, GameObject other)
 		{
 			var zoneName = zone + "_entered";
-			if(!_onZoneEntered.ContainsKey(zoneName))
+			var collisionName = zoneName + other.name;
+			if (!_onZoneEntered.ContainsKey(zoneName))
 				return;
-			
-			if (_lastActivationTime.TryGetValue(zoneName, out float lastTime))
+
+			if (_nameToLastActivationTime.TryGetValue(collisionName, out float lastTime))
 			{
 				if (lastTime == Time.fixedTime)
 				{
 					return;
 				}
 
-				_lastActivationTime[zoneName] = Time.fixedTime;
+				_nameToLastActivationTime[collisionName] = Time.fixedTime;
 			}
 			else
 			{
-				_lastActivationTime.Add(zoneName, Time.fixedTime);
+				_nameToLastActivationTime.Add(collisionName, Time.fixedTime);
 			}
 
 			_onZoneEntered[zoneName](other);
@@ -86,45 +91,88 @@ namespace HLVS.Runtime
 		public void OnStay(string zone, GameObject other)
 		{
 			var zoneName = zone + "_stay";
-			if(!_onZoneEntered.ContainsKey(zoneName))
+			var collisionName = zoneName + other.name;
+			if (!_onZoneStay.ContainsKey(zoneName))
 				return;
-			if (_lastActivationTime.TryGetValue(zoneName, out float lastTime))
+			if (_nameToLastActivationTime.TryGetValue(collisionName, out float lastTime))
 			{
 				if (lastTime == Time.fixedTime)
 				{
 					return;
 				}
 
-				_lastActivationTime[zoneName] = Time.fixedTime;
+				_nameToLastActivationTime[collisionName] = Time.fixedTime;
 			}
 			else
 			{
-				_lastActivationTime.Add(zoneName, Time.fixedTime);
+				_nameToLastActivationTime.Add(collisionName, Time.fixedTime);
 			}
 
-			_onZoneStay[zone](other);
+			_onZoneStay[zoneName](other);
 		}
 
 		public void OnExit(string zone, GameObject other)
 		{
 			var zoneName = zone + "_exit";
-			if(!_onZoneEntered.ContainsKey(zoneName))
+			var collisionName = zoneName + other.name;
+			if (!_onZoneExit.ContainsKey(zoneName))
 				return;
-			if (_lastActivationTime.TryGetValue(zoneName, out float lastTime))
+			if (_nameToLastActivationTime.TryGetValue(collisionName, out float lastTime))
 			{
 				if (lastTime == Time.fixedTime)
 				{
 					return;
 				}
 
-				_lastActivationTime[zoneName] = Time.fixedTime;
+				_nameToLastActivationTime[collisionName] = Time.fixedTime;
 			}
 			else
 			{
-				_lastActivationTime.Add(zoneName, Time.fixedTime);
+				_nameToLastActivationTime.Add(collisionName, Time.fixedTime);
 			}
 
-			_onZoneExit[zone](other);
+			_onZoneExit[zoneName](other);
+		}
+
+		public void CleanupPreviousZoneCollisions()
+		{
+			float currTime = Time.fixedTime;
+			float timestep = Time.fixedDeltaTime * 2;
+			foreach ((string collisionName, float time) in _nameToLastActivationTime.ToList())
+			{
+				if (currTime - time > timestep)
+				{
+					_nameToLastActivationTime.Remove(collisionName);
+				}
+			}
+		}
+	}
+
+	public class ZoneCleaner : MonoBehaviour
+	{
+		public static void Instantiate()
+		{
+			if(_instance)
+				return;
+
+			var gobj = new GameObject();
+			gobj.name = ObjectNames.NicifyVariableName(nameof(ZoneCleaner));
+			_instance = gobj.AddComponent<ZoneCleaner>();
+			DontDestroyOnLoad(gobj);
+		}
+
+		private static ZoneCleaner _instance;
+		private        float       _lastClean = 0;
+
+		private const float CleanEvery = 4;
+		
+		private void FixedUpdate()
+		{
+			if (Time.time - _lastClean > CleanEvery)
+			{
+				_lastClean = Time.time;
+				ZoneManager.Instance.CleanupPreviousZoneCollisions();
+			}
 		}
 	}
 }
