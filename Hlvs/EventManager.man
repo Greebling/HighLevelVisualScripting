@@ -13,61 +13,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _savedEvents:
-  - name: bla
-    parameters:
-    - rid: 7108747941380882432
-    - rid: 7108747941380882433
-  - name: other
-    parameters:
-    - rid: 7108747941380882434
-  - name: Event02
-    parameters: []
-  - name: Event03
-    parameters: []
-  - name: Event04
-    parameters: []
-  - name: Event05
-    parameters: []
-  - name: Event06
-    parameters: []
-  - name: Event01
-    parameters: []
   - name: My Event
-    parameters: []
+    parameters:
+    - rid: 5412298746070827221
+  - name: My Event (1)
+    parameters:
+    - rid: 5412298746070827152
+    - rid: 5412298746070827153
   _savedNames:
-  - bla
-  - other
-  - Event02
-  - Event03
-  - Event04
-  - Event05
-  - Event06
-  - Event01
   - My Event
+  - My Event (1)
   references:
     version: 2
     RefIds:
     - rid: -2
       type: {class: , ns: , asm: }
-    - rid: 7108747941380882432
-      type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 
-        name: bool
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          rid: -2
-        val: 1
-    - rid: 7108747941380882433
+    - rid: 5412298746070827152
       type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 
-        name: float
+        name: My Number
         type: 
         serializedValue:
           serializedType: 
@@ -76,12 +41,26 @@ MonoBehaviour:
         input: 1
         settings:
           rid: -2
-        val: 2.5
-    - rid: 7108747941380882434
-      type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+        val: 0
+    - rid: 5412298746070827153
+      type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 
-        name: 
+        name: My Text
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: 
+    - rid: 5412298746070827221
+      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: My GameObject
         type: 
         serializedValue:
           serializedType: 

@@ -10,10 +10,10 @@ namespace HLVS.Runtime
 	[Serializable]
 	public class HlvsEvent
 	{
-		public string name;
+		public string name = "";
 
 		[SerializeReference]
-		public List<ExposedParameter> parameters;
+		public List<ExposedParameter> parameters = new();
 	}
 
 	public interface INodeEventListener
@@ -27,11 +27,25 @@ namespace HLVS.Runtime
 	{
 		private Dictionary<string, List<INodeEventListener>> _listenerNodes    = new Dictionary<string, List<INodeEventListener>>();
 		private Dictionary<string, HlvsEvent>                _eventDefinitions = new Dictionary<string, HlvsEvent>();
-
-
+		
 		public IEnumerable<string> GetEventNames()
 		{
 			return _eventDefinitions.Select(pair => pair.Key);
+		}
+
+		internal List<HlvsEvent> GetAllEvents()
+		{
+			return _eventDefinitions.Select(pair => pair.Value).ToList();
+		}
+
+		internal void ClearAllEvents()
+		{
+			_eventDefinitions.Clear();
+			_savedEvents.Clear();
+			_savedNames.Clear();
+			_listenerNodes.Clear();
+			
+			DoSave();
 		}
 
 		public void RegisterListener(INodeEventListener listener, string eventName)
@@ -68,9 +82,9 @@ namespace HLVS.Runtime
 
 		public void AddEventDefinition(HlvsEvent e)
 		{
-			if (_eventDefinitions.TryGetValue(e.name, out HlvsEvent definition))
+			if (_eventDefinitions.ContainsKey(e.name))
 			{
-				definition = e;
+				_eventDefinitions[e.name] = e;
 			}
 			else
 			{
@@ -80,9 +94,10 @@ namespace HLVS.Runtime
 			DoSave();
 		}
 
-		public void RemoveEventDefinition(HlvsEvent e)
+		public void RemoveEventDefinition(string eventName)
 		{
-			_eventDefinitions.Remove(e.name);
+			_eventDefinitions.Remove(eventName);
+			DoSave();
 		}
 
 		public bool HasEvent(string name)
@@ -101,9 +116,11 @@ namespace HLVS.Runtime
 		[SerializeField]
 		private List<string> _savedNames = new List<string>();
 
-		public void OnBeforeSerialize()
+		private void DoSave()
 		{
 			SerializeData();
+
+			Save(true);
 		}
 
 		private void SerializeData()
@@ -115,13 +132,13 @@ namespace HLVS.Runtime
 				_savedEvents.Add(value);
 				_savedNames.Add(key);
 			}
+			
+			EditorUtility.SetDirty(this);
 		}
 
-		private void DoSave()
+		public void OnBeforeSerialize()
 		{
 			SerializeData();
-
-			Save(true);
 		}
 
 		public void OnAfterDeserialize()

@@ -48,7 +48,7 @@ namespace HLVS.Nodes
 
 		[SerializeReference]
 		[Output("Event Data")]
-		public List<ExposedParameter> eventData = new List<ExposedParameter>();
+		public List<ExposedParameter> eventData = new();
 
 		public override ProcessingStatus Evaluate()
 		{
@@ -76,7 +76,7 @@ namespace HLVS.Nodes
 				{
 					displayName = eventData[i].name,
 					displayType = eventData[i].GetValueType(),
-					identifier = i.ToString(), // needed by PushOutputs!
+					identifier = (i + 1).ToString(), // needed by PushOutputs!
 				};
 			}
 		}
