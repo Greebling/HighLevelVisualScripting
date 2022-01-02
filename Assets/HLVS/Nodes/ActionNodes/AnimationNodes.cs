@@ -10,20 +10,21 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Set Animation Trigger";
 		
 		[Input("Target")]
-		public Animator target;
+		public GameObject target;
 
 		[Input("Trigger Name")]
 		public string triggerName;
 
 		public override ProcessingStatus Evaluate()
 		{
-			if (!target)
+			var anim = target.GetComponent<Animator>();
+			if (!anim)
 			{
 				Debug.Assert(false, "No Animator was found");
 				return ProcessingStatus.Finished;
 			}
 			
-			target.SetTrigger(triggerName);
+			anim.SetTrigger(triggerName);
 			
 			return ProcessingStatus.Finished;
 		}
@@ -35,7 +36,7 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Set Animator Bool";
 		
 		[Input("Target")]
-		public Animator target;
+		public GameObject target;
 
 		[Input("Bool Name")]
 		public string boolName;
@@ -46,13 +47,14 @@ namespace HLVS.Nodes.ActionNodes
 
 		public override ProcessingStatus Evaluate()
 		{
-			if (!target)
+			var anim = target.GetComponent<Animator>();
+			if (!anim)
 			{
 				Debug.Assert(false, "No Animator was found");
 				return ProcessingStatus.Finished;
 			}
 			
-			target.SetBool(boolName, value);
+			anim.SetBool(boolName, value);
 			
 			return ProcessingStatus.Finished;
 		}
@@ -64,7 +66,7 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Set Animator Float";
 		
 		[Input("Target")]
-		public Animator target;
+		public GameObject target;
 
 		[Input("Float Name")]
 		public string floatName;
@@ -75,13 +77,14 @@ namespace HLVS.Nodes.ActionNodes
 
 		public override ProcessingStatus Evaluate()
 		{
-			if (!target)
+			var anim = target.GetComponent<Animator>();
+			if (!anim)
 			{
 				Debug.Assert(false, "No Animator was found");
 				return ProcessingStatus.Finished;
 			}
 
-			target.SetFloat(floatName, value);
+			anim.SetFloat(floatName, value);
 			
 			return ProcessingStatus.Finished;
 		}
@@ -93,7 +96,7 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Set Animator Integer";
 		
 		[Input("Target")]
-		public Animator target;
+		public GameObject target;
 
 		[Input("Integer Name")]
 		public string floatName;
@@ -104,13 +107,14 @@ namespace HLVS.Nodes.ActionNodes
 
 		public override ProcessingStatus Evaluate()
 		{
-			if (!target)
+			var anim = target.GetComponent<Animator>();
+			if (!anim)
 			{
 				Debug.Assert(false, "No Animator was found");
 				return ProcessingStatus.Finished;
 			}
 
-			target.SetInteger(floatName, value);
+			anim.SetInteger(floatName, value);
 			
 			return ProcessingStatus.Finished;
 		}
