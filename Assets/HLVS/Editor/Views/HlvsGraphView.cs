@@ -84,8 +84,17 @@ namespace HLVS.Editor.Views
 					continue;
 
 				//Check for type assignability
-				if (!BaseGraph.TypesAreConnectable(startPort.portType, p.portType))
-					continue;
+
+				if (startPort.direction == Direction.Input)
+				{
+					if (!BaseGraph.TypesAreConnectable(p.portType, startPort.portType))
+						continue;
+				}
+				else
+				{
+					if (!BaseGraph.TypesAreConnectable(startPort.portType, p.portType))
+						continue;
+				}
 
 				if (portView.owner == startView)
 					continue;

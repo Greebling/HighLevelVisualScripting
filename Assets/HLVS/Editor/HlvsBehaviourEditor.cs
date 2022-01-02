@@ -45,6 +45,8 @@ namespace HLVS.Editor
 
 		private void Reinitialize()
 		{
+			Deinitialize();
+			
 			if (!target)
 				return;
 
@@ -129,12 +131,12 @@ namespace HLVS.Editor
 			// open button
 			var button = new Button(() =>
 			{
-				if (_graph)
-					EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(_graph);
+				if (_behaviour.CurrentGraph)
+					EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(_behaviour.CurrentGraph);
 			});
 			button.text = "Open";
 			button.name = "open-button";
-			button.SetEnabled(_graph);
+			button.SetEnabled(_behaviour.CurrentGraph);
 			view.Add(button);
 
 			container.Add(view);

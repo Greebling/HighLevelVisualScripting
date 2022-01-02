@@ -11,9 +11,11 @@ namespace HLVS.Runtime
 		[HideInInspector] 
 		public HlvsGraph graph;
 
-		private HlvsGraph runtimeGraph;
+		private HlvsGraph _runtimeGraph;
 
 		[SerializeReference] [HideInInspector] public List<ExposedParameter> graphParameters = new List<ExposedParameter>();
+
+		public HlvsGraph CurrentGraph => _runtimeGraph ? _runtimeGraph : graph;
 
 		public void CreateFittingParamList()
 		{
@@ -120,10 +122,10 @@ namespace HLVS.Runtime
 		{
 			if (graph)
 			{
-				runtimeGraph = Instantiate(graph);
-				runtimeGraph.name = graph.name + " (Instance)";
-				runtimeGraph.Init();
-				runtimeGraph.LinkToScene(gameObject.scene);
+				_runtimeGraph = Instantiate(graph);
+				_runtimeGraph.name = graph.name + " (Instance)";
+				_runtimeGraph.Init();
+				_runtimeGraph.LinkToScene(gameObject.scene);
 			}
 
 			ZoneCleaner.Instantiate();
@@ -131,34 +133,34 @@ namespace HLVS.Runtime
 
 		private void OnDestroy()
 		{
-			Destroy(runtimeGraph);
-			runtimeGraph = null;
+			Destroy(_runtimeGraph);
+			_runtimeGraph = null;
 		}
 
 		private void Start()
 		{
-			if (runtimeGraph)
+			if (_runtimeGraph)
 			{
-				runtimeGraph.SetParameterValues(gameObject, graphParameters);
-				runtimeGraph.RunStartNodes();
+				_runtimeGraph.SetParameterValues(gameObject, graphParameters);
+				_runtimeGraph.RunStartNodes();
 			}
 		}
 
 		private void Update()
 		{
-			if (runtimeGraph)
+			if (_runtimeGraph)
 			{
-				runtimeGraph.SetParameterValues(gameObject, graphParameters);
-				runtimeGraph.RunUpdateNodes();
+				_runtimeGraph.SetParameterValues(gameObject, graphParameters);
+				_runtimeGraph.RunUpdateNodes();
 			}
 		}
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (runtimeGraph)
+			if (_runtimeGraph)
 			{
-				runtimeGraph.SetParameterValues(gameObject, graphParameters);
-				runtimeGraph.RunOnTriggerEnteredNodes();
+				_runtimeGraph.SetParameterValues(gameObject, graphParameters);
+				_runtimeGraph.RunOnTriggerEnteredNodes();
 			}
 		}
 	}

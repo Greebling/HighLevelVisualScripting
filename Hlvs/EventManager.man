@@ -15,7 +15,8 @@ MonoBehaviour:
   _savedEvents:
   - name: My Event
     parameters:
-    - rid: 5412298746070827221
+    - rid: 5412298765373800471
+    - rid: 5412298765373800472
   - name: My Event (1)
     parameters:
     - rid: 5412298746070827152
@@ -56,7 +57,7 @@ MonoBehaviour:
         settings:
           rid: -2
         val: 
-    - rid: 5412298746070827221
+    - rid: 5412298765373800471
       type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: 
@@ -70,3 +71,17 @@ MonoBehaviour:
         settings:
           rid: -2
         val: 0
+    - rid: 5412298765373800472
+      type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: My Position
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: {x: 0, y: 0, z: 0}
