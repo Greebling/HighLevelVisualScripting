@@ -29,7 +29,7 @@ namespace HLVS.Runtime
 
 		public override string GetErrorMessage()
 		{
-			return "Value was smaller than " + min;
+			return "Is smaller or equal to " + min;
 		}
 	}
 	
@@ -53,7 +53,7 @@ namespace HLVS.Runtime
 
 		public override string GetErrorMessage()
 		{
-			return "Value was smaller than " + min;
+			return "Is smaller or equal to " + min;
 		}
 	}
 
@@ -77,7 +77,7 @@ namespace HLVS.Runtime
 
 		public override string GetErrorMessage()
 		{
-			return "Value was larger than " + max;
+			return "Is larger than " + max;
 		}
 	}
 
@@ -101,7 +101,7 @@ namespace HLVS.Runtime
 
 		public override string GetErrorMessage()
 		{
-			return "Value was larger than " + max;
+			return "Is larger than " + max;
 		}
 	}
 }
