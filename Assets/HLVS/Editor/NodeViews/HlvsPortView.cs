@@ -226,7 +226,7 @@ namespace HLVS.Editor.NodeViews
 			_valueField.SetEnabled(false);
 		}
 
-		public void SetDisplayMode(PortMode mode)
+		public void SetDisplayMode(PortMode mode, bool force = false)
 		{
 			if (_mode == mode)
 				return;
@@ -293,6 +293,7 @@ namespace HLVS.Editor.NodeViews
 							blackboardProp = serializedBlackboard.FindProperty("fields")
 							                                     .GetArrayElementAtIndex(blackboardIndex)
 							                                     .FindPropertyRelative("name");
+							_valueField.BindProperty(blackboardProp);
 							SetDisplayMode(PortMode.ReferenceBlackboardVariable);
 						});
 						view.serializedGraph.Update();
@@ -316,6 +317,7 @@ namespace HLVS.Editor.NodeViews
 						graphParamProp = serializedGraph.FindProperty("parametersBlueprint").GetArrayElementAtIndex(index)
 						                                .FindPropertyRelative("name");
 
+						_valueField.BindProperty(graphParamProp);
 						SetDisplayMode(PortMode.ReferenceGraphVariable);
 					});
 					view.serializedGraph.Update();
