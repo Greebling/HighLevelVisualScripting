@@ -15,7 +15,9 @@ namespace HLVS.Runtime
 
 		[SerializeReference] [HideInInspector] public List<ExposedParameter> graphParameters = new List<ExposedParameter>();
 
-		public HlvsGraph CurrentGraph => _runtimeGraph ? _runtimeGraph : graph;
+		public HlvsGraph CurrentGraph => 
+			_runtimeGraph && Application.isPlaying ? 
+				_runtimeGraph : graph;
 
 		public void CreateFittingParamList()
 		{

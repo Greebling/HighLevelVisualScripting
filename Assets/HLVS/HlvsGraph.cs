@@ -75,6 +75,9 @@ namespace HLVS
 
 			onGraphChanges += changes =>
 			{
+				if(!activeGameObject)
+					return;
+				
 				if (changes.addedNode != null || changes.removedNode != null)
 				{
 					ScanEventNodes();
@@ -121,6 +124,9 @@ namespace HLVS
 
 			_processor.UpdateComputeOrder();
 #if UNITY_EDITOR
+			if(!activeGameObject)
+				return;
+			
 			ScanEventNodes();
 			ScanZoneNodes();
 #endif

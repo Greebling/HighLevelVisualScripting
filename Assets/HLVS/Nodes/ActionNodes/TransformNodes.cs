@@ -265,7 +265,7 @@ namespace HLVS.Nodes.ActionNodes
 		[Input("Direction")]
 		public Vector3 direction;
 
-		[Input("Max Turnangle")] [LargerOrEqual(0)]
+		[Input("Speed")] [LargerOrEqual(0)]
 		public float smoothAmount = 120.0f;
 
 		
