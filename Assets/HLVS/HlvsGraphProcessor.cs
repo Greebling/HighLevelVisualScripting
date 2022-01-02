@@ -13,8 +13,7 @@ namespace HLVS
 	{
 		List<ExecutionStarterNode> _startNodes;
 
-		private Dictionary<Type, (HashSet<HlvsNode> currentPausedNodes, HashSet<HlvsNode> nextPausedNodes)> _pausedNodes =
-			new Dictionary<Type, (HashSet<HlvsNode> currentPausedNodes, HashSet<HlvsNode> nextPausedNodes)>();
+		private Dictionary<Type, (HashSet<HlvsNode> currentPausedNodes, HashSet<HlvsNode> nextPausedNodes)> _pausedNodes = new();
 
 
 		private readonly HlvsGraph _graph;
@@ -273,31 +272,37 @@ namespace HLVS
 
 				var result = EvaluateNodeAndDependencies(currNode);
 
-				if (result == ProcessingStatus.Unfinished)
+				switch (result)
 				{
-					nextPausedNodes.Add(currNode);
-				}
-				else
-				{
-					if (currNode is HlvsFlowNode flowNode)
-					{
-						var nextNodes = GetNextNodes(flowNode);
-						if (nextNodes != null)
+					case ProcessingStatus.Finished:
+						if (currNode is HlvsFlowNode flowNode)
 						{
-							foreach (HlvsNode nextNode in nextNodes)
+							var nextNodes = GetNextNodes(flowNode);
+							if (nextNodes != null)
 							{
-								currNodes.Enqueue(nextNode);
+								foreach (HlvsNode nextNode in nextNodes)
+								{
+									currNodes.Enqueue(nextNode);
+								}
 							}
+
+							continue;
 						}
 
-						continue;
-					}
-
-					HlvsNode next = GetNextNode(currNode);
-					if (next != null)
-					{
-						currNodes.Enqueue(next);
-					}
+						HlvsNode next = GetNextNode(currNode);
+						if (next != null)
+						{
+							currNodes.Enqueue(next);
+						}
+						break;
+					case ProcessingStatus.Unfinished:
+						nextPausedNodes.Add(currNode);
+						break;
+					case ProcessingStatus.Abort:
+						// do nothing, we stop here
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
 				}
 			}
 		}

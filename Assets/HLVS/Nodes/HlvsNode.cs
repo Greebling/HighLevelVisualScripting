@@ -11,7 +11,8 @@ namespace HLVS.Nodes
 	public enum ProcessingStatus
 	{
 		Finished,
-		Unfinished
+		Unfinished,
+		Abort,
 	}
 
 	[Serializable]
