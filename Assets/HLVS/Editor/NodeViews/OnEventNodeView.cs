@@ -11,20 +11,17 @@ namespace HLVS.Editor.NodeViews
 	[NodeCustomEditor(typeof(OnEventNode))]
 	public class OnEventNodeView : HlvsNodeView
 	{
-		private const string addText = "New Event...";
-
 		private OnEventNode   _target;
 		private DropdownField _currentDropDown;
 
 		public override void Select(VisualElement selectionContainer, bool additive)
 		{
 			base.Select(selectionContainer, additive);
-			
-			
+
+
 			var choices = EventManager.instance.GetEventNames().ToList();
-			choices.Add(addText);
 			controlsContainer.Remove(_currentDropDown);
-			
+
 			_currentDropDown = CreateDropDown(choices);
 			controlsContainer.Add(_currentDropDown);
 		}
@@ -33,27 +30,25 @@ namespace HLVS.Editor.NodeViews
 		{
 			_target = (OnEventNode)nodeTarget;
 
-			if (_target.eventName == "" &&  EventManager.instance.GetEventNames().FirstOrDefault() != null)
+			if (_target.eventName == "" && EventManager.instance.GetEventNames().FirstOrDefault() != null)
 			{
 				_target.eventName = EventManager.instance.GetEventNames().FirstOrDefault();
 				OnEventSelected();
 			}
-			
-			
+
+
 			var choices = EventManager.instance.GetEventNames().ToList();
-			choices.Add(addText);
 
 			_currentDropDown = CreateDropDown(choices);
 			controlsContainer.Add(_currentDropDown);
-			
-			
+
+
 			controlsContainer.RegisterCallback<FocusOutEvent>(evt => { UpdateDropDown(); });
 		}
 
 		private void UpdateDropDown()
 		{
 			var choices = EventManager.instance.GetEventNames().ToList();
-			choices.Add(addText);
 			_currentDropDown.choices = choices;
 		}
 
@@ -71,38 +66,14 @@ namespace HLVS.Editor.NodeViews
 
 			namesField.RegisterValueChangedCallback((v) =>
 			{
-				if (v.newValue == addText)
-				{
-					var popup = new TextField();
-					popup.name = "Popup";
-					owner.Add(popup);
-					_target.eventName = "";
-
-					popup.RegisterCallback<FocusOutEvent>(evt =>
-					{
-						_target.eventName = popup.value;
-						EventManager.instance.AddEventDefinition(new HlvsEvent() { name = popup.value });
-
-						namesField.value = popup.value;
-						OnEventSelected();
-						
-						owner.Remove(popup);
-						owner.serializedGraph.ApplyModifiedProperties();
-						owner.serializedGraph.Update();
-
-					});
-				}
-				else
-				{
-					owner.RegisterCompleteObjectUndo("Updated event name of OnEventNode");
-					_target.eventName = namesField.value;
-					OnEventSelected();
-				}
+				owner.RegisterCompleteObjectUndo("Updated event name of OnEventNode");
+				_target.eventName = namesField.value;
+				OnEventSelected();
 			});
 
 			namesField.RegisterCallback<FocusInEvent>(evt =>
 				UpdateDropDown());
-			
+
 			return namesField;
 		}
 	}
