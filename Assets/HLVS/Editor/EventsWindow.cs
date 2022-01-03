@@ -53,15 +53,15 @@ namespace HLVS.Editor
 
 		private void AddEventList()
 		{
-			var list = new ListView(_events, 140,
+			var eventsView = new ListView(_events, 140,
 				() => new EventDrawer(),
 				(element, i) => (element as EventDrawer).SetRender(_events[i]));
-			list.showAddRemoveFooter = true;
-			list.headerTitle = "Parameters";
-			list.style.flexGrow = 1;
+			eventsView.showAddRemoveFooter = true;
+			eventsView.headerTitle = "Parameters";
+			eventsView.style.flexGrow = 1;
 
 
-			list.itemsAdded += ints =>
+			eventsView.itemsAdded += ints =>
 			{
 				foreach (int i in ints)
 				{
@@ -73,16 +73,24 @@ namespace HLVS.Editor
 					AssetDatabase.SaveAssetIfDirty(EventManager.instance);
 				}
 			};
-			list.itemsRemoved += ints =>
+			eventsView.itemsRemoved += ints =>
 			{
+				_events = EventManager.instance.GetAllEvents(); // get all events just to be sure
+				
 				var list = _events.ToList();
 				foreach (int i in ints)
 				{
+					if (i >= list.Count)
+					{
+						Debug.LogError($"Event at index {i} cannot be removed");
+						return;
+					}
+					
 					EventManager.instance.RemoveEventDefinition(list[i].name);
 				}
 			};
 
-			_root.Add(list);
+			_root.Add(eventsView);
 		}
 
 		private void AddClearButton()
