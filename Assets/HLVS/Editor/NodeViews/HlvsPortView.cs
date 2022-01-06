@@ -69,7 +69,7 @@ namespace HLVS.Editor.NodeViews
 			if (direction == Direction.Output || fieldInfo.FieldType == typeof(ExecutionLink))
 				return;
 
-			this.Q<Label>().style.width = 60;
+			this.Q<Label>().style.width = 70;
 
 			InitValueProperty(graph, view, targetNode);
 			InitResetButton(graph, view, targetNode);
