@@ -231,8 +231,6 @@ namespace HLVS.Editor.NodeViews
 			if (_mode == mode)
 				return;
 
-			OnBeforeSwitchDisplayMode();
-
 			// show next mode field
 			switch (mode)
 			{
@@ -248,11 +246,6 @@ namespace HLVS.Editor.NodeViews
 			}
 
 			_mode = mode;
-		}
-
-		public virtual void OnBeforeSwitchDisplayMode()
-		{
-			//_valueField.Unbind();
 		}
 
 		private void InitResetButton(HlvsGraph graph, HlvsGraphView view, HlvsNode node)
@@ -360,14 +353,6 @@ namespace HLVS.Editor.NodeViews
 			}
 
 			valueProp = valueProp.FindPropertyRelative(fieldInfo.Name);
-		}
-
-
-		public void SetPortType(Type type)
-		{
-			RemoveFromClassList("Port_" + portType.Name);
-			portType = type;
-			AddToClassList("Port_" + portType.Name);
 		}
 
 		private static void OnReferenceVariable(HlvsNode node, string nameOfField, string parameterGuid)
