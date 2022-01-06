@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GraphProcessor;
 using UnityEngine;
 
@@ -32,6 +33,21 @@ namespace HLVS.Nodes.ActionNodes
 			}
 			
 			return ProcessingStatus.Finished;
+		}
+		
+		[CustomPortBehavior(nameof(inputData))]
+		IEnumerable<PortData> ListPortBehavior(List<SerializableEdge> edges)
+		{
+			var selectedVariable = (graph as HlvsGraph).GetVariableByName(variableName);
+			if (selectedVariable == null)
+				yield return null;
+			
+			yield return new PortData
+			{
+				displayName = selectedVariable.name,
+				displayType = selectedVariable.GetValueType(),
+				identifier = "0",
+			};
 		}
 	}
 }

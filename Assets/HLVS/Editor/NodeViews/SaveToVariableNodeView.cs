@@ -22,6 +22,7 @@ namespace HLVS.Editor.NodeViews
 			inputContainer.Add(_currentDropDown);
 			
 			controlsContainer.Clear();
+			title = _target.name + " " + _target.variableName;
 		}
 		
 		private void UpdateDropDown()
@@ -42,7 +43,10 @@ namespace HLVS.Editor.NodeViews
 			namesField.RegisterValueChangedCallback((v) =>
 			{
 				owner.RegisterCompleteObjectUndo("Updated variable name of SaveToVariableNode");
-				_target.variableName = namesField.value;
+				_target.variableName = v.newValue;
+
+				title = _target.name + " " + _target.variableName;
+				ForceUpdatePorts();
 			});
 
 			namesField.RegisterCallback<FocusInEvent>(evt =>
