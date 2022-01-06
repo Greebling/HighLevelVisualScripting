@@ -8,6 +8,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Direction = UnityEditor.Experimental.GraphView.Direction;
+using Node = UnityEditor.Experimental.GraphView.Node;
 
 namespace HLVS.Editor.Views
 {
