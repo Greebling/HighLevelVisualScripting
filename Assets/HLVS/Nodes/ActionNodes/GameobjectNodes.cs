@@ -150,7 +150,7 @@ namespace HLVS.Nodes.ActionNodes
 		[LargerThan(0)]
 		public float distance = 10;
 
-		public LayerMask layers = Int32.MaxValue;
+		public LayerMask checkedLayers = Int32.MaxValue;
 
 		[Output("Gameobject")]
 		public GameObject output;
@@ -164,7 +164,7 @@ namespace HLVS.Nodes.ActionNodes
 				direction = origin.transform.forward;
 
 			var ray = new Ray(origin.transform.position, direction);
-			if (Physics.Raycast(ray, out RaycastHit hit, distance, layers))
+			if (Physics.Raycast(ray, out RaycastHit hit, distance, checkedLayers))
 			{
 				output = hit.collider.gameObject;
 
@@ -205,7 +205,7 @@ namespace HLVS.Nodes.ActionNodes
 		[LargerThan(0)]
 		public float distance = 10;
 
-		public LayerMask layers = Int32.MaxValue;
+		public LayerMask checkedLayers = Int32.MaxValue;
 
 		[Output("Gameobject")]
 		public GameObject output;
@@ -216,7 +216,7 @@ namespace HLVS.Nodes.ActionNodes
 			var direction = origin.transform.forward;
 
 			var ray = new Ray(origin.transform.position, direction);
-			if (Physics.Raycast(ray, out RaycastHit hit, distance, layers))
+			if (Physics.Raycast(ray, out RaycastHit hit, distance, checkedLayers))
 			{
 				output = hit.collider.gameObject;
 
