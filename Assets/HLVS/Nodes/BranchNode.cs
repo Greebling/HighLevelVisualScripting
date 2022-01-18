@@ -11,7 +11,7 @@ namespace HLVS.Nodes
 		public override string name => "Condition";
 
 		[Input(" ")]
-		public ExecutionLink inputLink;
+		public ExecutionLink previousAction;
 
 		[Input("Condition")]
 		public bool condition = true;
@@ -30,12 +30,12 @@ namespace HLVS.Nodes
 	
 	
 	[Serializable, NodeMenuItem("Branch/Is Same Gameobject")]
-	public class Node : HlvsFlowNode
+	public class IsSameGameobjectNode : HlvsFlowNode
 	{
 		public override string name => "Is Same Gameobject";
 
 		[Input(" ")]
-		public ExecutionLink inputLink;
+		public ExecutionLink previousAction;
 
 		[Input("Object")]
 		public GameObject obj1;
@@ -43,10 +43,10 @@ namespace HLVS.Nodes
 		[Input("Other")]
 		public GameObject obj2;
 
-		[Output("Is Same")]
+		[Output("Same")]
 		public ExecutionLink trueLink;
 
-		[Output("Is Different")]
+		[Output("Different")]
 		public ExecutionLink falseLink;
 
 		public override string[] GetNextExecutionLinks()
