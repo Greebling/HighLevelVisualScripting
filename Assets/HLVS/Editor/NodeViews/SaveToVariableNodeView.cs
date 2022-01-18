@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
+using HLVS.Editor.Views;
 using HLVS.Nodes.ActionNodes;
+using HLVS.Runtime;
 using UnityEngine.UIElements;
 
 namespace HLVS.Editor.NodeViews
@@ -15,16 +17,23 @@ namespace HLVS.Editor.NodeViews
 		public override void Enable()
 		{
 			base.Enable();
-			
+
 			_target = (SaveToVariableNode)nodeTarget;
 
 			_currentDropDown = CreateDropDown();
 			inputContainer.Add(_currentDropDown);
-			
+
 			controlsContainer.Clear();
 			title = _target.name + " " + _target.variableName;
+			
+			foreach (PortView portView in inputPortViews.ToList())
+			{
+				var button = portView.Q<Button>();
+				if(button != null)
+					button.parent.Remove(button);
+			}
 		}
-		
+
 		private void UpdateDropDown()
 		{
 			var choices = graph.GetParameters().Select(parameter => parameter.name).ToList();
@@ -47,6 +56,13 @@ namespace HLVS.Editor.NodeViews
 
 				title = _target.name + " " + _target.variableName;
 				ForceUpdatePorts();
+
+				foreach (PortView portView in inputPortViews.ToList())
+				{
+					var button = portView.Q<Button>();
+					if(button != null)
+						button.parent.Remove(button);
+				}
 			});
 
 			namesField.RegisterCallback<FocusInEvent>(evt =>
