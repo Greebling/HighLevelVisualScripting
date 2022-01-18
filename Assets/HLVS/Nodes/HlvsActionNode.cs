@@ -12,5 +12,7 @@ namespace HLVS.Nodes
 		public readonly ExecutionLink followingAction = new ExecutionLink();
 
 		public override string nextExecutionLink => nameof(followingAction);
+
+		public override bool isRenamable => true;
 	}
 }
