@@ -31,6 +31,61 @@ namespace HLVS.Editor.NodeViews
 			styleSheets.Add(portStyle);
 		}
 
+		public override bool RefreshPorts()
+		{
+			var refreshStatus = base.RefreshPorts();
+			MoveExecutionPortsToHeader();
+			return refreshStatus;
+		}
+
+		private void MoveExecutionPortsToHeader()
+		{
+			foreach (PortView portView in inputPortViews)
+			{
+				if (portView.fieldName == "previousAction")
+				{
+					portView.parent.Remove(portView);
+					portView.RemoveFromHierarchy();
+					titleContainer.Insert(0, portView);
+
+					var portStyle = portView.Q("connector").style;
+					portStyle.borderBottomLeftRadius = 0;
+					portStyle.borderTopLeftRadius = 0;
+					portStyle.height = 14;
+					portStyle.width = 12;
+					var capStyle = portView.Q("cap").style;
+					capStyle.borderBottomLeftRadius = 1;
+					capStyle.borderTopLeftRadius = 1;
+					capStyle.height = 8;
+					capStyle.width = 6;
+
+					break;
+				}
+			}
+
+			foreach (PortView portView in outputPortViews)
+			{
+				if (portView.fieldName == "followingAction")
+				{
+					portView.parent.Remove(portView);
+					portView.RemoveFromHierarchy();
+					titleContainer.Add(portView);
+
+					var portStyle = portView.Q("connector").style;
+					portStyle.borderBottomRightRadius = 0;
+					portStyle.borderTopRightRadius = 0;
+					portStyle.height = 14;
+					portStyle.width = 12;
+					var capStyle = portView.Q("cap").style;
+					capStyle.borderBottomRightRadius = 1;
+					capStyle.borderTopRightRadius = 1;
+					capStyle.height = 8;
+					capStyle.width = 6;
+					break;
+				}
+			}
+		}
+
 		internal void CheckInputtedData()
 		{
 			bottomPortContainer.Clear();

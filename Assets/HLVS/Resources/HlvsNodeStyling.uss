@@ -51,3 +51,24 @@
     border-width: 2px;
     border-radius: 5px ;
 }
+
+.execution-in #connector .connectorBox{
+    width: 10px;
+    height: 10px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.port #connector > #cap {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.Port_ExecutionLink{
+    align-self: center;
+}
+
