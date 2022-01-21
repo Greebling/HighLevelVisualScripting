@@ -846,7 +846,7 @@ namespace GraphProcessor
 			var nodeIndexString = nodeIndex.ToString();
 			foreach (var propertyField in this.Query<PropertyField>().ToList())
 			{
-				if(!propertyField.enabledSelf)
+				if(!propertyField.enabledSelf || propertyField.bindingPath == null)
 					continue;
 				
 				propertyField.Unbind();
