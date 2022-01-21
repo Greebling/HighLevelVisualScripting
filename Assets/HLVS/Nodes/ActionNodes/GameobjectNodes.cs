@@ -59,9 +59,12 @@ namespace HLVS.Nodes.ActionNodes
 	}
 
 	[Serializable, NodeMenuItem("Gameobject/Has Tag")]
-	public class CompareTagNode : HlvsDataNode
+	public class CompareTagNode : HlvsFlowNode
 	{
 		public override string name => "Has Tag";
+
+		[Input(" ")]
+		public ExecutionLink previousAction;
 
 		[Input("Object")]
 		public GameObject target;
@@ -69,20 +72,25 @@ namespace HLVS.Nodes.ActionNodes
 		[Input("Tag")]
 		public string tag;
 
-		[Output("Has Tag")]
-		public bool hasTag;
+		[Output("Has Tag", false)]
+		public ExecutionLink trueLink;
 
-		public override ProcessingStatus Evaluate()
+		[Output("Else", false)]
+		public ExecutionLink falseLink;
+
+		public override string[] GetNextExecutionLinks()
 		{
-			hasTag = target && target.CompareTag(tag);
-			return ProcessingStatus.Finished;
+			return target && target.CompareTag(tag) ? new[] { nameof(trueLink) } : new[] { nameof(falseLink) };
 		}
 	}
 
 	[Serializable, NodeMenuItem("Gameobject/Is on Layer")]
-	public class IsOnLayerNode : HlvsDataNode
+	public class IsOnLayerNode : HlvsFlowNode
 	{
 		public override string name => "Is on Layer";
+
+		[Input(" ")]
+		public ExecutionLink previousAction;
 
 		[Input("Object")]
 		public GameObject target;
@@ -90,13 +98,16 @@ namespace HLVS.Nodes.ActionNodes
 		[Input("Any of")]
 		public LayerMask layer;
 
-		[Output("Is on Layer")]
-		public bool isOnLayer;
+		[Output("On Layer", false)]
+		public ExecutionLink trueLink;
 
-		public override ProcessingStatus Evaluate()
+		[Output("Else", false)]
+		public ExecutionLink falseLink;
+
+		public override string[] GetNextExecutionLinks()
 		{
-			isOnLayer = target && (target.layer & layer) != 0;
-			return ProcessingStatus.Finished;
+			bool isOnLayer = target && (target.layer & layer) != 0;
+			return isOnLayer ? new[] { nameof(trueLink) } : new[] { nameof(falseLink) };
 		}
 	}
 
