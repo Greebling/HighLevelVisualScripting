@@ -40,14 +40,17 @@ namespace HLVS.Nodes.ActionNodes
 		{
 			var selectedVariable = (graph as HlvsGraph).GetVariableByName(variableName);
 			if (selectedVariable == null)
-				yield return null;
-			
-			yield return new PortData
 			{
-				displayName = selectedVariable.name,
-				displayType = selectedVariable.GetValueType(),
-				identifier = "0",
-			};
+				yield return null;
+			} else
+			{
+				yield return new PortData
+				{
+					displayName = selectedVariable.name,
+					displayType = selectedVariable.GetValueType(),
+					identifier = "0",
+				};
+			}
 		}
 	}
 }
