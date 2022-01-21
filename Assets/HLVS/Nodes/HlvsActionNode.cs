@@ -8,7 +8,7 @@ namespace HLVS.Nodes
 		[Input(" ")]
 		public ExecutionLink previousAction;
 		
-		[Output(" ")]
+		[Output(" ", false)]
 		public readonly ExecutionLink followingAction = new ExecutionLink();
 
 		public override string nextExecutionLink => nameof(followingAction);

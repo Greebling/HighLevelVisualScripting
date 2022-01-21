@@ -16,10 +16,10 @@ namespace HLVS.Nodes
 		[Input("Condition")]
 		public bool condition = true;
 
-		[Output("True")]
+		[Output("True", false)]
 		public ExecutionLink trueLink;
 
-		[Output("False")]
+		[Output("False", false)]
 		public ExecutionLink falseLink;
 
 		public override string[] GetNextExecutionLinks()
@@ -43,10 +43,10 @@ namespace HLVS.Nodes
 		[Input("Other")]
 		public GameObject obj2;
 
-		[Output("Same")]
+		[Output("Same", false)]
 		public ExecutionLink trueLink;
 
-		[Output("Different")]
+		[Output("Different", false)]
 		public ExecutionLink falseLink;
 
 		public override string[] GetNextExecutionLinks()
