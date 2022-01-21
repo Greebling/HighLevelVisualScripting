@@ -1,6 +1,7 @@
 ﻿using System;
 using GraphProcessor;
 using UnityEngine;
+using UnityEngine.Playables;
 
 namespace HLVS.Nodes.ActionNodes
 {
@@ -115,6 +116,29 @@ namespace HLVS.Nodes.ActionNodes
 			}
 
 			anim.SetInteger(floatName, value);
+			
+			return ProcessingStatus.Finished;
+		}
+	}
+	
+	[Serializable, NodeMenuItem("Animation/Play Director")]
+	public class PlayDirectorNode : HlvsActionNode
+	{
+		public override string name => "Play Director";
+		
+		[Input("Target")]
+		public GameObject target;
+
+		public override ProcessingStatus Evaluate()
+		{
+			var anim = target.GetComponent<PlayableDirector>();
+			if (!anim)
+			{
+				Debug.Assert(false, "No Playable Director was found");
+				return ProcessingStatus.Finished;
+			}
+
+			anim.Play();
 			
 			return ProcessingStatus.Finished;
 		}
