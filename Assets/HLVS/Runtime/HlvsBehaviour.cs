@@ -125,6 +125,7 @@ namespace HLVS.Runtime
 			if (graph)
 			{
 				_runtimeGraph = Instantiate(graph);
+				_runtimeGraph.activeGameObject = gameObject;
 				_runtimeGraph.name = graph.name + " (Instance)";
 				_runtimeGraph.Init();
 				_runtimeGraph.LinkToScene(gameObject.scene);
