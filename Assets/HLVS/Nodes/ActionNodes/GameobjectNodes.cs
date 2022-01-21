@@ -189,7 +189,7 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Object in Front Of";
 
 		[Input(" ")]
-		public ExecutionLink inputLink;
+		public ExecutionLink previousAction;
 		
 		[Output("Some Found")]
 		public ExecutionLink trueLink;

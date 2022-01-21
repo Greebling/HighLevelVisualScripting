@@ -21,9 +21,17 @@ MonoBehaviour:
     parameters:
     - rid: 5412298746070827152
     - rid: 5412298746070827153
+  - name: My Event (2)
+    parameters:
+    - rid: 5412299176374960138
+    - rid: -2
+  - name: My Event (3)
+    parameters: []
   _savedNames:
   - My Event
   - My Event (1)
+  - My Event (2)
+  - My Event (3)
   references:
     version: 2
     RefIds:
@@ -85,3 +93,17 @@ MonoBehaviour:
         settings:
           rid: -2
         val: {x: 0, y: 0, z: 0}
+    - rid: 5412299176374960138
+      type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: My Text
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: 
