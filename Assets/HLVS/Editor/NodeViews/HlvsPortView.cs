@@ -126,6 +126,11 @@ namespace HLVS.Editor.NodeViews
 			AddVisualElements();
 		}
 
+		public virtual void Disable()
+		{
+			_valueField?.Unbind();
+		}
+
 		protected virtual void AddVisualElements()
 		{
 			Add(_valueField);
@@ -201,9 +206,9 @@ namespace HLVS.Editor.NodeViews
 
 		public virtual void ShowValueField()
 		{
-			if(valueProp == null) // dont show non serializeable properties
+			if (valueProp == null) // dont show non serializeable properties
 				return;
-			
+
 			_valueField.BindProperty(isExpressionPort & !_isConnected ? expressionProp : valueProp);
 			_valueField.Bind(serializedGraph);
 
@@ -373,7 +378,7 @@ namespace HLVS.Editor.NodeViews
 			// show serialized value
 			ShowValue,
 		}
-
+		
 		/// <summary>
 		/// Current display mode of port
 		/// </summary>

@@ -31,6 +31,20 @@ namespace HLVS.Editor.NodeViews
 			styleSheets.Add(portStyle);
 		}
 
+		public override void Disable()
+		{
+			foreach (HlvsPortView portView in inputPortViews.Cast<HlvsPortView>())
+			{
+				portView.Disable();
+			}
+			foreach (HlvsPortView portView in outputPortViews.Cast<HlvsPortView>())
+			{
+				portView.Disable();
+			}
+
+			base.Disable();
+		}
+
 		public override bool RefreshPorts()
 		{
 			var refreshStatus = base.RefreshPorts();
