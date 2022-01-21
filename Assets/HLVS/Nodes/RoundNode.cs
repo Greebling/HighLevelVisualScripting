@@ -12,6 +12,13 @@ namespace HLVS.Nodes
 		
 		[Output("Out")]
 		public int output;
+		
+		public RoundMode rounding;
+
+		public enum RoundMode
+		{
+			Standard, Ceil, Floor
+		}
 
 		public override string name => "Round";
 
@@ -27,8 +34,21 @@ namespace HLVS.Nodes
 
 		public override ProcessingStatus Evaluate()
 		{
-			output = Mathf.RoundToInt(input);
-			
+			switch (rounding)
+			{
+				case RoundMode.Standard:
+					output = Mathf.RoundToInt(input);
+					break;
+				case RoundMode.Ceil:
+					output = Mathf.CeilToInt(input);
+					break;
+				case RoundMode.Floor:
+					output = Mathf.FloorToInt(input);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
 			return ProcessingStatus.Finished;
 		}
 	}
