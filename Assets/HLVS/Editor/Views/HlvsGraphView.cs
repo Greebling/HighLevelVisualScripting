@@ -72,6 +72,8 @@ namespace HLVS.Editor.Views
 
 			var startNode = (HlvsNode) (startPort as PortView).owner.nodeTarget;
 			var startView = ((PortView)startPort).owner;
+			var startNodesStarter = HlvsGraphProcessor.ExecutionStarterOf(startNode);
+			
 			var previousNodes = new HashSet<BaseNode>();
 			foreach (var previousNode in startNode.GetAllPreviousNodes())
 			{
@@ -85,7 +87,6 @@ namespace HLVS.Editor.Views
 					continue;
 
 				//Check for type assignability
-
 				if (startPort.direction == Direction.Input)
 				{
 					if (!BaseGraph.TypesAreConnectable(p.portType, startPort.portType))
@@ -100,14 +101,26 @@ namespace HLVS.Editor.Views
 				if (portView.owner == startView)
 					continue;
 				
-				var nextNode = (p as PortView).owner.nodeTarget;
-				if(!(startNode is HlvsDataNode || nextNode is HlvsDataNode) && previousNodes.Contains(nextNode))
+				var checkedNode = (HlvsNode) ((PortView) p).owner.nodeTarget;
+				if(startNode is not HlvsDataNode && checkedNode is not HlvsDataNode && previousNodes.Contains(checkedNode))
 					continue;
 
 				//Check if the edge already exists
 				if (portView.GetEdges().Any(e => e.input == startPort || e.output == startPort))
 					continue;
 
+				
+				// check dependency ordering of port
+				if (startNodesStarter != null)
+				{
+					var checkedStart = HlvsGraphProcessor.ExecutionStarterOf(checkedNode);
+					if (checkedStart != null)
+					{
+						if(startNodesStarter != checkedStart)
+							continue;
+					}
+				}
+				
 				compatiblePorts.Add(p);
 			}
 

@@ -59,12 +59,9 @@ namespace HLVS.Nodes.ActionNodes
 	}
 
 	[Serializable, NodeMenuItem("Gameobject/Has Tag")]
-	public class CompareTagNode : HlvsFlowNode
+	public class CompareTagNode : BranchingNode
 	{
 		public override string name => "Has Tag";
-
-		[Input(" ")]
-		public ExecutionLink previousAction;
 
 		[Input("Object")]
 		public GameObject target;
@@ -85,12 +82,9 @@ namespace HLVS.Nodes.ActionNodes
 	}
 
 	[Serializable, NodeMenuItem("Gameobject/Is on Layer")]
-	public class IsOnLayerNode : HlvsFlowNode
+	public class IsOnLayerNode : BranchingNode
 	{
 		public override string name => "Is on Layer";
-
-		[Input(" ")]
-		public ExecutionLink previousAction;
 
 		[Input("Object")]
 		public GameObject target;
@@ -137,12 +131,9 @@ namespace HLVS.Nodes.ActionNodes
 	}
 
 	[Serializable, NodeMenuItem("Gameobject/Object In Direction")]
-	public class FirstObjectInDirectionNode : HlvsFlowNode
+	public class FirstObjectInDirectionNode : BranchingNode
 	{
 		public override string name => "Object in Direction";
-
-		[Input(" ")]
-		public ExecutionLink inputLink;
 		
 		[Output("Some Found")]
 		public ExecutionLink trueLink;
@@ -195,12 +186,9 @@ namespace HLVS.Nodes.ActionNodes
 	}
 
 	[Serializable, NodeMenuItem("Gameobject/Object In Front Of")]
-	public class FirstObjectInFrontNode : HlvsFlowNode
+	public class FirstObjectInFrontNode : BranchingNode
 	{
 		public override string name => "Object in Front Of";
-
-		[Input(" ")]
-		public ExecutionLink previousAction;
 		
 		[Output("Some Found")]
 		public ExecutionLink trueLink;

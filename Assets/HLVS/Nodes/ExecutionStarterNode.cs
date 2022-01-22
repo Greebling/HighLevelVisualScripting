@@ -11,7 +11,13 @@ namespace HLVS.Nodes
 		[Output(" ", false)]
 		public readonly ExecutionLink followingAction = null;
 
+		public override HlvsNode GetPreviousNode()
+		{
+			return null;
+		}
+
 		public override string nextExecutionLink => nameof(followingAction);
+		
 	}
 
 	[Serializable, NodeMenuItem("Start/Every Frame")]

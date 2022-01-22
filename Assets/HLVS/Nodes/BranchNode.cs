@@ -1,17 +1,26 @@
 using System;
+using System.Linq;
 using GraphProcessor;
 using HLVS.Runtime;
 using UnityEngine;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("Branch/Conditional Branch")]
-	public class BranchNode : HlvsFlowNode
+	public abstract class BranchingNode : HlvsFlowNode
 	{
-		public override string name => "Condition";
-
 		[Input(" ")]
 		public ExecutionLink previousAction;
+		
+		public override HlvsNode GetPreviousNode()
+		{
+			return (HlvsNode) inputPorts.Find(port => port.fieldName == nameof(previousAction)).GetEdges().FirstOrDefault()?.outputNode;
+		}
+	}
+
+	[Serializable, NodeMenuItem("Branch/Conditional Branch")]
+	public class BranchNode : BranchingNode
+	{
+		public override string name => "Condition";
 
 		[Input("Condition")]
 		public bool condition = true;
@@ -27,19 +36,16 @@ namespace HLVS.Nodes
 			return condition ? new[] { nameof(trueLink) } : new[] { nameof(falseLink) };
 		}
 	}
-	
-	
+
+
 	[Serializable, NodeMenuItem("Branch/Is Same Gameobject")]
-	public class IsSameGameobjectNode : HlvsFlowNode
+	public class IsSameGameobjectNode : BranchingNode
 	{
 		public override string name => "Is Same Gameobject";
 
-		[Input(" ")]
-		public ExecutionLink previousAction;
-
 		[Input("Object")]
 		public GameObject obj1;
-		
+
 		[Input("Other")]
 		public GameObject obj2;
 

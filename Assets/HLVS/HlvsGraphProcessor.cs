@@ -352,5 +352,15 @@ namespace HLVS
 			           .Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null)
 			           .Select(edge => edge.inputNode as HlvsNode);
 		}
+
+		public static ExecutionStarterNode ExecutionStarterOf(HlvsNode fromNode)
+		{
+			while (fromNode != null && fromNode is not ExecutionStarterNode)
+			{
+				fromNode = fromNode.GetPreviousNode();
+			}
+
+			return (ExecutionStarterNode) fromNode;
+		}
 	}
 }

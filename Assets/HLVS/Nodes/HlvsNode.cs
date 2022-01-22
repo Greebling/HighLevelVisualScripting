@@ -69,6 +69,8 @@ namespace HLVS.Nodes
 			return val;
 		}
 
+		public abstract HlvsNode GetPreviousNode();
+		
 		/// <summary>
 		/// Returns the name of the port that has the next node connected
 		/// </summary>
