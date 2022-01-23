@@ -66,7 +66,7 @@ namespace HLVS.Editor.NodeViews
 
 		public virtual void Init(HlvsGraph graph, HlvsGraphView view, HlvsNodeView nodeView, HlvsNode targetNode)
 		{
-			if (direction == Direction.Output || fieldInfo.FieldType == typeof(ExecutionLink))
+			if (direction == Direction.Output || fieldInfo.FieldType == typeof(ExecutionLink) || fieldInfo.FieldType != portData.displayType)
 				return;
 
 			this.Q<Label>().style.width = 70;
@@ -378,7 +378,7 @@ namespace HLVS.Editor.NodeViews
 			// show serialized value
 			ShowValue,
 		}
-		
+
 		/// <summary>
 		/// Current display mode of port
 		/// </summary>
