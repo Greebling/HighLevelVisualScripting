@@ -65,7 +65,7 @@ namespace HLVS.Nodes
 		{
 			foreach (SerializableEdge edge in connectedEdges)
 			{
-				var index = int.Parse(edge.outputPort.portData.identifier); // currently don't know a better solution
+				var index = int.Parse(edge.outputPort.portData.identifier) - 1; // currently don't know a better solution
 				edge.passThroughBuffer = eventData[index].value;
 			}
 		}
