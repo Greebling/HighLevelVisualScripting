@@ -1212,7 +1212,7 @@ namespace GraphProcessor
 			edgeView.input = inputPortView;
 			edgeView.output = outputPortView;
 
-			if (ConversionNodeAdapter.AreAssignable(outputPort.fieldInfo.FieldType, inputPort.fieldInfo.FieldType))
+			if (ConversionNodeAdapter.AreAssignable(outputPort.portData.displayType, inputPort.portData.displayType))
 			{
 				return ConnectConvertable(edgeView, autoDisconnectInputs);
 			} else
@@ -1239,7 +1239,7 @@ namespace GraphProcessor
 			var inputPort = inputNodeView.nodeTarget.GetPort(inputPortView.fieldName, inputPortView.portData.identifier);
 			var outputPort = outputNodeView.nodeTarget.GetPort(outputPortView.fieldName, outputPortView.portData.identifier);
 			
-			Type conversionNodeType = ConversionNodeAdapter.GetConversionNode(outputPort.fieldInfo.FieldType, inputPort.fieldInfo.FieldType);
+			Type conversionNodeType = ConversionNodeAdapter.GetConversionNode(outputPort.portData.displayType, inputPort.portData.displayType);
 			if (conversionNodeType != null)
 			{
 				var nodePosition = (inputPort.owner.position.center + outputPort.owner.position.center) / 2.0f;
