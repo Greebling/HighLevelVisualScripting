@@ -6,7 +6,6 @@ namespace HLVS.Editor.Views
 	public class HlvsToolbarView : ToolbarView
 	{
 		private readonly HlvsGraphView _view;
-		private          bool          _isUpdating;
 
 		public HlvsToolbarView(BaseGraphView graphView) : base(graphView)
 		{
