@@ -140,4 +140,23 @@ namespace HLVS.Nodes.DataNodes
 			return ProcessingStatus.Finished;
 		}
 	}
+	
+	[Serializable, NodeMenuItem("Conditions/Not Condition")]
+	public class BoolNorNode : HlvsDataNode
+	{
+		public override string name => "Not Condition";
+
+		[Input("Condition ")]
+		public bool cond;
+
+		[Output("Result")]
+		public bool result;
+
+		public override ProcessingStatus Evaluate()
+		{
+			result = !cond;
+
+			return ProcessingStatus.Finished;
+		}
+	}
 }
