@@ -78,7 +78,7 @@ namespace HLVS.Nodes.DataNodes
 		}
 	}
 	
-	[Serializable, NodeMenuItem("Gameobject/Name"), ConverterNode(typeof(GameObject), typeof(string))]
+	[Serializable, NodeMenuItem("Gameobject/Get Name"), ConverterNode(typeof(GameObject), typeof(string))]
 	public class GameobjectNameNode : HlvsDataNode, IConversionNode
 	{
 		public override string name => "Get Name";
