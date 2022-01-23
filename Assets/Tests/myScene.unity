@@ -1093,12 +1093,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   graph: {fileID: 11400000, guid: 89b57ce35057c3c4db2ec0bd3db9fea1, type: 2}
   graphParameters:
-  - rid: 5412299201690468366
-  - rid: 5412299201690468367
+  - rid: 5412299246997864481
+  - rid: 5412299246997864482
   references:
     version: 2
     RefIds:
-    - rid: 5412299201690468366
+    - rid: 5412299246997864481
       type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: bced5117-232d-4050-8aa9-0d861b88322d
@@ -1110,9 +1110,9 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          rid: 5412299201690468368
+          rid: 5412299246997864483
         val: {fileID: 1274344589}
-    - rid: 5412299201690468367
+    - rid: 5412299246997864482
       type: {class: BoolParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         guid: a46c0444-004c-4386-96b9-032f9189efac
@@ -1124,15 +1124,15 @@ MonoBehaviour:
           serializedValue: 
         input: 1
         settings:
-          rid: 5412299201690468369
+          rid: 5412299246997864484
         val: 0
-    - rid: 5412299201690468368
+    - rid: 5412299246997864483
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0
         expanded: 0
         guid: bced5117-232d-4050-8aa9-0d861b88322d
-    - rid: 5412299201690468369
+    - rid: 5412299246997864484
       type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
         isHidden: 0

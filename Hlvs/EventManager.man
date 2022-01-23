@@ -15,8 +15,8 @@ MonoBehaviour:
   _savedEvents:
   - name: My Event
     parameters:
-    - rid: 5412298765373800471
-    - rid: 5412298765373800472
+    - rid: 5412299246997864450
+    - rid: 5412299246997864451
   - name: My Event (1)
     parameters:
     - rid: 5412298746070827152
@@ -24,14 +24,17 @@ MonoBehaviour:
   - name: My Event (2)
     parameters:
     - rid: 5412299176374960138
-    - rid: -2
   - name: My Event (3)
     parameters: []
+  - name: Test
+    parameters:
+    - rid: 5412299250187370504
   _savedNames:
   - My Event
   - My Event (1)
   - My Event (2)
   - My Event (3)
+  - Test
   references:
     version: 2
     RefIds:
@@ -65,34 +68,6 @@ MonoBehaviour:
         settings:
           rid: -2
         val: 
-    - rid: 5412298765373800471
-      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 
-        name: My GameObject
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          rid: -2
-        val: 0
-    - rid: 5412298765373800472
-      type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 
-        name: My Position
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          rid: -2
-        val: {x: 0, y: 0, z: 0}
     - rid: 5412299176374960138
       type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
       data:
@@ -107,3 +82,45 @@ MonoBehaviour:
         settings:
           rid: -2
         val: 
+    - rid: 5412299246997864450
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: My GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: {fileID: 0}
+    - rid: 5412299246997864451
+      type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: My Position
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: {x: 0, y: 0, z: 0}
+    - rid: 5412299250187370504
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 
+        name: My GameObject
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: -2
+        val: {fileID: 0}
