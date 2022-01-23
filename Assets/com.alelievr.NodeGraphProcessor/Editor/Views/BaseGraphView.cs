@@ -1212,8 +1212,13 @@ namespace GraphProcessor
 			edgeView.input = inputPortView;
 			edgeView.output = outputPortView;
 
-
-			return Connect(edgeView);
+			if (ConversionNodeAdapter.AreAssignable(outputPort.fieldInfo.FieldType, inputPort.fieldInfo.FieldType))
+			{
+				return ConnectConvertable(edgeView, autoDisconnectInputs);
+			} else
+			{
+				return Connect(edgeView);
+			}
 		}
 
 		/// <summary>
