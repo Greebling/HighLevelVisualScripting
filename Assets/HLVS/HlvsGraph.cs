@@ -368,7 +368,15 @@ namespace HLVS
 
 		public void OnEvent(HlvsEvent e)
 		{
-			_processor.RunFromNodes(_eventNodes[e.name].Where(node => true), typeof(OnEventNode));
+			if(!activeGameObject)
+				return;
+			
+			foreach (OnEventNode onEventNode in _eventNodes[e.name])
+			{
+				onEventNode.eventData = e.parameters;
+			}
+
+			_processor.RunFromNodes(_eventNodes[e.name].Where(node => node != null), typeof(OnEventNode));
 		}
 	}
 }
