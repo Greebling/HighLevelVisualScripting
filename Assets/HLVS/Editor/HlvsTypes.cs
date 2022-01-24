@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 namespace HLVS.Editor
 {
+	/// <summary>
+	/// When applied the given class pops up as an addable type in graph blackboards and parameter lists
+	/// </summary>
 	[AttributeUsage(AttributeTargets.Class)]
 	public class HlvsTypeAttribute : Attribute
 	{
@@ -15,9 +18,24 @@ namespace HLVS.Editor
 	{
 		public static readonly List<Type> BuiltInTypes = new List<Type>()
 		{
-			typeof(bool), typeof(float), typeof(int), typeof(Vector2), typeof(Vector3), typeof(Vector4), typeof(string),
-			typeof(Color), typeof(GameObject), typeof(Collider), typeof(Rigidbody), typeof(Material), typeof(Scene)
+			typeof(bool), typeof(float), typeof(Vector3), typeof(string),
+			typeof(GameObject), typeof(Scene)
 		};
+
+		/// <summary>
+		/// Beautifies a given types name
+		/// </summary>
+		public static string GetTypeName(Type type)
+		{
+			string result = type.Name switch
+			                {
+				                "Single"  => "Number",
+				                "String"  => "Text",
+				                "Vector3" => "Position",
+				                _         => ObjectNames.NicifyVariableName(type.Name)
+			                };
+			return result;
+		}
 
 		public static TypeCache.TypeCollection GetUserTypes()
 		{

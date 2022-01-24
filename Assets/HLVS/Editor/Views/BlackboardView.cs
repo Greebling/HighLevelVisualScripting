@@ -74,12 +74,7 @@ namespace HLVS.Editor.Views
 		{
 			foreach (var type in HlvsTypes.BuiltInTypes)
 			{
-				string niceParamName = type.Name switch
-				{
-					"Single" => "Float",
-					"Int32" => "Int",
-					_ => ObjectNames.NicifyVariableName(type.Name)
-				};
+				string niceParamName = HlvsTypes.GetTypeName(type);
 
 				addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
 				{

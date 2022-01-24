@@ -59,12 +59,7 @@ namespace HLVS.Editor.Views
 		{
 			foreach (var type in HlvsTypes.BuiltInTypes)
 			{
-				string niceParamName = type.Name switch
-				{
-					"Single" => "Float",
-					"Int32" => "Int",
-					_ => ObjectNames.NicifyVariableName(type.Name)
-				};
+				string niceParamName = HlvsTypes.GetTypeName(type);
 
 				addMenu.AddItem(new GUIContent("Add " + niceParamName), false, () =>
 				{
@@ -145,7 +140,7 @@ namespace HLVS.Editor.Views
 			field.name = param.guid;
 			field.AddToClassList("hlvs-blackboard-field");
 			field.text = entryName;
-			field.typeText = param.GetValueType().Name;
+			field.typeText = HlvsTypes.GetTypeName(param.GetValueType());
 			field.Q("node-border").style.overflow = Overflow.Hidden;
 
 			// add updates for name changes
