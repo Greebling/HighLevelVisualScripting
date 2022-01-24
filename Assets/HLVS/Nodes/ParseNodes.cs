@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace HLVS.Nodes
 {
-	[Serializable, NodeMenuItem("Convert/Float to String"), ConverterNode(typeof(float), typeof(string))]
+	[Serializable, NodeMenuItem("Convert/Number to String"), ConverterNode(typeof(float), typeof(string))]
 	public class FloatToStringNode : HlvsDataNode, IConversionNode
 	{
 		[Input("In")]
@@ -40,7 +40,7 @@ namespace HLVS.Nodes
 		}
 	}
 
-	[Serializable, NodeMenuItem("Convert/Int to String"), ConverterNode(typeof(int), typeof(string))]
+	[Serializable, NodeMenuItem("Convert/Number to String"), ConverterNode(typeof(int), typeof(string))]
 	public class IntToStringNode : HlvsDataNode, IConversionNode
 	{
 		[Input("In")]

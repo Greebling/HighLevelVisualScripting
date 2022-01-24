@@ -146,7 +146,7 @@ namespace HLVS.Nodes.DataNodes
 	{
 		public override string name => "Not Condition";
 
-		[Input("Condition ")]
+		[Input("Condition")]
 		public bool cond;
 
 		[Output("Result")]
@@ -155,6 +155,25 @@ namespace HLVS.Nodes.DataNodes
 		public override ProcessingStatus Evaluate()
 		{
 			result = !cond;
+
+			return ProcessingStatus.Finished;
+		}
+	}
+	
+	[Serializable, NodeMenuItem("Conditions/Condition Value")]
+	public class BoolValueNode : HlvsDataNode
+	{
+		public override string name => "Not Condition";
+
+		[Input("Condition")]
+		public bool cond;
+
+		[Output("Result")]
+		public bool result;
+
+		public override ProcessingStatus Evaluate()
+		{
+			result = cond;
 
 			return ProcessingStatus.Finished;
 		}
