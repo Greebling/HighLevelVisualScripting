@@ -128,7 +128,11 @@ namespace HLVS.Editor.NodeViews
 
 		public virtual void Disable()
 		{
-			_valueField?.Unbind();
+			if(_valueField !=null)
+			{
+				_valueField.Unbind();
+				_valueField.RemoveFromHierarchy();
+			}
 		}
 
 		protected virtual void AddVisualElements()
