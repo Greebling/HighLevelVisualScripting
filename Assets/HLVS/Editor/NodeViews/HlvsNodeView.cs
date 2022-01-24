@@ -63,13 +63,13 @@ namespace HLVS.Editor.NodeViews
 					titleContainer.Insert(0, portView);
 
 					var portStyle = portView.Q("connector").style;
-					portStyle.borderBottomLeftRadius = 0;
-					portStyle.borderTopLeftRadius = 0;
+					portStyle.borderBottomRightRadius = 0;
+					portStyle.borderTopRightRadius = 0;
 					portStyle.height = 14;
 					portStyle.width = 12;
 					var capStyle = portView.Q("cap").style;
-					capStyle.borderBottomLeftRadius = 1;
-					capStyle.borderTopLeftRadius = 1;
+					capStyle.borderBottomRightRadius = 1;
+					capStyle.borderTopRightRadius = 1;
 					capStyle.height = 8;
 					capStyle.width = 6;
 
@@ -86,15 +86,16 @@ namespace HLVS.Editor.NodeViews
 					titleContainer.Add(portView);
 
 					var portStyle = portView.Q("connector").style;
-					portStyle.borderBottomRightRadius = 0;
-					portStyle.borderTopRightRadius = 0;
+					portStyle.borderBottomLeftRadius = 0;
+					portStyle.borderTopLeftRadius = 0;
 					portStyle.height = 14;
 					portStyle.width = 12;
 					var capStyle = portView.Q("cap").style;
-					capStyle.borderBottomRightRadius = 1;
-					capStyle.borderTopRightRadius = 1;
+					capStyle.borderBottomLeftRadius = 1;
+					capStyle.borderTopLeftRadius = 1;
 					capStyle.height = 8;
 					capStyle.width = 6;
+					
 					break;
 				}
 			}
