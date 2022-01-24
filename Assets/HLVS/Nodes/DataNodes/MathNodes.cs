@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace HLVS.Nodes.DataNodes
 {
-	[Serializable, NodeMenuItem("Math/Create Vector3"), ConverterNode(typeof(float), typeof(Vector3))]
+	[Serializable, NodeMenuItem("Math/Create Position"), ConverterNode(typeof(float), typeof(Vector3))]
 	public class CreateVector3Node : HlvsDataNode, IConversionNode
 	{
-		public override string name => "Create Vector3";
+		public override string name => "Create Position";
 
 		[Input("X")]
 		public float x;
