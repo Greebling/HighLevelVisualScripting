@@ -131,8 +131,8 @@ namespace HLVS.Editor
 			// open button
 			var button = new Button(() =>
 			{
-				if (_behaviour.CurrentGraph)
-					EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(_behaviour.CurrentGraph);
+				if (_behaviour.graph)
+					EditorWindow.GetWindow<HlvsWindow>().InitializeGraph(_behaviour.graph);
 			});
 			button.text = "Open";
 			button.name = "open-button";
