@@ -163,7 +163,7 @@ namespace HLVS.Nodes.DataNodes
 	[Serializable, NodeMenuItem("Conditions/Condition Value")]
 	public class BoolValueNode : HlvsDataNode
 	{
-		public override string name => "Not Condition";
+		public override string name => "Condition";
 
 		[Input("Condition")]
 		public bool cond;
