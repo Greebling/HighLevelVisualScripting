@@ -133,7 +133,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: eece54a370628c44da4e34e160f366ea,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: eece54a370628c44da4e34e160f366ea,
         type: 3}
@@ -352,14 +352,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 437641850}
   m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: -0.23000002, y: 0.5624168, z: 2.1346588}
+  m_LocalPosition: {x: -0.23000002, y: 0.5624168, z: -8.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2108310715}
   - {fileID: 497564568}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &497564567
 GameObject:
@@ -554,7 +554,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &656151987
 MonoBehaviour:
@@ -615,8 +615,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.6609057, y: 1, z: 1}
-  m_Center: {x: -0.16954784, y: 0, z: 3.9301414e-15}
+  m_Size: {x: 0.7796312, y: 1, z: 0.70230275}
+  m_Center: {x: 0.024163695, y: 0, z: -0.017068965}
 --- !u!23 &785018880
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -699,7 +699,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!64 &788633356
 MeshCollider:
@@ -778,7 +778,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &788633360
 MonoBehaviour:
@@ -883,12 +883,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 802631014}
   m_LocalRotation: {x: 0.3743677, y: 0.19154188, z: -0.07933917, w: 0.90380627}
-  m_LocalPosition: {x: -1.68, y: 8.9, z: -9.47}
+  m_LocalPosition: {x: -2.52, y: 9.706818, z: -8.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_Father: {fileID: 9544253}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 45, y: 23.931, z: 0}
 --- !u!1 &1274344589
 GameObject:
@@ -902,7 +902,6 @@ GameObject:
   - component: {fileID: 1274344595}
   - component: {fileID: 1274344594}
   - component: {fileID: 1274344593}
-  - component: {fileID: 1274344592}
   - component: {fileID: 1274344591}
   - component: {fileID: 1274344596}
   m_Layer: 0
@@ -937,7 +936,7 @@ Animator:
   m_GameObject: {fileID: 1274344589}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b778eaa91f963fb49b6e46b7908dbf0d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -947,25 +946,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!320 &1274344592
-PlayableDirector:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1274344589}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: c94239ba41d7ee44db2b348609e8e00b, type: 2}
-  m_InitialState: 0
-  m_WrapMode: 0
-  m_DirectorUpdateMode: 1
-  m_InitialTime: 0
-  m_SceneBindings:
-  - key: {fileID: 5000203387749845946, guid: c94239ba41d7ee44db2b348609e8e00b, type: 2}
-    value: {fileID: 1274344591}
-  m_ExposedReferences:
-    m_References: []
 --- !u!65 &1274344593
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1070,14 +1050,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360408198}
   m_LocalRotation: {x: -0, y: 0.70710576, z: -0, w: 0.7071079}
-  m_LocalPosition: {x: -0.23, y: 0.5624168, z: 2.1346588}
+  m_LocalPosition: {x: -0.23, y: 0.5624168, z: -8.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1274344590}
   - {fileID: 785018878}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &1360408200
 MonoBehaviour:
@@ -1095,6 +1075,8 @@ MonoBehaviour:
   graphParameters:
   - rid: 5412299246997864481
   - rid: 5412299246997864482
+  - rid: 5412299310808170496
+  - rid: 5412299310808170497
   references:
     version: 2
     RefIds:
@@ -1138,6 +1120,46 @@ MonoBehaviour:
         isHidden: 0
         expanded: 0
         guid: a46c0444-004c-4386-96b9-032f9189efac
+    - rid: 5412299310808170496
+      type: {class: Vector3Parameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: eb7ec08c-e2d7-4c24-844d-da6be0870db5
+        name: My Position
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 5412299310808170498
+        val: {x: 0, y: 0, z: 0}
+    - rid: 5412299310808170497
+      type: {class: StringParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 8fdd4860-af0a-4549-a2c0-c8d81a6cad41
+        name: My Text
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 5412299310808170499
+        val: 
+    - rid: 5412299310808170498
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: eb7ec08c-e2d7-4c24-844d-da6be0870db5
+    - rid: 5412299310808170499
+      type: {class: ExposedParameter/Settings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 8fdd4860-af0a-4549-a2c0-c8d81a6cad41
 --- !u!1 &1581654372
 GameObject:
   m_ObjectHideFlags: 0
@@ -1230,7 +1252,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &2108310714
 GameObject:
