@@ -5,7 +5,6 @@ using GraphProcessor;
 using HLVS.Nodes;
 using HLVS.Runtime;
 using IkTools.FormulaParser;
-using UnityEditor;
 using UnityEngine;
 
 namespace HLVS
@@ -271,8 +270,6 @@ namespace HLVS
 					return Time.time;
 				case "DELTA_TIME":
 					return Time.deltaTime;
-				case "THIS":
-					return activeGameObject;
 			}
 		}
 
