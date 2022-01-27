@@ -32,7 +32,6 @@ namespace HLVS.Nodes.ActionNodes
 			return ProcessingStatus.Finished;
 		}
 		
-		
 		[CustomPortInput(nameof(eventData), typeof(object))]
 		void PullInputs(List<SerializableEdge> connectedEdges)
 		{
