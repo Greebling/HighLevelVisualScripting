@@ -16,4 +16,4 @@ MonoBehaviour:
   - My Zone
   - Another Zone
   - Door01
-  _serializedZoneOccurences: 010000000100000001000000
+  _serializedZoneOccurences: 020000000100000001000000
