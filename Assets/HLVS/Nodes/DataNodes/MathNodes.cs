@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using GraphProcessor;
+using IkTools.FormulaParser;
 using UnityEngine;
 
 namespace HLVS.Nodes.DataNodes
@@ -38,7 +40,7 @@ namespace HLVS.Nodes.DataNodes
 			return nameof(result);
 		}
 	}
-	
+
 	[Serializable, NodeMenuItem("Math/Normalize")]
 	public class NormalizeNode : HlvsDataNode
 	{
@@ -57,7 +59,7 @@ namespace HLVS.Nodes.DataNodes
 			return ProcessingStatus.Finished;
 		}
 	}
-	
+
 	[Serializable, NodeMenuItem("Math/Multiply Vector")]
 	public class MultiplyVectorNode : HlvsDataNode
 	{
@@ -79,7 +81,7 @@ namespace HLVS.Nodes.DataNodes
 			return ProcessingStatus.Finished;
 		}
 	}
-	
+
 	[Serializable, NodeMenuItem("Math/Vector Length")]
 	public class VectorLengthNode : HlvsDataNode
 	{
@@ -98,7 +100,7 @@ namespace HLVS.Nodes.DataNodes
 			return ProcessingStatus.Finished;
 		}
 	}
-	
+
 	[Serializable, NodeMenuItem("Conditions/All True")]
 	public class BoolAndNode : HlvsDataNode
 	{
@@ -106,6 +108,7 @@ namespace HLVS.Nodes.DataNodes
 
 		[Input("Condition 1")]
 		public bool cond1;
+
 		[Input("Condition 1")]
 		public bool cond2;
 
@@ -119,7 +122,7 @@ namespace HLVS.Nodes.DataNodes
 			return ProcessingStatus.Finished;
 		}
 	}
-	
+
 	[Serializable, NodeMenuItem("Conditions/Any True")]
 	public class BoolOrNode : HlvsDataNode
 	{
@@ -127,6 +130,7 @@ namespace HLVS.Nodes.DataNodes
 
 		[Input("Condition 1")]
 		public bool cond1;
+
 		[Input("Condition 1")]
 		public bool cond2;
 
@@ -140,7 +144,7 @@ namespace HLVS.Nodes.DataNodes
 			return ProcessingStatus.Finished;
 		}
 	}
-	
+
 	[Serializable, NodeMenuItem("Conditions/Not Condition")]
 	public class BoolNorNode : HlvsDataNode
 	{
@@ -159,7 +163,7 @@ namespace HLVS.Nodes.DataNodes
 			return ProcessingStatus.Finished;
 		}
 	}
-	
+
 	[Serializable, NodeMenuItem("Conditions/Condition Value")]
 	public class BoolValueNode : HlvsDataNode
 	{
@@ -176,6 +180,127 @@ namespace HLVS.Nodes.DataNodes
 			result = cond;
 
 			return ProcessingStatus.Finished;
+		}
+	}
+
+	[Serializable, NodeMenuItem("Conditions/Math Expression")]
+	public class MathNode : HlvsDataNode, IVariableProvider<MathNode>
+	{
+		public override string name => "Math";
+
+		[HideInInspector]
+		public RawFormula formula = new RawFormula();
+
+		[Input("Data")]
+		public object inputData;
+
+		[Output("Result")]
+		public float result;
+
+		[NonSerialized]
+		public string errors;
+
+		private FormulaTemplate        _template;
+		private Func<MathNode, double> _parsedExpression;
+
+		[SerializeField, HideInInspector]
+		private List<string> variableNames = new();
+
+		private Dictionary<string, double> _variableData = new();
+
+		protected override void Enable()
+		{
+			RecompileExpression();
+		}
+
+		public override ProcessingStatus Evaluate()
+		{
+			if (_parsedExpression == null)
+			{
+				Debug.LogError($"Unparsed expression in node {name} of graph {graph}");
+				return ProcessingStatus.Abort;
+			}
+
+			result = InvokeExpression();
+			_variableData.Clear();
+			return ProcessingStatus.Finished;
+		}
+
+		[CustomPortBehavior(nameof(inputData))]
+		IEnumerable<PortData> ListPortBehavior(List<SerializableEdge> edges)
+		{
+			foreach (string variableName in variableNames)
+			{
+				yield return new PortData
+				{
+					displayName = variableName,
+					displayType = typeof(float),
+					identifier = variableName,
+				};
+			}
+		}
+
+		[CustomPortInput(nameof(inputData), typeof(float))]
+		void PullInputs(List<SerializableEdge> connectedEdges)
+		{
+			foreach (SerializableEdge edge in connectedEdges)
+			{
+				var varName = edge.inputPort.portData.identifier;
+
+				_variableData.Add(varName, (float)edge.passThroughBuffer);
+			}
+		}
+
+		public void RecompileExpression()
+		{
+			errors = null;
+
+			try
+			{
+				if (!string.IsNullOrEmpty(formula.Expression))
+				{
+					_template = formula.Template();
+					_parsedExpression = _template?.Compile(this);
+				}
+			}
+			catch (Exception e)
+			{
+				// catch compile errors
+				errors = e.Message;
+			}
+		}
+
+		private float InvokeExpression()
+		{
+#if UNITY_EDITOR
+			// needed for variable name collection
+			if (!Application.isPlaying)
+				variableNames.Clear();
+#endif
+			return (float)_parsedExpression(this);
+		}
+
+		public Func<MathNode, double> Get(string varName)
+		{
+			return node => node.GetVariable(varName);
+		}
+
+		private double GetVariable(string varName)
+		{
+#if UNITY_EDITOR
+			// collect variable names
+			if (!Application.isPlaying)
+			{
+				if (!variableNames.Contains(varName))
+					variableNames.Add(varName);
+			}
+#endif
+			if (_variableData.TryGetValue(varName, out double val))
+			{
+				return val;
+			}
+
+			return 0;
 		}
 	}
 }
