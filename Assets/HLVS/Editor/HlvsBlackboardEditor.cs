@@ -30,7 +30,6 @@ namespace HLVS.Editor
 		
 		void OnValidate()
 		{
-			Debug.Log("Val");
 		}
 
 		private void CreateInspector()

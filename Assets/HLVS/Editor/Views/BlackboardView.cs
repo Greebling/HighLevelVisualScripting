@@ -133,10 +133,13 @@ namespace HLVS.Editor.Views
 			if (param.GetValueType().IsValueType)
 				initValue = Activator.CreateInstance(param.GetValueType());
 
-			param.Initialize(entryName, initValue);
-
-			param.name = entryName;
 			param.guid = Guid.NewGuid().ToString();
+			param.Initialize(entryName, initValue);
+			if (param is GameObjectParameter)
+			{
+				((GameObjectParameter.GameObjectSettings)param.settings).onlyPrefabs = true;
+			}
+			
 			target.fields.Add(param);
 			graph.onBlackboardListChanged();
 

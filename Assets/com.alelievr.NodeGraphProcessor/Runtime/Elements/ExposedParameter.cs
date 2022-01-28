@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -747,6 +748,15 @@ namespace GraphProcessor
 	public class GameObjectParameter : ExposedParameter
 	{
 		[SerializeField] GameObject val;
+		
+		[Serializable]
+		public class GameObjectSettings : Settings
+		{
+			public bool onlyPrefabs = false; 
+
+			public override bool Equals(Settings param)
+				=> base.Equals(param) && onlyPrefabs == ((GameObjectSettings)param).onlyPrefabs;
+		}
 
 		public override object value
 		{
@@ -755,6 +765,42 @@ namespace GraphProcessor
 		}
 
 		public override Type GetValueType() => typeof(GameObject);
+		protected override Settings CreateSettings() => new GameObjectSettings();
+		
+		public override VisualElement GetPropertyDrawer(Action<object> onChanged = null)
+		{
+			var objField = new ObjectField
+			{
+				objectType = GetValueType(),
+				label = "",
+				allowSceneObjects = false,
+				style =
+				{
+					flexGrow = new StyleFloat(1.0f),
+					width = 0 //so it does not have such a long minimum width and is aligned with other fields
+				}
+			};
+			objField.RegisterValueChangedCallback(evt =>
+			{
+				if (evt.newValue && ((GameObjectSettings)settings).onlyPrefabs)
+				{
+					var newVal = (GameObject)evt.newValue;
+					if(!PrefabUtility.IsPartOfPrefabAsset(newVal))
+					{
+						Debug.LogWarning(name + " only allows Prefabs");
+						return;
+					}
+				}
+				
+				value = evt.newValue;
+				if (onChanged != null)
+					onChanged(value);
+			});
+
+			if (value != null)
+				objField.value = (Object)value;
+			return objField;
+		}
 	}
 
 	[Serializable]
