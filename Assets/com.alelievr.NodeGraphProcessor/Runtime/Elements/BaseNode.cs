@@ -1,15 +1,14 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using System;
-using System.Reflection;
-using Unity.Jobs;
 using System.Linq;
+using System.Reflection;
+using UnityEngine;
 
 namespace GraphProcessor
 {
-	public delegate IEnumerable< PortData > CustomPortBehaviorDelegate(List< SerializableEdge > edges);
-	public delegate IEnumerable< PortData > CustomPortTypeBehaviorDelegate(string fieldName, string displayName, object value);
+	public delegate IEnumerable<PortData> CustomPortBehaviorDelegate(List<SerializableEdge> edges);
+	public delegate IEnumerable<PortData> CustomPortTypeBehaviorDelegate(string fieldName, string displayName, object value);
+
 
 	[Serializable]
 	public abstract class BaseNode
@@ -21,90 +20,96 @@ namespace GraphProcessor
 		/// Name of the node, it will be displayed in the title section
 		/// </summary>
 		/// <returns></returns>
-		public virtual string       name => GetType().Name;
-		
+		public virtual string name => GetType().Name;
+
 		/// <summary>
 		/// The accent color of the node
 		/// </summary>
 		public virtual Color color => Color.clear;
-		
+
 		/// <summary>
 		/// Set a custom uss file for the node. We use a Resources.Load to get the stylesheet so be sure to put the correct resources path
 		/// https://docs.unity3d.com/ScriptReference/Resources.Load.html
 		/// </summary>
-        public virtual string       layoutStyle => string.Empty;
+		public virtual string layoutStyle => string.Empty;
 
 		/// <summary>
 		/// If the node can be locked or not
 		/// </summary>
-        public virtual bool         unlockable => true; 
+		public virtual bool unlockable => true;
 
 		/// <summary>
 		/// Is the node is locked (if locked it can't be moved)
 		/// </summary>
-        public virtual bool         isLocked => nodeLock; 
+		public virtual bool isLocked => nodeLock;
 
-        //id
-        public string				GUID;
+		//id
+		public string GUID;
 
-		public int					computeOrder = -1;
+		public int computeOrder = -1;
 
 		/// <summary>Tell wether or not the node can be processed. Do not check anything from inputs because this step happens before inputs are sent to the node</summary>
-		public virtual bool			canProcess => true;
+		public virtual bool canProcess => true;
 
 		/// <summary>Show the node controlContainer only when the mouse is over the node</summary>
-		public virtual bool			showControlsOnHover => false;
+		public virtual bool showControlsOnHover => false;
 
 		/// <summary>True if the node can be deleted, false otherwise</summary>
-		public virtual bool			deletable => true;
+		public virtual bool deletable => true;
 
 		/// <summary>
 		/// Container of input ports
 		/// </summary>
 		[NonSerialized]
-		public readonly NodeInputPortContainer	inputPorts;
+		public readonly NodeInputPortContainer inputPorts;
+
 		/// <summary>
 		/// Container of output ports
 		/// </summary>
 		[NonSerialized]
-		public readonly NodeOutputPortContainer	outputPorts;
+		public readonly NodeOutputPortContainer outputPorts;
 
 		//Node view datas
-		public Rect					position;
+		public Rect position;
+
 		/// <summary>
 		/// Is the node expanded
 		/// </summary>
-		public bool					expanded;
+		public bool expanded;
+
 		/// <summary>
 		/// Is debug visible
 		/// </summary>
-		public bool					debug;
+		public bool debug;
+
 		/// <summary>
 		/// Node locked state
 		/// </summary>
-        public bool                 nodeLock;
+		public bool nodeLock;
 
-        public delegate void		ProcessDelegate();
+		public delegate void ProcessDelegate();
 
 		/// <summary>
 		/// Triggered when the node is processes
 		/// </summary>
-		public event ProcessDelegate	onProcessed;
-		public event Action< string, NodeMessageType >	onMessageAdded;
-		public event Action< string >					onMessageRemoved;
+		public event ProcessDelegate onProcessed;
+		public event Action<string, NodeMessageType> onMessageAdded;
+		public event Action<string>                  onMessageRemoved;
+
 		/// <summary>
 		/// Triggered after an edge was connected on the node
 		/// </summary>
-		public event Action< SerializableEdge >			onAfterEdgeConnected;
+		public event Action<SerializableEdge> onAfterEdgeConnected;
+
 		/// <summary>
 		/// Triggered after an edge was disconnected on the node
 		/// </summary>
-		public event Action< SerializableEdge >			onAfterEdgeDisconnected;
+		public event Action<SerializableEdge> onAfterEdgeDisconnected;
 
 		/// <summary>
 		/// Triggered after a single/list of port(s) is updated, the parameter is the field name
 		/// </summary>
-		public event Action< string >					onPortsUpdated;
+		public event Action<string> onPortsUpdated;
 
 		[NonSerialized]
 		bool _needsInspector = false;
@@ -112,34 +117,34 @@ namespace GraphProcessor
 		/// <summary>
 		/// Does the node needs to be visible in the inspector (when selected).
 		/// </summary>
-		public virtual bool			needsInspector => _needsInspector;
+		public virtual bool needsInspector => _needsInspector;
 
 		/// <summary>
 		/// Can the node be renamed in the UI. By default a node can be renamed by double clicking it's name.
 		/// </summary>
-		public virtual bool			isRenamable => false;
+		public virtual bool isRenamable => false;
 
 		/// <summary>
 		/// Is the node created from a duplicate operation (either ctrl-D or copy/paste).
 		/// </summary>
-		public bool					createdFromDuplication {get; internal set; } = false;
+		public bool createdFromDuplication {get; internal set; } = false;
 
 		/// <summary>
 		/// True only when the node was created from a duplicate operation and is inside a group that was also duplicated at the same time. 
 		/// </summary>
-		public bool					createdWithinGroup {get; internal set; } = false;
+		public bool createdWithinGroup {get; internal set; } = false;
 
 		[NonSerialized]
-		internal Dictionary< string, NodeFieldInformation >	nodeFields = new Dictionary< string, NodeFieldInformation >();
+		internal Dictionary<string, NodeFieldInformation> nodeFields = new Dictionary<string, NodeFieldInformation>();
 
 		[NonSerialized]
-		internal Dictionary< Type, CustomPortTypeBehaviorDelegate> customPortTypeBehaviorMap = new Dictionary<Type, CustomPortTypeBehaviorDelegate>();
+		internal Dictionary<Type, CustomPortTypeBehaviorDelegate> customPortTypeBehaviorMap = new Dictionary<Type, CustomPortTypeBehaviorDelegate>();
 
 		[NonSerialized]
-		List< string >				messages = new List<string>();
+		List<string> messages = new List<string>();
 
 		[NonSerialized]
-		protected BaseGraph			graph;
+		protected BaseGraph graph;
 
 		internal class NodeFieldInformation
 		{
@@ -496,7 +501,7 @@ namespace GraphProcessor
 							if (port.fieldName != field)
 								continue;
 
-							foreach(var edge in port.GetEdges())
+							foreach (var edge in port.GetEdges())
 							{
 								var edgeNode = (node.IsFieldInput(field)) ? edge.outputNode : edge.inputNode;
 								var fieldsWithBehavior = edgeNode.nodeFields.Values.Where(f => HasCustomBehavior(f)).Select(f => f.fieldName).ToList();
@@ -553,7 +558,7 @@ namespace GraphProcessor
 					_needsInspector = true;
 
 				if (inputAttribute == null && outputAttribute == null)
-					continue ;
+					continue;
 
 				//check if field is a collection type
 				isMultiple = (inputAttribute != null) ? inputAttribute.allowMultiple : (outputAttribute.allowMultiple);
@@ -575,13 +580,16 @@ namespace GraphProcessor
 				CustomPortBehaviorDelegate behavior = null;
 
 				if (customPortBehaviorAttribute == null)
-					continue ;
+					continue;
 
 				// Check if custom port behavior function is valid
-				try {
+				try
+				{
 					var referenceType = typeof(CustomPortBehaviorDelegate);
 					behavior = (CustomPortBehaviorDelegate)Delegate.CreateDelegate(referenceType, this, method, true);
-				} catch {
+				}
+				catch
+				{
 					Debug.LogError("The function " + method + " cannot be converted to the required delegate format: " + typeof(CustomPortBehaviorDelegate));
 				}
 
@@ -613,7 +621,7 @@ namespace GraphProcessor
 		public void OnEdgeDisconnected(SerializableEdge edge)
 		{
 			if (edge == null)
-				return ;
+				return;
 
 			bool input = edge.inputNode == this;
 			NodePortContainer portCollection = (input) ? (NodePortContainer)inputPorts : outputPorts;

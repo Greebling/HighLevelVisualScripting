@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a287be6c49135cd4f9b2b8666c39d999, type: 3}
+  m_Script: {fileID: 11500000, guid: 5fd8b877f1244be1bfc4c9b89a6fd893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  assetDefaultFramerate: 60
-  m_DefaultFrameRate: 60
+  _serializedZoneNames:
+  - My Zone
+  - Another Zone
+  - Door01
+  _serializedZoneOccurences: 020000000100000001000000
