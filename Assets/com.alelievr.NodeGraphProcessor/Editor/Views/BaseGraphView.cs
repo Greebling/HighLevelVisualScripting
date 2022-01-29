@@ -352,9 +352,11 @@ namespace GraphProcessor
 							Disconnect(edge);
 							return true;
 						case BaseNodeView nodeView:
+							// For vertical nodes, we need to delete them ourselves as it's not handled by GraphView
 							foreach (var pv in nodeView.inputPortViews.Concat(nodeView.outputPortViews))
-								foreach (var edge in pv.GetEdges().ToList())
-									Disconnect(edge);
+								if (pv.orientation == Orientation.Vertical)
+									foreach (var edge in pv.GetEdges().ToList())
+										Disconnect(edge);
 
 							nodeInspector.NodeViewRemoved(nodeView);
 							ExceptionToLog.Call(() => nodeView.OnRemoved());
@@ -423,28 +425,6 @@ namespace GraphProcessor
                 groupView.group.size = groupView.GetPosition().size;
         }
 
-        public List<BaseNode> GetAllPreviousNodes(BaseNode startingNode)
-        {
-	        List<BaseNode> previousNodes = new List<BaseNode>(){startingNode};
-	        List<BaseNode> frontier = new List<BaseNode>() {startingNode};
-	        List<BaseNode> nextFrontier = new List<BaseNode>();
-
-	        while (frontier.Count != 0)
-	        {
-		        nextFrontier.Clear();
-
-		        foreach (var node in frontier)
-		        {
-			        nextFrontier.AddRange(node.GetInputNodes());
-		        }
-		        previousNodes.AddRange(frontier);
-		        
-		        (frontier, nextFrontier) = (nextFrontier, frontier);
-	        }
-
-	        return previousNodes;
-        }
-
 		public override List< Port > GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
 		{
 			var compatiblePorts = new List< Port >();
@@ -452,14 +432,14 @@ namespace GraphProcessor
 			compatiblePorts.AddRange(ports.Where(p => {
 				var portView = p as PortView;
 
+				if (portView.owner == (startPort as PortView).owner)
+					return false;
+
 				if (p.direction == startPort.direction)
 					return false;
 
 				//Check for type assignability
 				if (!BaseGraph.TypesAreConnectable(startPort.portType, p.portType))
-					return false;
-
-				if ((p as PortView).owner == (startPort as PortView).owner)
 					return false;
 
 				//Check if the edge already exists
@@ -775,6 +755,8 @@ namespace GraphProcessor
 				if (e.keyCode == KeyCode.S && e.actionKey)
 					SaveGraphToDisk();
 			});
+
+			ClearGraphElements();
 
 			InitializeGraphView();
 			InitializeNodeViews();
@@ -1278,9 +1260,8 @@ namespace GraphProcessor
 			var inputPort = inputNodeView.nodeTarget.GetPort(inputPortView.fieldName, inputPortView.portData.identifier);
 			var outputPort = outputNodeView.nodeTarget.GetPort(outputPortView.fieldName, outputPortView.portData.identifier);
 
-			var edges = graph.Connect(inputPort, outputPort, autoDisconnectInputs);
+			e.userData = graph.Connect(inputPort, outputPort, autoDisconnectInputs);
 
-			e.userData = edges;
 			ConnectView(e, autoDisconnectInputs);
 
 			UpdateComputeOrder();
@@ -1333,11 +1314,6 @@ namespace GraphProcessor
 		{
 			graph.UpdateComputeOrder();
 
-			computeOrderUpdated?.Invoke();
-		}
-
-		public void InvokeUpdateComputeOrderEvent()
-		{
 			computeOrderUpdated?.Invoke();
 		}
 

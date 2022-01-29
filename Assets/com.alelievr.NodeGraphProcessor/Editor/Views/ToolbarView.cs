@@ -41,7 +41,7 @@ namespace GraphProcessor
 		protected BaseGraphView		graphView;
 		
 		ToolbarButtonData showProcessor;
-		protected ToolbarButtonData showParameters;
+		ToolbarButtonData showParameters;
 
 		public ToolbarView(BaseGraphView graphView)
 		{

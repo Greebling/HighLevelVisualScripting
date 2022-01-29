@@ -1,6 +1,0 @@
-﻿.hlvs-event-list{
-    border-width: 1px;
-    border-color: rgba(40, 40, 40, 1);
-    border-radius: 2px;
-    padding: 2px;
-}

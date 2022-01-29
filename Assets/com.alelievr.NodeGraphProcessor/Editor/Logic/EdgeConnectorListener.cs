@@ -66,9 +66,8 @@ namespace GraphProcessor
                 this.graphView.RegisterCompleteObjectUndo("Connected " + edgeView.input.node.name + " and " + edgeView.output.node.name);
                 if (!this.graphView.ConnectConvertable(edge as EdgeView, !wasOnTheSamePort))
                     this.graphView.Disconnect(edge as EdgeView);
-            } catch (System.Exception e)
+            } catch (System.Exception)
             {
-                Debug.Log(e);
                 this.graphView.Disconnect(edge as EdgeView);
             }
         }
