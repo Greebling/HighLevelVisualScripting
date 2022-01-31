@@ -129,6 +129,7 @@ namespace HLVS.Runtime
 				_runtimeGraph.name = graph.name + " (Instance)";
 				_runtimeGraph.Init();
 				_runtimeGraph.LinkToScene(gameObject.scene);
+				_runtimeGraph.InitParameterValues(gameObject, graphParameters);
 			}
 
 			ZoneCleaner.Instantiate();
@@ -144,8 +145,8 @@ namespace HLVS.Runtime
 		{
 			if (_runtimeGraph)
 			{
-				_runtimeGraph.SetParameterValues(gameObject, graphParameters);
 				_runtimeGraph.RunStartNodes();
+				UpdateParameters();
 			}
 		}
 
@@ -153,8 +154,8 @@ namespace HLVS.Runtime
 		{
 			if (_runtimeGraph)
 			{
-				_runtimeGraph.SetParameterValues(gameObject, graphParameters);
 				_runtimeGraph.RunUpdateNodes();
+				UpdateParameters();
 			}
 		}
 
@@ -162,8 +163,15 @@ namespace HLVS.Runtime
 		{
 			if (_runtimeGraph)
 			{
-				_runtimeGraph.SetParameterValues(gameObject, graphParameters);
 				_runtimeGraph.RunOnTriggerEnteredNodes();
+			}
+		}
+
+		private void UpdateParameters()
+		{
+			for (int i = 0; i < graphParameters.Count; i++)
+			{
+				graphParameters[i].value = _runtimeGraph.parametersBlueprint[i].value;
 			}
 		}
 	}

@@ -659,7 +659,7 @@ GameObject:
   - component: {fileID: 661863099}
   - component: {fileID: 661863098}
   m_Layer: 5
-  m_Name: Text (Legacy) (1)
+  m_Name: Points Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1079,7 +1079,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e4e119bba4a4aae91190d49b253a3e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zoneName: My Zone
+  zoneName: Point Count Zone
 --- !u!65 &918992399
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1123,6 +1123,8 @@ MonoBehaviour:
   graph: {fileID: 11400000, guid: dca6441621889f4489ec8c09442ed52a, type: 2}
   graphParameters:
   - rid: 5412299335611187206
+  - rid: 5412299421828513804
+  - rid: 5412299421828513805
   references:
     version: 2
     RefIds:
@@ -1149,6 +1151,50 @@ MonoBehaviour:
         mode: 0
         min: 0
         max: 1
+    - rid: 5412299421828513804
+      type: {class: FloatParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: 964bda00-f1bf-4f09-8fa0-4908e6fb00e9
+        name: Points per Second
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 5412299421828513806
+        val: 1.3
+    - rid: 5412299421828513805
+      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        guid: dd0b9356-be3b-4287-adaa-df61d0ca512e
+        name: UI Text
+        type: 
+        serializedValue:
+          serializedType: 
+          serializedName: 
+          serializedValue: 
+        input: 1
+        settings:
+          rid: 5412299421828513807
+        val: {fileID: 661863096}
+    - rid: 5412299421828513806
+      type: {class: FloatParameter/FloatSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: 964bda00-f1bf-4f09-8fa0-4908e6fb00e9
+        mode: 0
+        min: 0
+        max: 1
+    - rid: 5412299421828513807
+      type: {class: GameObjectParameter/GameObjectSettings, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
+      data:
+        isHidden: 0
+        expanded: 0
+        guid: dd0b9356-be3b-4287-adaa-df61d0ca512e
+        onlyPrefabs: 0
 --- !u!1 &1224026735
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,4 +16,5 @@ MonoBehaviour:
   - My Zone
   - Another Zone
   - Door01
-  _serializedZoneOccurences: 020000000100000001000000
+  - Point Count Zone
+  _serializedZoneOccurences: 01000000010000000100000001000000

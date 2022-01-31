@@ -14,6 +14,10 @@ namespace HLVS.Nodes.ActionNodes
 		
 		[Input("Data")]
 		public object inputData;
+		
+		[Output("Data")]
+		public object outputData;
+		
 
 		public override ProcessingStatus Evaluate()
 		{
@@ -31,12 +35,14 @@ namespace HLVS.Nodes.ActionNodes
 			{
 				Debug.LogError($"Did not find variable '{variableName}'");
 			}
+
+			outputData = inputData;
 			
 			return ProcessingStatus.Finished;
 		}
 		
 		[CustomPortBehavior(nameof(inputData))]
-		IEnumerable<PortData> ListPortBehavior(List<SerializableEdge> edges)
+		IEnumerable<PortData> ListPortBehaviorInputs(List<SerializableEdge> edges)
 		{
 			var selectedVariable = (graph as HlvsGraph).GetVariableByName(variableName);
 			if (selectedVariable == null)
@@ -49,6 +55,24 @@ namespace HLVS.Nodes.ActionNodes
 					displayName = selectedVariable.name,
 					displayType = selectedVariable.GetValueType(),
 					identifier = "0",
+				};
+			}
+		}
+		
+		[CustomPortBehavior(nameof(outputData))]
+		IEnumerable<PortData> ListPortBehaviorOutputs(List<SerializableEdge> edges)
+		{
+			var selectedVariable = (graph as HlvsGraph).GetVariableByName(variableName);
+			if (selectedVariable == null)
+			{
+				yield return null;
+			} else
+			{
+				yield return new PortData
+				{
+					displayName = selectedVariable.name,
+					displayType = selectedVariable.GetValueType(),
+					identifier = "1",
 				};
 			}
 		}

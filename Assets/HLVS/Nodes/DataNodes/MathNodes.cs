@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphProcessor;
 using IkTools.FormulaParser;
+using UnityEditor;
 using UnityEngine;
 
 namespace HLVS.Nodes.DataNodes
@@ -233,7 +235,7 @@ namespace HLVS.Nodes.DataNodes
 			{
 				yield return new PortData
 				{
-					displayName = variableName,
+					displayName = ObjectNames.NicifyVariableName(variableName.ToLower().Replace('_', ' ')),
 					displayType = typeof(float),
 					identifier = variableName,
 				};
@@ -243,12 +245,9 @@ namespace HLVS.Nodes.DataNodes
 		[CustomPortInput(nameof(inputData), typeof(float))]
 		void PullInputs(List<SerializableEdge> connectedEdges)
 		{
-			foreach (SerializableEdge edge in connectedEdges)
-			{
-				var varName = edge.inputPort.portData.identifier;
-
-				_variableData.Add(varName, (float)edge.passThroughBuffer);
-			}
+			SerializableEdge edge = connectedEdges.Last();
+			var varName = edge.inputPort.portData.identifier;
+			_variableData.Add(varName, (float) edge.passThroughBuffer);
 		}
 
 		public void RecompileExpression()
@@ -294,13 +293,13 @@ namespace HLVS.Nodes.DataNodes
 				if (!variableNames.Contains(varName))
 					variableNames.Add(varName);
 			}
-#endif
-			if (_variableData.TryGetValue(varName, out double val))
+			
+			if (!_variableData.ContainsKey(varName))
 			{
-				return val;
+				Debug.LogError($"Did not find input for {varName}");
 			}
-
-			return 0;
+#endif
+			return _variableData[varName];
 		}
 	}
 }

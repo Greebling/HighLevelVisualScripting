@@ -71,18 +71,6 @@ namespace HLVS
 				var node = (HlvsNode)baseNode;
 				node.Graph = this;
 			}
-
-			onGraphChanges += changes =>
-			{
-				if(!activeGameObject)
-					return;
-				
-				if (changes.addedNode != null || changes.removedNode != null)
-				{
-					ScanEventNodes();
-					ScanZoneNodes();
-				}
-			};
 		}
 
 		private void OnDestroy()
@@ -123,9 +111,9 @@ namespace HLVS
 
 			_processor.UpdateComputeOrder();
 #if UNITY_EDITOR
-			if(!activeGameObject)
+			if (!activeGameObject)
 				return;
-			
+
 			ScanEventNodes();
 			ScanZoneNodes();
 #endif
@@ -244,7 +232,7 @@ namespace HLVS
 			parametersBlueprint.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter));
 		}
 
-		public void SetParameterValues(GameObject currentGameObject, List<ExposedParameter> parameters)
+		public void InitParameterValues(GameObject currentGameObject, List<ExposedParameter> parameters)
 		{
 			Debug.Assert(parameters.Count == parametersBlueprint.Count, "Parameter lists don't match");
 			activeGameObject = currentGameObject;
@@ -281,7 +269,7 @@ namespace HLVS
 			{
 				EventManager.instance.RemoveListener(this, listenedEvent);
 			}
-			
+
 			_listenedEvents.Clear();
 			_eventNodes.Clear();
 			foreach (OnEventNode node in nodes.Where(node => node is OnEventNode).Cast<OnEventNode>().Where(node => node.eventName != string.Empty))
@@ -365,9 +353,9 @@ namespace HLVS
 
 		public void OnEvent(HlvsEvent e)
 		{
-			if(!activeGameObject)
+			if (!activeGameObject)
 				return;
-			
+
 			foreach (OnEventNode onEventNode in _eventNodes[e.name])
 			{
 				onEventNode.eventData = e.parameters;

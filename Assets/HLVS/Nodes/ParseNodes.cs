@@ -33,9 +33,7 @@ namespace HLVS.Nodes
 
 		public override ProcessingStatus Evaluate()
 		{
-			var mult = Mathf.Pow(10, decimalPlace);
-			float val = Mathf.Round(input * mult) / mult;
-			output = val.ToString(CultureInfo.InvariantCulture);
+			output = input.ToString("F" + decimalPlace, CultureInfo.InvariantCulture);
 			return ProcessingStatus.Finished;
 		}
 	}
