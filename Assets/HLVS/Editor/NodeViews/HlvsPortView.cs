@@ -76,7 +76,8 @@ namespace HLVS.Editor.NodeViews
 
 			CreateValueField();
 
-			if (targetNode.fieldToParamGuid.TryGetValue(fieldInfo.Name, out string paramGuid))
+			var field = targetNode.GetType().GetField(fieldInfo.Name);
+			if (targetNode.fieldToParamGuid.TryGetValue(field, out string paramGuid))
 			{
 				int paramIndex = graph.parametersBlueprint.FindIndex(parameter => parameter.guid == paramGuid);
 				if (paramIndex != -1)

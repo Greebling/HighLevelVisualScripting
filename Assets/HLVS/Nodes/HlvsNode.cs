@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using GraphProcessor;
 using HLVS.Runtime;
 using IkTools.FormulaParser;
@@ -40,7 +41,7 @@ namespace HLVS.Nodes
 		/// <summary>
 		/// Maps the name of a node field to the guid of an exposed parameter in the graph and gives its reference type
 		/// </summary>
-		internal Dictionary<string, string> fieldToParamGuid = new Dictionary<string, string>();
+		internal Dictionary<FieldInfo, string> fieldToParamGuid = new Dictionary<FieldInfo, string>();
 
 		/// <summary>
 		/// Used for serialization of fieldToParamGuid
@@ -133,7 +134,7 @@ namespace HLVS.Nodes
 			foreach (var fieldToParam in fieldToParamGuid)
 			{
 				var parameter = graph.GetVariableByGuid(fieldToParam.Value);
-				GetType().GetField(fieldToParam.Key).SetValue(this, parameter.value);
+				fieldToParam.Key.SetValue(this, parameter.value);
 			}
 		}
 
@@ -177,8 +178,10 @@ namespace HLVS.Nodes
 
 		public void SetFieldToReference(string fieldName, string parameterGuid)
 		{
-			if (fieldToParamGuid.ContainsKey(fieldName))
-				fieldToParamGuid[fieldName] = parameterGuid;
+			var field = GetType().GetField(fieldName);
+			
+			if (fieldToParamGuid.ContainsKey(field))
+				fieldToParamGuid[field] = parameterGuid;
 			else
 			{
 				for (int i = 0; i < fieldToFormula.Count; i++)
@@ -192,13 +195,14 @@ namespace HLVS.Nodes
 				}
 
 				fieldToFormula.RemoveAll(pair => pair.fieldName == fieldName);
-				fieldToParamGuid.Add(fieldName, parameterGuid);
+				fieldToParamGuid.Add(field, parameterGuid);
 			}
 		}
 
 		public void UnsetFieldReference(string fieldName)
 		{
-			fieldToParamGuid.Remove(fieldName);
+			var field = GetType().GetField(fieldName);
+			fieldToParamGuid.Remove(field);
 		}
 
 		public void OnBeforeSerialize()
@@ -209,7 +213,7 @@ namespace HLVS.Nodes
 			{
 				foreach (var keyValuePair in fieldToParamGuid)
 				{
-					varToGuidSerialization.Add(new StringStringPair(keyValuePair.Key, keyValuePair.Value));
+					varToGuidSerialization.Add(new StringStringPair(keyValuePair.Key.Name, keyValuePair.Value));
 				}
 			}
 		}
@@ -219,10 +223,11 @@ namespace HLVS.Nodes
 			// transform list back to dictionary
 			if (varToGuidSerialization != null)
 			{
-				fieldToParamGuid = new Dictionary<string, string>();
+				fieldToParamGuid = new Dictionary<FieldInfo, string>();
 				foreach (var serializedValues in varToGuidSerialization)
 				{
-					fieldToParamGuid.Add(serializedValues.Item1, serializedValues.Item2);
+					var field = GetType().GetField(serializedValues.Item1);
+					fieldToParamGuid.Add(field, serializedValues.Item2);
 				}
 			}
 		}

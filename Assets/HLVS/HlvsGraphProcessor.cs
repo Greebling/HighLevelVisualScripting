@@ -324,14 +324,13 @@ namespace HLVS
 			return res;
 		}
 
-		private static HlvsNode[] GetNextNodes(HlvsFlowNode actionNode)
+		private static IEnumerable<HlvsNode> GetNextNodes(HlvsFlowNode actionNode)
 		{
 			var nextLinks = actionNode.GetNextExecutionLinks();
 			var nextPort = actionNode.outputPorts
 			                         .Where(port => port.fieldInfo.FieldType == typeof(ExecutionLink))
 			                         .Where(port => nextLinks.Contains(port.fieldName));
-			return nextPort.Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null).Select(edge => (HlvsNode)edge.inputNode)
-			               .ToArray();
+			return nextPort.Select(port => port.GetEdges().FirstOrDefault()).Where(edge => edge != null).Select(edge => (HlvsNode)edge.inputNode);
 		}
 
 		private static HlvsNode GetNextNode(HlvsNode node)
