@@ -37,7 +37,6 @@ namespace HLVS.Nodes
 		}
 	}
 
-
 	[Serializable, NodeMenuItem("Branch/Is Same Gameobject")]
 	public class IsSameGameobjectNode : BranchingNode
 	{
@@ -58,6 +57,38 @@ namespace HLVS.Nodes
 		public override string[] GetNextExecutionLinks()
 		{
 			return obj1 == obj2 ? new[] { nameof(trueLink) } : new[] { nameof(falseLink) };
+		}
+	}
+
+
+	[Serializable, NodeMenuItem("Branch/Player Has Key")]
+	public class PlayerHasKeyNode : BranchingNode
+	{
+		public override string name => "Has Key";
+
+		[Input("Player")]
+		public GameObject player;
+		
+		[Input("Key")]
+		public string key = "";
+
+		[Output("Same", false)]
+		public ExecutionLink trueLink;
+
+		[Output("Different", false)]
+		public ExecutionLink falseLink;
+
+		public override string[] GetNextExecutionLinks()
+		{
+			for (int i = 0; i < player.transform.childCount; i++)
+			{
+				if (player.transform.GetChild(i).name == key)
+				{
+					return new[] { nameof(trueLink) };
+				}
+			}
+			
+			return new[] { nameof(falseLink) };
 		}
 	}
 }
