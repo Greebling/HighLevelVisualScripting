@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GraphProcessor;
 using HLVS.Runtime;
 using UnityEngine;
@@ -17,7 +18,6 @@ namespace HLVS.Nodes
 		}
 
 		public override string nextExecutionLink => nameof(followingAction);
-		
 	}
 
 	[Serializable, NodeMenuItem("Start/Every Frame")]
@@ -32,19 +32,30 @@ namespace HLVS.Nodes
 		public override string name => "On Start";
 	}
 
-	[Serializable, NodeMenuItem("Start/On Trigger")]
+	[Serializable, NodeMenuItem("Start/On Trigger Enter")]
 	public class OnTriggerEnteredNode : ExecutionStarterNode
 	{
 		[Output("Gameobject")]
 		public GameObject enteredObject;
-		public override string name => "On Trigger Collider Entered";
+
+		public override string name => "On Trigger Entered";
 	}
+
+	[Serializable, NodeMenuItem("Start/On Trigger Exit")]
+	public class OnTriggerExitNode : ExecutionStarterNode
+	{
+		[Output("Gameobject")]
+		public GameObject exitingObject;
+
+		public override string name => "On Trigger Exit";
+	}
+
 
 	[Serializable, NodeMenuItem("Start/On Collision")]
 	public class OnCollisionNode : ExecutionStarterNode
 	{
 		public override string name => "On Collision";
-		
+
 		[Output("Gameobject")]
 		public GameObject enteredObject;
 	}
@@ -59,6 +70,16 @@ namespace HLVS.Nodes
 		[SerializeReference]
 		[Output("Event Data")]
 		public List<ExposedParameter> eventData = new();
+
+		public override void InitializePorts()
+		{
+			base.InitializePorts();
+			if (EventManager.instance.HasEvent(eventName))
+			{
+				var def = EventManager.instance.GetEventDefinition(eventName);
+				eventData = def.parameters.ToList();
+			}
+		}
 
 		public override ProcessingStatus Evaluate()
 		{
@@ -82,6 +103,9 @@ namespace HLVS.Nodes
 
 			for (int i = 0; i < portCount; i++)
 			{
+				if(eventData[i] == null)
+					 continue;
+				
 				yield return new PortData
 				{
 					displayName = eventData[i].name,

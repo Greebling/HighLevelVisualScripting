@@ -82,6 +82,8 @@ namespace HLVS.Runtime
 
 		public void AddEventDefinition(HlvsEvent e)
 		{
+			e.parameters = e.parameters.Where(parameter => parameter != null).ToList();
+			
 			if (_eventDefinitions.ContainsKey(e.name))
 			{
 				_eventDefinitions[e.name] = e;
