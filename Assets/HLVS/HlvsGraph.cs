@@ -19,7 +19,7 @@ namespace HLVS
 		/// Blueprint of which types are needed as parameters
 		/// </summary>
 		[SerializeReference]
-		public List<ExposedParameter> parametersBlueprint = new List<ExposedParameter>();
+		public List<ExposedParameter> parametersBlueprint = new();
 
 		[NonSerialized]
 		public GameObject activeGameObject;
@@ -29,14 +29,14 @@ namespace HLVS
 		public Action<HlvsBlackboard> onBlackboardAdded       = (HlvsBlackboard) => { };
 		public Action<HlvsBlackboard> onBlackboardRemoved     = (HlvsBlackboard) => { };
 
-		private readonly Dictionary<string, ExposedParameter> _nameToVar          = new Dictionary<string, ExposedParameter>();
-		private readonly Dictionary<string, ExposedParameter> _upperCaseNameToVar = new Dictionary<string, ExposedParameter>();
-		private readonly Dictionary<string, ExposedParameter> _guidToVar          = new Dictionary<string, ExposedParameter>();
+		private readonly Dictionary<string, ExposedParameter> _nameToVar          = new();
+		private readonly Dictionary<string, ExposedParameter> _upperCaseNameToVar = new();
+		private readonly Dictionary<string, ExposedParameter> _guidToVar          = new();
 
-		public readonly Dictionary<BaseNode, int> nodeToIndex = new Dictionary<BaseNode, int>();
+		public readonly Dictionary<string, int> nodeGuidToIndex = new ();
 
-		private readonly Dictionary<string, List<OnEventNode>>     _eventNodes = new Dictionary<string, List<OnEventNode>>();
-		private readonly Dictionary<string, List<OnZoneEventNode>> _zoneNodes  = new Dictionary<string, List<OnZoneEventNode>>();
+		private readonly Dictionary<string, List<OnEventNode>>     _eventNodes = new();
+		private readonly Dictionary<string, List<OnZoneEventNode>> _zoneNodes  = new();
 
 		private bool _hasCollisionNodes;
 
@@ -57,7 +57,7 @@ namespace HLVS
 			{
 				if (changes.addedNode != null)
 				{
-					nodeToIndex.Add(changes.addedNode, nodes.Count - 1);
+					nodeGuidToIndex.Add(changes.addedNode.GUID, nodes.Count - 1);
 				}
 			};
 
@@ -65,7 +65,7 @@ namespace HLVS
 			{
 				if (changes.removedNode != null)
 				{
-					nodeToIndex.Clear();
+					nodeGuidToIndex.Clear();
 					BuildNodeDict();
 				}
 			};
@@ -248,7 +248,7 @@ namespace HLVS
 		{
 			for (int i = 0; i < nodes.Count; i++)
 			{
-				nodeToIndex.Add((HlvsNode)nodes[i], i);
+				nodeGuidToIndex.Add(nodes[i].GUID, i);
 			}
 		}
 

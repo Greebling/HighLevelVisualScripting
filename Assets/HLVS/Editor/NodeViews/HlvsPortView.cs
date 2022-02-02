@@ -340,7 +340,7 @@ namespace HLVS.Editor.NodeViews
 
 		private void InitValueProperty(HlvsGraph graph, HlvsGraphView view, HlvsNode node)
 		{
-			var nodeIndex = graph.nodeToIndex[node];
+			var nodeIndex = graph.nodeGuidToIndex[node.GUID];
 			valueProp = view.serializedGraph.FindProperty("nodes").GetArrayElementAtIndex(nodeIndex);
 			if (isExpressionPort)
 			{
