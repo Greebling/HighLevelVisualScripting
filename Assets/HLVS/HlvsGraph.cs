@@ -99,10 +99,16 @@ namespace HLVS
 				node.Reset();
 				node.ParseExpressions();
 			}
-
-			_hasCollisionNodes = nodes.Any(node => node is OnCollisionNode);
-
 			UpdateComputeOrder();
+			
+			_hasCollisionNodes = nodes.Any(node => node is OnCollisionNode);
+#if UNITY_EDITOR
+			if (!activeGameObject)
+				return;
+
+			ScanEventNodes();
+			ScanZoneNodes();
+#endif
 		}
 
 		public override void UpdateComputeOrder()
@@ -122,13 +128,6 @@ namespace HLVS
 			}
 
 			_processor.UpdateComputeOrder();
-#if UNITY_EDITOR
-			if (!activeGameObject)
-				return;
-
-			ScanEventNodes();
-			ScanZoneNodes();
-#endif
 		}
 
 		public void RunStartNodes()
@@ -153,6 +152,19 @@ namespace HLVS
 			}
 
 			_processor.Run(typeof(OnTriggerEnteredNode));
+		}
+
+		public void RunOnTriggerExitNodes(GameObject enteredObject)
+		{
+			foreach (BaseNode baseNode in nodes)
+			{
+				if (baseNode is OnTriggerExitNode node)
+				{
+					node.exitingObject = enteredObject;
+				}
+			}
+
+			_processor.Run(typeof(OnTriggerExitNode));
 		}
 
 		public void RunOnCollisionEnteredNodes(GameObject enteredObject)
@@ -231,17 +243,32 @@ namespace HLVS
 
 		public ExposedParameter GetVariableByName(string variableName)
 		{
-			return _nameToVar.ContainsKey(variableName) ? _nameToVar[variableName] : null;
+			if (_nameToVar.TryGetValue(variableName, out ExposedParameter val))
+			{
+				return val;
+			}
+
+			return null;
 		}
 
 		public ExposedParameter GetVariableByUppercaseName(string variableName)
 		{
-			return _upperCaseNameToVar.ContainsKey(variableName) ? _upperCaseNameToVar[variableName] : null;
+			if (_upperCaseNameToVar.TryGetValue(variableName, out ExposedParameter val))
+			{
+				return val;
+			}
+
+			return null;
 		}
 
 		public ExposedParameter GetVariableByGuid(string guid)
 		{
-			return _guidToVar.ContainsKey(guid) ? _guidToVar[guid] : null;
+			if (_guidToVar.TryGetValue(guid, out ExposedParameter val))
+			{
+				return val;
+			}
+			
+			return null;
 		}
 
 		private void BuildNodeDict()
@@ -255,16 +282,16 @@ namespace HLVS
 		private void BuildVariableDict()
 		{
 			_nameToVar.Clear();
-			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _nameToVar.Add(parameter.name, parameter)));
+			blackboards.ForEach(blackboard => blackboard.RuntimeInstance.fields.ForEach(parameter => _nameToVar.Add(parameter.name, parameter)));
 			parametersBlueprint.ForEach(parameter => _nameToVar.Add(parameter.name, parameter));
 
 			_upperCaseNameToVar.Clear();
 			blackboards.ForEach(blackboard =>
-				blackboard.fields.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter)));
+				blackboard.RuntimeInstance.fields.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter)));
 			parametersBlueprint.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter));
 
 			_guidToVar.Clear();
-			blackboards.ForEach(blackboard => blackboard.fields.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter)));
+			blackboards.ForEach(blackboard => blackboard.RuntimeInstance.fields.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter)));
 			parametersBlueprint.ForEach(parameter => _guidToVar.Add(parameter.guid, parameter));
 		}
 
