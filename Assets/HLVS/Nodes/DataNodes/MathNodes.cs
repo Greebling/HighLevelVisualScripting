@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using GraphProcessor;
+using HLVS.Runtime;
 using IkTools.FormulaParser;
 using UnityEditor;
 using UnityEngine;
@@ -185,6 +186,34 @@ namespace HLVS.Nodes.DataNodes
 		}
 	}
 
+	[Serializable, NodeMenuItem("Math/Is Equal")]
+	public class IsEqualNode : BranchingNode
+	{
+		public override string name => "Is Equal";
+
+		[Input("Number")]
+		public float num1;
+
+		[Input("Number")]
+		public float num2;
+
+		[Output("True", false)]
+		public ExecutionLink trueLink;
+
+		[Output("False", false)]
+		public ExecutionLink falseLink;
+
+		public override ProcessingStatus Evaluate()
+		{
+			return base.Evaluate();
+		}
+
+		public override string[] GetNextExecutionLinks()
+		{
+			return Mathf.Approximately(num1, num2) ? new[] { nameof(trueLink) } : new[] { nameof(falseLink) };
+		}
+	}
+
 	[Serializable, NodeMenuItem("Conditions/Math Expression")]
 	public class MathNode : HlvsDataNode, IVariableProvider<MathNode>
 	{
@@ -292,6 +321,7 @@ namespace HLVS.Nodes.DataNodes
 			{
 				if (!variableNames.Contains(varName))
 					variableNames.Add(varName);
+				return 0;
 			}
 			
 			if (!_variableData.ContainsKey(varName))
