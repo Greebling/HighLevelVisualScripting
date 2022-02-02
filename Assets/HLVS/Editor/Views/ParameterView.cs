@@ -153,7 +153,7 @@ namespace HLVS.Editor.Views
 				AfterFieldRenamed(param, field, nameField);
 				graph.onParameterListChanged();
 			});
-			
+
 			// display remove option
 			var removeButton = new Button(() =>
 			{
@@ -168,8 +168,9 @@ namespace HLVS.Editor.Views
 			removeButton.style.borderBottomRightRadius = 7;
 			removeButton.style.borderTopLeftRadius = 7;
 			removeButton.style.borderTopRightRadius = 7;
-			field.Add(removeButton);
-			
+			if (entryName != "Self")
+				field.Add(removeButton);
+
 			// not renamed, but needs categorization
 			AfterFieldRenamed(param, field, field.Q<TextField>());
 			return field;
