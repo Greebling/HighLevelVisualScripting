@@ -33,6 +33,7 @@ namespace HLVS.Editor
 		public static void CreateGraphProcessor()
 		{
 			var graph = CreateInstance<HlvsGraph>();
+			graph.OnCreated();
 			ProjectWindowUtil.CreateAsset(graph, HlvsSettings.DefaultAssetName);
 		}
 		

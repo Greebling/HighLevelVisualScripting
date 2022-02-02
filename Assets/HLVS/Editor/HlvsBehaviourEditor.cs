@@ -156,7 +156,7 @@ namespace HLVS.Editor
 
 
 			// add label if no params are drawn
-			if (_behaviour.graphParameters.Count == 0)
+			if (_behaviour.graphParameters.Count == 0 || _behaviour.graphParameters.All(parameter => parameter.name == "Self"))
 			{
 				var noneLabel = new Label("No Graph Parameters");
 				noneLabel.style.unityFontStyleAndWeight = FontStyle.Italic;
@@ -178,7 +178,7 @@ namespace HLVS.Editor
 				{
 					return parameter.name.Substring(0, slashIndex);
 				}
-			});
+			}).Where(parameter => parameter.name != "Self");
 
 			void AddCategoryLabel(string categoryName, int depth)
 			{

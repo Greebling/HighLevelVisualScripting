@@ -163,7 +163,15 @@ namespace HLVS.Runtime
 		{
 			if (_runtimeGraph)
 			{
-				_runtimeGraph.RunOnTriggerEnteredNodes();
+				_runtimeGraph.RunOnTriggerEnteredNodes(other.gameObject);
+			}
+		}
+
+		private void OnCollisionEnter(Collision collision)
+		{
+			if (_runtimeGraph)
+			{
+				_runtimeGraph.RunOnCollisionEnteredNodes(collision.gameObject);
 			}
 		}
 

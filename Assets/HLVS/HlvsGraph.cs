@@ -38,6 +38,16 @@ namespace HLVS
 		private readonly Dictionary<string, List<OnEventNode>>     _eventNodes = new Dictionary<string, List<OnEventNode>>();
 		private readonly Dictionary<string, List<OnZoneEventNode>> _zoneNodes  = new Dictionary<string, List<OnZoneEventNode>>();
 
+		private bool _hasCollisionNodes;
+
+		public virtual void OnCreated()
+		{
+			var self = new GameObjectParameter();
+			self.Initialize("Self", null);
+			parametersBlueprint.Add(self);
+			onParameterListChanged();
+		}
+
 		protected override void OnEnable()
 		{
 			blackboards = blackboards == null ? new List<HlvsBlackboard>() : blackboards.Where(blackboard => blackboard).ToList();
@@ -90,6 +100,8 @@ namespace HLVS
 				node.ParseExpressions();
 			}
 
+			_hasCollisionNodes = nodes.Any(node => node is OnCollisionNode);
+
 			UpdateComputeOrder();
 		}
 
@@ -130,9 +142,33 @@ namespace HLVS
 			_processor.Run(typeof(OnUpdateNode));
 		}
 
-		public void RunOnTriggerEnteredNodes()
+		public void RunOnTriggerEnteredNodes(GameObject enteredObject)
 		{
+			foreach (BaseNode baseNode in nodes)
+			{
+				if (baseNode is OnTriggerEnteredNode node)
+				{
+					node.enteredObject = enteredObject;
+				}
+			}
+
 			_processor.Run(typeof(OnTriggerEnteredNode));
+		}
+
+		public void RunOnCollisionEnteredNodes(GameObject enteredObject)
+		{
+			if (!_hasCollisionNodes)
+				return;
+
+			foreach (BaseNode baseNode in nodes)
+			{
+				if (baseNode is OnCollisionNode node)
+				{
+					node.enteredObject = enteredObject;
+				}
+			}
+
+			_processor.Run(typeof(OnCollisionNode));
 		}
 
 		public void AddBlackboard(HlvsBlackboard board)
@@ -239,7 +275,10 @@ namespace HLVS
 
 			for (int i = 0; i < parametersBlueprint.Count; i++)
 			{
-				parametersBlueprint[i].value = parameters[i].value;
+				if (parametersBlueprint[i].name == "Self")
+					parametersBlueprint[i].value = currentGameObject;
+				else
+					parametersBlueprint[i].value = parameters[i].value;
 			}
 		}
 

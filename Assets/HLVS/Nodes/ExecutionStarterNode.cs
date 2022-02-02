@@ -35,6 +35,8 @@ namespace HLVS.Nodes
 	[Serializable, NodeMenuItem("Start/On Trigger")]
 	public class OnTriggerEnteredNode : ExecutionStarterNode
 	{
+		[Output("Gameobject")]
+		public GameObject enteredObject;
 		public override string name => "On Trigger Collider Entered";
 	}
 
@@ -42,6 +44,9 @@ namespace HLVS.Nodes
 	public class OnCollisionNode : ExecutionStarterNode
 	{
 		public override string name => "On Collision";
+		
+		[Output("Gameobject")]
+		public GameObject enteredObject;
 	}
 
 	[Serializable, NodeMenuItem("Start/On Event")]
