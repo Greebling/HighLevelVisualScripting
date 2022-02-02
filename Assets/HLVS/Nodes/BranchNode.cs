@@ -72,10 +72,10 @@ namespace HLVS.Nodes
 		[Input("Key")]
 		public string key = "";
 
-		[Output("Same", false)]
+		[Output("Has Key", false)]
 		public ExecutionLink trueLink;
 
-		[Output("Different", false)]
+		[Output("Else", false)]
 		public ExecutionLink falseLink;
 
 		public override string[] GetNextExecutionLinks()
