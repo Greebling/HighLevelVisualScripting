@@ -104,7 +104,7 @@ namespace HLVS.Nodes.DataNodes
 			}
 
 			movementDir *= maxSpeed;
-			speed = movementDir.magnitude;
+			speed = movementDir.x;
 
 			// translation
 			var rb = target.GetComponent<Rigidbody>();
@@ -166,8 +166,8 @@ namespace HLVS.Nodes.DataNodes
 
 			movementDir *= maxSpeed;
 			movementDir.y = 0;
+			speed = movementDir.x;
 			movementDir = target.transform.rotation * movementDir;
-			speed = movementDir.magnitude;
 
 			if (!applyMovement)
 				return ProcessingStatus.Finished;
