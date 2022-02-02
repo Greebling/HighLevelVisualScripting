@@ -42,8 +42,6 @@ namespace HLVS
 			{
 				ProcessGraph(startNode, starterType);
 			}
-
-			RunPreviouslyPausedNodes(starterType);
 		}
 		
 		public void RunFromNodes(IEnumerable<HlvsNode> nodes, Type starterType)
