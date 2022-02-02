@@ -167,6 +167,14 @@ namespace HLVS.Runtime
 			}
 		}
 
+		private void OnTriggerExit(Collider other)
+		{
+			if (_runtimeGraph)
+			{
+				_runtimeGraph.RunOnTriggerExitNodes(other.gameObject);
+			}
+		}
+
 		private void OnCollisionEnter(Collision collision)
 		{
 			if (_runtimeGraph)
