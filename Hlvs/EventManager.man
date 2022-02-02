@@ -26,15 +26,11 @@ MonoBehaviour:
     - rid: 5412299176374960138
   - name: My Event (3)
     parameters: []
-  - name: Test
-    parameters:
-    - rid: 5412299250187370504
   _savedNames:
   - My Event
   - My Event (1)
   - My Event (2)
   - My Event (3)
-  - Test
   references:
     version: 2
     RefIds:
@@ -110,17 +106,3 @@ MonoBehaviour:
         settings:
           rid: -2
         val: {x: 0, y: 0, z: 0}
-    - rid: 5412299250187370504
-      type: {class: GameObjectParameter, ns: GraphProcessor, asm: com.alelievr.NodeGraphProcessor.Runtime}
-      data:
-        guid: 
-        name: My GameObject
-        type: 
-        serializedValue:
-          serializedType: 
-          serializedName: 
-          serializedValue: 
-        input: 1
-        settings:
-          rid: -2
-        val: {fileID: 0}
