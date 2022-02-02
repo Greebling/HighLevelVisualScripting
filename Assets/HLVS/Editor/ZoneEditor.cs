@@ -27,15 +27,13 @@ namespace HLVS.Editor
 
 			_zoneField = new TextField("Zone");
 			_zoneField.value = _target.zoneName;
-			_zoneField.RegisterCallback<FocusOutEvent>(evt =>
+			_zoneField.RegisterValueChangedCallback(evt =>
 			{
-				_zoneField.value = _zoneField.value.Trim(' ');
-				
-				if(_zoneField.value != _target.zoneName)
+				if(evt.newValue != _target.zoneName)
 				{
 					ZoneNameProvider.instance.RemoveZone(_target.zoneName);
 
-					_target.zoneName = _zoneField.value;
+					_target.zoneName = evt.newValue;
 					ZoneNameProvider.instance.AddZone(_zoneField.value);
 
 					serializedObject.ApplyModifiedProperties();
