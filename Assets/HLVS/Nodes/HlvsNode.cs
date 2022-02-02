@@ -59,19 +59,19 @@ namespace HLVS.Nodes
 		{
 			inputPorts.PullDatas();
 
-			UpdateParameterValues();
 			UpdateExpressionsValue();
+			UpdateParameterValues();
 
 			var val = Evaluate();
-			
+
 			InvokeOnProcessed();
 			outputPorts.PushDatas();
-			
+
 			return val;
 		}
 
 		public abstract HlvsNode GetPreviousNode();
-		
+
 		/// <summary>
 		/// Returns the name of the port that has the next node connected
 		/// </summary>
@@ -179,23 +179,21 @@ namespace HLVS.Nodes
 		public void SetFieldToReference(string fieldName, string parameterGuid)
 		{
 			var field = GetType().GetField(fieldName);
-			
-			if (fieldToParamGuid.ContainsKey(field))
-				fieldToParamGuid[field] = parameterGuid;
-			else
-			{
-				for (int i = 0; i < fieldToFormula.Count; i++)
-				{
-					var formulaPair = fieldToFormula[i];
-					if (formulaPair.fieldName == fieldName)
-					{
-						fieldToFormula.RemoveAt(i);
-						break;
-					}
-				}
 
-				fieldToFormula.RemoveAll(pair => pair.fieldName == fieldName);
-				fieldToParamGuid.Add(field, parameterGuid);
+			for (int i = 0; i < fieldToFormula.Count; i++)
+			{
+				var formulaPair = fieldToFormula[i];
+				if (formulaPair.fieldName == fieldName)
+				{
+					fieldToFormula.RemoveAt(i);
+					break;
+				}
+			}
+
+			fieldToFormula.RemoveAll(pair => pair.fieldName == fieldName);
+			if (fieldToParamGuid.TryAdd(field, parameterGuid))
+			{
+				fieldToParamGuid[field] = parameterGuid;
 			}
 		}
 
