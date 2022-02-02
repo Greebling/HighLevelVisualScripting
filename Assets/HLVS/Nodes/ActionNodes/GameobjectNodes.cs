@@ -130,17 +130,76 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
+	[Serializable, NodeMenuItem("Gameobject/Hide Gameobject")]
+	public class HideGameobjectNode : HlvsActionNode
+	{
+		public override string name => "Hide Gameobject";
+
+		[Input("Gameobject")]
+		public GameObject gameobject;
+
+
+		public override ProcessingStatus Evaluate()
+		{
+			if (!gameobject)
+			{
+				Debug.LogError($"No gameobject to hide was given");
+				return ProcessingStatus.Finished;
+			}
+
+			var renderer = gameobject.GetComponent<Renderer>();
+			if (renderer)
+				renderer.enabled = false;
+			else
+			{
+				Debug.LogError($"No rendering component found on {gameobject}");
+			}
+
+			return ProcessingStatus.Finished;
+		}
+	}
+
+	[Serializable, NodeMenuItem("Gameobject/Make Gameobject Visible")]
+	public class UnhideGameobjectNode : HlvsActionNode
+	{
+		public override string name => "Make Gameobject Visible";
+
+		[Input("Gameobject")]
+		public GameObject gameobject;
+
+		public override ProcessingStatus Evaluate()
+		{
+			if (!gameobject)
+			{
+				Debug.LogError("No gameobject to make visible was given");
+				return ProcessingStatus.Finished;
+			}
+			
+			gameobject.SetActive(true);
+
+			var renderer = gameobject.GetComponent<Renderer>();
+			if (renderer)
+				renderer.enabled = true;
+			else
+			{
+				Debug.LogError($"No rendering component found on {gameobject}");
+			}
+
+			return ProcessingStatus.Finished;
+		}
+	}
+
 	[Serializable, NodeMenuItem("Gameobject/Object In Direction")]
 	public class FirstObjectInDirectionNode : BranchingNode
 	{
 		public override string name => "Object in Direction";
-		
+
 		[Output("Some Found")]
 		public ExecutionLink trueLink;
 
 		[Output("None found")]
 		public ExecutionLink falseLink;
-		
+
 
 		[Input("Start")]
 		public GameObject origin;
@@ -189,7 +248,7 @@ namespace HLVS.Nodes.ActionNodes
 	public class FirstObjectInFrontNode : BranchingNode
 	{
 		public override string name => "Object in Front Of";
-		
+
 		[Output("Some Found")]
 		public ExecutionLink trueLink;
 
