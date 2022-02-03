@@ -73,14 +73,14 @@ namespace HLVS.Nodes.ActionNodes
 		public override string name => "Set Kinematic";
 		
 		[Input("Target")]
-		public Rigidbody target;
+		public GameObject target;
 
 		[Input("Is Kinematic")]
 		public bool value;
 
 		public override ProcessingStatus Evaluate()
 		{
-			target.isKinematic = value;
+			target.GetComponent<Rigidbody>().isKinematic = value;
 			
 			return ProcessingStatus.Finished;
 		}
