@@ -29,7 +29,6 @@ namespace HLVS
 		public Action<HlvsBlackboard> onBlackboardAdded       = (HlvsBlackboard) => { };
 		public Action<HlvsBlackboard> onBlackboardRemoved     = (HlvsBlackboard) => { };
 
-		private readonly Dictionary<string, ExposedParameter> _nameToVar          = new();
 		private readonly Dictionary<string, ExposedParameter> _upperCaseNameToVar = new();
 		private readonly Dictionary<string, ExposedParameter> _guidToVar          = new();
 
@@ -71,7 +70,6 @@ namespace HLVS
 			};
 
 			BuildVariableDict();
-			ScanEventNodes();
 			onParameterListChanged += BuildVariableDict;
 			onBlackboardListChanged += BuildVariableDict;
 			base.OnEnable();
@@ -103,7 +101,7 @@ namespace HLVS
 			
 			_hasCollisionNodes = nodes.Any(node => node is OnCollisionNode);
 #if UNITY_EDITOR
-			if (!activeGameObject)
+			if (!activeGameObject || !Application.isPlaying)
 				return;
 
 			ScanEventNodes();
@@ -243,12 +241,7 @@ namespace HLVS
 
 		public ExposedParameter GetVariableByName(string variableName)
 		{
-			if (_nameToVar.TryGetValue(variableName, out ExposedParameter val))
-			{
-				return val;
-			}
-
-			return null;
+			return GetVariableByUppercaseName(variableName.ToUpper().Replace(' ', '_'));
 		}
 
 		public ExposedParameter GetVariableByUppercaseName(string variableName)
@@ -281,10 +274,6 @@ namespace HLVS
 
 		private void BuildVariableDict()
 		{
-			_nameToVar.Clear();
-			blackboards.ForEach(blackboard => blackboard.RuntimeInstance.fields.ForEach(parameter => _nameToVar.Add(parameter.name, parameter)));
-			parametersBlueprint.ForEach(parameter => _nameToVar.Add(parameter.name, parameter));
-
 			_upperCaseNameToVar.Clear();
 			blackboards.ForEach(blackboard =>
 				blackboard.RuntimeInstance.fields.ForEach(parameter => _upperCaseNameToVar.Add(parameter.name.ToUpperInvariant().Replace(' ', '_'), parameter)));
@@ -298,7 +287,6 @@ namespace HLVS
 		public void InitParameterValues(GameObject currentGameObject, List<ExposedParameter> parameters)
 		{
 			Debug.Assert(parameters.Count == parametersBlueprint.Count, "Parameter lists don't match");
-			activeGameObject = currentGameObject;
 
 			for (int i = 0; i < parametersBlueprint.Count; i++)
 			{
