@@ -29,6 +29,11 @@ namespace HLVS.Nodes.ActionNodes
 			var variableData = graph.GetVariableByName(variableName);
 			if (variableData != null)
 			{
+				if(inputData == null && variableData.GetValueType().IsValueType)
+				{
+					return ProcessingStatus.Finished;
+				}
+					
 				variableData.value = inputData;
 			}
 			else
