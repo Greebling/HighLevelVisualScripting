@@ -58,6 +58,33 @@ namespace HLVS.Nodes.ActionNodes
 		}
 	}
 
+	[Serializable, NodeMenuItem("Gameobject/Set Position")]
+	public class SetPositionNode : HlvsActionNode
+	{
+		public override string name => "Set Position";
+
+		[Input("Target")]
+		public GameObject target;
+
+		[Input("Location")]
+		public GameObject location;
+
+
+		public override ProcessingStatus Evaluate()
+		{
+			if (!target)
+			{
+				Debug.LogError("No Gameobject was found to set active");
+				return ProcessingStatus.Finished;
+			}
+			
+			if (target && location)
+				target.transform.position = location.transform.position;
+
+			return ProcessingStatus.Finished;
+		}
+	}
+
 	[Serializable, NodeMenuItem("Gameobject/Has Tag")]
 	public class CompareTagNode : BranchingNode
 	{
@@ -174,7 +201,7 @@ namespace HLVS.Nodes.ActionNodes
 				Debug.LogError("No gameobject to make visible was given");
 				return ProcessingStatus.Finished;
 			}
-			
+
 			gameobject.SetActive(true);
 
 			var renderer = gameobject.GetComponent<Renderer>();
