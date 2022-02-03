@@ -71,12 +71,12 @@ namespace HLVS.Runtime
 
 		public void RaiseEvent(HlvsEvent e)
 		{
-			if(!_listenerNodes.ContainsKey(e.name))
-				return;
-			
-			foreach (INodeEventListener nodeEventListener in _listenerNodes[e.name])
+			if (_listenerNodes.TryGetValue(e.name, out var listeners))
 			{
-				nodeEventListener.OnEvent(e);
+				foreach (INodeEventListener nodeEventListener in listeners)
+				{
+					nodeEventListener.OnEvent(e);
+				}
 			}
 		}
 
@@ -84,13 +84,9 @@ namespace HLVS.Runtime
 		{
 			e.parameters = e.parameters.Where(parameter => parameter != null).ToList();
 			
-			if (_eventDefinitions.ContainsKey(e.name))
+			if (!_eventDefinitions.TryAdd(e.name, e))
 			{
 				_eventDefinitions[e.name] = e;
-			}
-			else
-			{
-				_eventDefinitions.Add(e.name, e);
 			}
 
 			DoSave();
