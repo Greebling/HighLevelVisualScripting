@@ -76,6 +76,11 @@ namespace HLVS.Editor.NodeViews
 
 			CreateValueField();
 
+			OnConnected += (_, _) => {
+				targetNode.UnsetFieldReference(fieldInfo.Name);
+				view.serializedGraph.Update();
+			};
+
 			var field = targetNode.GetType().GetField(fieldInfo.Name);
 			if (targetNode.fieldToParamGuid.TryGetValue(field, out string paramGuid))
 			{
