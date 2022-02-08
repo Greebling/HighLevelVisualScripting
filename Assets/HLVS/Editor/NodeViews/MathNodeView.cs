@@ -1,5 +1,6 @@
 ﻿using GraphProcessor;
 using HLVS.Nodes.DataNodes;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace HLVS.Editor.NodeViews
@@ -22,18 +23,26 @@ namespace HLVS.Editor.NodeViews
 			{
 				_errorBox.Clear();
 				
-				Target.formula.Expression = evt.newValue;
-				Target.RecompileExpression();
-
-				if (!string.IsNullOrEmpty(Target.errors))
+				if (Application.isPlaying)
 				{
-					var errors = new Label(Target.errors);
-					_errorBox.Add(errors);
-				}
+					var error = new Label("Cannot edit math expression while playing");
+					_errorBox.Add(error);
+				} else
+				{
+					Target.formula.Expression = evt.newValue;
+					Target.RecompileExpression();
 
-				Target.Evaluate();
-				
-				ForceUpdatePorts();
+					// add errors
+					if (!string.IsNullOrEmpty(Target.errors))
+					{
+						var errors = new Label(Target.errors);
+						_errorBox.Add(errors);
+					}
+
+					Target.Evaluate();
+
+					ForceUpdatePorts();
+				}
 			});
 			formulaInput.style.minWidth = 200;
 			
