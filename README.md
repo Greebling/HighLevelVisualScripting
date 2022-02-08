@@ -39,3 +39,6 @@ public class CompareTagNode : HlvsDataNode
 
 ### Node creation menu
 ![](https://user-images.githubusercontent.com/6877923/58935811-893adf80-876e-11e9-9f69-69ce51a432b8.png)
+
+### Requirements
+This project requires the IKT Formula Parser in order to work, which is not provided by this repository. Instead, users will have to buy it from the Unity Asset Store.
