@@ -19,6 +19,8 @@ namespace HLVS.Nodes
 	[Serializable]
 	public abstract class HlvsNode : BaseNode, ISerializationCallbackReceiver
 	{
+		public override bool isRenamable => true;
+
 		/// <summary>
 		/// Called when node shall be evaluated and execute its actions
 		/// </summary>

@@ -18,6 +18,9 @@ namespace HLVS.Nodes
 		}
 
 		public override string nextExecutionLink => nameof(followingAction);
+		
+		
+		public override bool isRenamable => false;
 	}
 
 	[Serializable, NodeMenuItem("Start/Every Frame")]
