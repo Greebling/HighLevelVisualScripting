@@ -8,16 +8,17 @@ namespace HLVS.Runtime
 {
 	public class HlvsBehaviour : MonoBehaviour
 	{
-		[HideInInspector] 
+		[HideInInspector]
 		public HlvsGraph graph;
 
 		private HlvsGraph _runtimeGraph;
 
-		[SerializeReference] [HideInInspector] public List<ExposedParameter> graphParameters = new List<ExposedParameter>();
+		[SerializeReference]
+		[HideInInspector]
+		public List<ExposedParameter> graphParameters = new List<ExposedParameter>();
 
-		public HlvsGraph CurrentGraph => 
-			_runtimeGraph && Application.isPlaying ? 
-				_runtimeGraph : graph;
+		public HlvsGraph CurrentGraph =>
+			_runtimeGraph && Application.isPlaying ? _runtimeGraph : graph;
 
 		public void CreateFittingParamList()
 		{
@@ -45,8 +46,8 @@ namespace HLVS.Runtime
 			}
 
 			graphParameters = graph.parametersBlueprint
-				.Select(ExposedParameter.CopyParameter)
-				.ToList();
+			                       .Select(ExposedParameter.CopyParameter)
+			                       .ToList();
 		}
 
 		public bool IsParameterListOutdated()
@@ -146,7 +147,9 @@ namespace HLVS.Runtime
 			if (_runtimeGraph)
 			{
 				_runtimeGraph.RunStartNodes();
+#if UNITY_EDITOR
 				UpdateParameters();
+#endif
 			}
 		}
 
@@ -155,7 +158,9 @@ namespace HLVS.Runtime
 			if (_runtimeGraph)
 			{
 				_runtimeGraph.RunUpdateNodes();
+#if UNITY_EDITOR
 				UpdateParameters();
+#endif
 			}
 		}
 
@@ -185,9 +190,13 @@ namespace HLVS.Runtime
 
 		private void UpdateParameters()
 		{
+			if (_runtimeGraph.parametersBlueprint.Count < graphParameters.Count)
+				return;
+
 			for (int i = 0; i < graphParameters.Count; i++)
 			{
-				graphParameters[i].value = _runtimeGraph.parametersBlueprint[i].value;
+				if (_runtimeGraph.parametersBlueprint[i] != null)
+					graphParameters[i].value = _runtimeGraph.parametersBlueprint[i].value;
 			}
 		}
 	}
