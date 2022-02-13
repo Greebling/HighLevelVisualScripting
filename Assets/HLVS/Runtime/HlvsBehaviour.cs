@@ -72,7 +72,7 @@ namespace HLVS.Runtime
 			{
 				// add missing entries
 				var missingParams = graph.parametersBlueprint.Where(parameter =>
-					graphParameters.All(exposedParameter => exposedParameter.guid != parameter.guid));
+					parameter.name != "Self" && graphParameters.All(exposedParameter => exposedParameter.guid != parameter.guid));
 				foreach (var parameter in missingParams)
 				{
 					graphParameters.Add(ExposedParameter.CopyParameter(parameter));
